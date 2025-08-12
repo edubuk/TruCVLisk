@@ -24,8 +24,7 @@ const Home:React.FC = () => {
      <div className="relative w-full flex flex-col">
      <div className="relative flex justify-end items-center w-full h-[20px] mt-2 p-6">
       <div className="relative">
-      <img src={userImage} className="w-12 h-12 text-[#03257e] rounded-full cursor-pointer" onClick={()=>setOpenProfile(!openProfile)}/>
-      {/* <div className="absolute top-0  w-12 h-12  rounded-full   bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] -z-10"></div> */}
+      {userImage && <img src={userImage} className="w-12 h-12 text-[#03257e] rounded-full cursor-pointer" onClick={()=>setOpenProfile(!openProfile)}/>}      {/* <div className="absolute top-0  w-12 h-12  rounded-full   bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] -z-10"></div> */}
       </div>
 
      <ProfilePopup openProfile={openProfile}/></div>
