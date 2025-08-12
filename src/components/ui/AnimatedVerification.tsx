@@ -10,7 +10,6 @@ import { useFormContext } from "react-hook-form";
 import { Dialog, DialogContent, DialogTrigger } from "./dialog";
 import { FileUpload } from "./file-upload";
 import {uploadToIpfs} from "./PinFileOnPinata";
-import toast from "react-hot-toast";
 // import {sendEmail} from './MailToVerify';
 // import toast from "react-hot-toast";
 // import { Input } from "./input";
@@ -53,23 +52,11 @@ export function AnimatedVerification({
   validationStep,
   // verificationObject,
   setterVerificationObject,
-  jobRole,
-  companyName,
   companyInfo,
   formSkill,
-  awardName,
-  awardOrg,
   awardInfo,
   courseInfo,
   projectInfo,
-  courseName,
-  courseOrg,
-  underGraduateCollegeName,
-  postGraduateCollegeName,
-  class10SchoolName,
-  class12CollegeName,
-  underGraduateDegreeName,
-  postGraduateDegreeName,
 }: {
   className?: string;
   firstButtonText: string;
@@ -148,12 +135,8 @@ export function AnimatedVerification({
   
   const uploadImageToDB = async () => {
     if (files.length === 0) return;
-
-    const proofArray: string[] = [];
-    const hashArray: string[] = [];
   
     let docHash;
-    const userName = localStorage.getItem("userName");
     switch(verificationStep)
     {
       case "educationVerifications":
@@ -165,7 +148,8 @@ export function AnimatedVerification({
           setDialogOpen(false); //closing dialog after upload;
           // Ensure setValue is called after all uploads are complete
           setValue(`class10CertUrl`,docHash);
-          console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+          setIpfsHash(docHash as string);
         } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
@@ -179,7 +163,8 @@ export function AnimatedVerification({
           setDialogOpen(false); //closing dialog after upload;
           // Ensure setValue is called after all uploads are complete
           setValue(`class12CertUrl`,docHash);
-          console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+          setIpfsHash(docHash as string);
         } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
@@ -194,6 +179,7 @@ export function AnimatedVerification({
           // Ensure setValue is called after all uploads are complete
           setValue(`undergraduationCertUrl`,docHash);
           //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+          setIpfsHash(docHash as string);
         } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
@@ -208,7 +194,8 @@ export function AnimatedVerification({
           // Ensure setValue is called after all uploads are complete
           setValue(`postgraduationCertUrl`,docHash);
           //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-        } catch (error) {
+          setIpfsHash(docHash as string);
+            } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
         }
@@ -222,6 +209,7 @@ export function AnimatedVerification({
           // Ensure setValue is called after all uploads are complete
           setValue(`${companyInfo}.experienceCertUrl`,docHash);
           //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+          setIpfsHash(docHash as string);
         } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
@@ -235,7 +223,8 @@ export function AnimatedVerification({
           setDialogOpen(false); //closing dialog after upload;
           // Ensure setValue is called after all uploads are complete
           setValue(`${formSkill}.skillUrl`,docHash);
-          console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+          setIpfsHash(docHash as string);
         } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
@@ -251,6 +240,7 @@ export function AnimatedVerification({
           // Ensure setValue is called after all uploads are complete
           setValue(`${awardInfo}.awardCertUrl`,docHash);
           //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+          setIpfsHash(docHash as string);
         } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
@@ -264,6 +254,7 @@ export function AnimatedVerification({
         // Ensure setValue is called after all uploads are complete
         setValue(`${courseInfo}.courseCertUrl`,docHash);
         //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+        setIpfsHash(docHash as string);
       } catch (error) {
         console.error("Error uploading files:", error);
         setIsUploading(false);
@@ -277,6 +268,7 @@ export function AnimatedVerification({
         // Ensure setValue is called after all uploads are complete
         setValue(`${projectInfo}.projectCertUrl`,docHash);
         //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+        setIpfsHash(docHash as string);
       } catch (error) {
         console.error("Error uploading files:", error);
         setIsUploading(false);

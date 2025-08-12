@@ -4,7 +4,7 @@ import { IoCloseCircleSharp } from "react-icons/io5";
 import PaymentPopup from "../../paymentGateway/razorpay";
 
 const SubscriptionPlans = () => {
-  const [currentPlan, setCurrentPlan] = useState<"Free" | "Pro" | null>(null);
+  const [currentPlan,] = useState<"Free" | "Pro" | null>(null);
   const [showPopup, setShowPopup] = useState(false);
 
  
