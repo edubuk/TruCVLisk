@@ -56,13 +56,13 @@ const Resume: React.FC = () => {
   const downloadPdfHandler = async()=>{
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8000/cv/pdfmaker`,{
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/cv/pdfmaker`,{
         method:"POST",
         headers:{
           "Content-Type":"application/json",
           "Authorization": `Bearer ${localStorage.getItem("googleIdToken")}`
         },
-        body:JSON.stringify({url:`http://localhost:5173/new-cv/${id}`,selector:"#cv-preview-wrapper",loginMailId:localStorage.getItem("email")})
+        body:JSON.stringify({url:`https://www.edubuktrucv.com/new-cv/${id}`,selector:"#cv-preview-wrapper",loginMailId:localStorage.getItem("email")})
       })
       if(!response.ok){
         throw new Error("Failed to generate PDF");

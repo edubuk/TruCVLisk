@@ -3,9 +3,11 @@ type EducationType = {
   class10School?: string;
   class10Board?: string;
   class10Grade?: Number;
+  class10CertUrl?: string;
   class12College?: string;
   class12Board?: string;
   class12Grade?: Number;
+  class12CertUrl?: string;
   underGraduateCollege?: string;
   underGraduateDegree?: string;
   underGraduateGPA?: Number;
@@ -15,6 +17,7 @@ type EducationType = {
       to: string;
     };
   };
+  underGraduateCertUrl?: string;
   postGraduateCollege?: string;
   postGraduateDegree?: string;
   postGraduateGPA?: Number;
@@ -24,7 +27,7 @@ type EducationType = {
       to: string;
     };
   };
-  
+  postGraduateCertUrl?: string;
 };
 
 export type ExperienceObjectType = {
@@ -35,12 +38,14 @@ export type ExperienceObjectType = {
     to: string;
   };
   job_role: string;
+  experienceCertUrl?: string;
 };
 export type AwardObjectType = {
   award_name: string;
   awarding_organization: string;
   date_of_achievement: string;
   description: string;
+  awardCertUrl?: string;
 };
 export type CourseObjectType = {
   course_name: string;
@@ -50,6 +55,7 @@ export type CourseObjectType = {
     to: string;
   };
   description: string;
+  courseCertUrl?: string;
 };
 export type ProjectObjectType = {
   project_name: string;
@@ -59,6 +65,7 @@ export type ProjectObjectType = {
     to: string;
   };
   description: string;
+  projectCertUrl?: string;
 };
 // Define the type for personal details object
 type PersonalDetailsType = {

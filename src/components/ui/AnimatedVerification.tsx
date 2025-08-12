@@ -177,7 +177,7 @@ export function AnimatedVerification({
           setIsUploading(false);
           setDialogOpen(false); //closing dialog after upload;
           // Ensure setValue is called after all uploads are complete
-          setValue(`undergraduationCertUrl`,docHash);
+          setValue(`undergraduateCertUrl`,docHash);
           //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
           setIpfsHash(docHash as string);
         } catch (error) {
@@ -192,7 +192,7 @@ export function AnimatedVerification({
           setIsUploading(false);
           setDialogOpen(false); //closing dialog after upload;
           // Ensure setValue is called after all uploads are complete
-          setValue(`postgraduationCertUrl`,docHash);
+          setValue(`postgraduateCertUrl`,docHash);
           //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
           setIpfsHash(docHash as string);
             } catch (error) {
@@ -239,8 +239,8 @@ export function AnimatedVerification({
           setDialogOpen(false); //closing dialog after upload;
           // Ensure setValue is called after all uploads are complete
           setValue(`${awardInfo}.awardCertUrl`,docHash);
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
           setIpfsHash(docHash as string);
+          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
         } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
@@ -253,8 +253,12 @@ export function AnimatedVerification({
         setDialogOpen(false); //closing dialog after upload;
         // Ensure setValue is called after all uploads are complete
         setValue(`${courseInfo}.courseCertUrl`,docHash);
+        if(docHash)
+        {
+          console.log("docHash while setting",docHash);
+          setIpfsHash(docHash as string);
+        }
         //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-        setIpfsHash(docHash as string);
       } catch (error) {
         console.error("Error uploading files:", error);
         setIsUploading(false);
@@ -267,8 +271,8 @@ export function AnimatedVerification({
         setDialogOpen(false); //closing dialog after upload;
         // Ensure setValue is called after all uploads are complete
         setValue(`${projectInfo}.projectCertUrl`,docHash);
-        //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
         setIpfsHash(docHash as string);
+        //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
       } catch (error) {
         console.error("Error uploading files:", error);
         setIsUploading(false);
@@ -429,7 +433,6 @@ export function AnimatedVerification({
                 <UploadProofButton
                   col
                   className="-ml-7 text-xs sm:text-base sm:ml-0"
-                  isUploaded={(verificationData.proof || []).length > 0}
                   ipfsHash={ipfsHash}
                 />
               }
@@ -438,7 +441,6 @@ export function AnimatedVerification({
               <UploadProofButton
                   col
                   className="-ml-7 text-xs sm:text-base sm:ml-0 -mt-3"
-                  isUploaded={(verificationData.proof || []).length > 0}
                   ipfsHash={ipfsHash}
                 />
               }

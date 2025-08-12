@@ -7,6 +7,7 @@ import { AnimatedBeam } from "./ui/animated-beam";
 // import IssuerButton from "../Buttons/IssuerButton";
 // import { twMerge } from "tailwind-merge";
 import ShowVerifications from "./ShowVerifications";
+import { FaExternalLinkAlt } from "react-icons/fa";
 // import { useFormContext } from "react-hook-form";
 // import { Dialog, DialogContent, DialogTrigger } from "./dialog";
 
@@ -48,7 +49,7 @@ export function ShowAnimatedVerifications({
   buttonClass?: string;
   isSelfAttested: boolean;
   mailStatus?:string;
-  hash?:[];
+  hash?:string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   // const div1Ref = useRef<HTMLDivElement>(null);
@@ -84,9 +85,9 @@ export function ShowAnimatedVerifications({
             </div> */}
             <div
               ref={div7Ref}
-              className="px-2 py-1 text-xs lg:text-sm tracking-wide font-semibold rounded-sm bg-[#006666] text-white w-fit"
+              className="flex justify-center items-center gap-2 px-2 py-1 text-xs lg:text-sm tracking-wide font-semibold rounded-sm bg-[#006666] text-white w-fit"
             >
-              {firstButtonText}
+              {firstButtonText } {hash&&<a href={`${import.meta.env.VITE_AzureGATWAY}/${hash}`} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-md"><FaExternalLinkAlt /></a>}
             </div>
           </div>
         </div>
@@ -108,7 +109,7 @@ export function ShowAnimatedVerifications({
           <div ref={div2Ref} className="z-50 bg-white  w-96">
             <ShowVerifications isAttested={isSelfAttested} mailStatus={mailStatus} hash={hash}/>
           </div>
-        </div>
+        </div>  
       </div>
 
       {/* AnimatedBeams */}

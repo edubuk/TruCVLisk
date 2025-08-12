@@ -1,4 +1,3 @@
-import { ExternalLink } from "lucide-react";
 import { ComponentPropsWithoutRef } from "react";
 import { twMerge } from "tailwind-merge";
 import { Badge } from "./ui/badge";
@@ -13,7 +12,7 @@ const ShowVerifications = (
     linkClass?: string;
     fillcheckClass?: string;
     mailStatus?:string;
-    hash?: string[];
+    hash?: string;
   }
 ) => {
   const {
@@ -23,17 +22,15 @@ const ShowVerifications = (
     textClass,
     badge,
     fillCheck,
-    linkClass,
     fillcheckClass,
     mailStatus,
-    hash
   } = props;
   return (
     <div className={twMerge("flex items-center gap-1", className)}>
       {badge && onlySelfAttest ? (
         <Badge className="text-nowrap self-start">
           <TbRosetteDiscountCheckFilled className="size-4 mr-1" />
-          Self attested
+          Self attested 
         </Badge>
       ) : (
         <>
@@ -54,19 +51,11 @@ const ShowVerifications = (
             )}
           >
             {isAttested && (
-              <span className="">Self attested{!onlySelfAttest && ","}</span>
+              <span className="">Self attested</span>
             )}
             {!onlySelfAttest && (
               <>
                 <span className={mailStatus==="pending"?"text-yellow-500":mailStatus==="approved"?"text-green-600":"text-red-500"}> </span>{" "}
-                <span
-                  className={twMerge(
-                    "text-blue-600 text-md cursor-pointer inline-flex items-center gap-1 ml-1 hover:underline",
-                    linkClass
-                  )}
-                >
-                  {hash&&hash?.length>0&&<a href={`https://${import.meta.env.VITE_PINATAGATWAY}/ipfs/${hash[0]}`} target="_blank"><ExternalLink className="inline-flex size-4 mt-1" /></a>}
-                </span>
               </>
             )}
           </p>
