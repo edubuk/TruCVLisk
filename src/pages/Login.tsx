@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { Link } from "react-router-dom";
 interface UserLoginData {
     name: string;
     email: string;
@@ -55,13 +56,14 @@ const GoogleLoginModal = ()=>{
     />
 
     {/* Close Button */}
-    {loading?<p className="mt-2 px-4 py-2 bg-white text-[#03257e] font-semibold rounded text-center">Please Wait...</p>:<button
-      onClick={hidePopup}
-      className="mt-2 px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition"
+    {loading?<p className="mt-2 px-4 py-2 bg-white text-[#03257e] font-semibold rounded text-center">Please Wait...</p>:
+    <Link
+      to="/"
+      className="mt-2 px-4 py-2 bg-red-500 text-white text-center font-semibold rounded hover:bg-red-600 transition"
       aria-label="Close Google login modal"
     >
       Close
-    </button>}
+    </Link>}
   </div>
 </div>
     )
