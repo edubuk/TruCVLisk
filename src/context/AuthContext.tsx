@@ -46,7 +46,7 @@ export const UserContextProvider = ({ children }: { children: React.ReactNode })
 
         console.log("user-data",userData.userEmail,userData.subscriptionPlan)
       } catch (err) {
-        //toast.error("Something went wrong while fetching user data");
+        toast.error("Something went wrong while fetching user data");
         console.log("Error fetching user plan", err);
       }
     };
