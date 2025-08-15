@@ -4,11 +4,8 @@ import truCv from "../assets/truCV2.png";
 import { Link } from "react-router-dom";
 import { useNavigate,useLocation } from "react-router-dom";
 import {
-  MdCancel,
   MdClose,
-  MdContentCopy,
 } from "react-icons/md";
-import { LiaNetworkWiredSolid } from "react-icons/lia";
 import toast from "react-hot-toast";
 import { googleLogout } from "@react-oauth/google";
 
@@ -55,11 +52,7 @@ const Navbar:React.FC = () => {
   const [isActive, setActive] = useState("/");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // const [auth, setAuth] = useState<string>();
-  const [address, setAddress] = useState<string>();
-  const [networkName, setNetworkName] = useState<string>();
-  const [showText, setShowText] = useState(false);
-  
-  const [openWalletInfo, setOpenWalletInfo] = useState(false);
+  // const [address, setAddress] = useState<string>();
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -72,14 +65,14 @@ console.log("currentPath",currentPath);
   };
 
  
-  const copyAddress = async () => {
-    try {
-      if (address) await navigator.clipboard.writeText(address);
-      toast.success("address copied");
-    } catch (error) {
-      toast.error("Please refresh the page and try again..");
-    }
-  };
+  // const copyAddress = async () => {
+  //   try {
+  //     if (address) await navigator.clipboard.writeText(address);
+  //     toast.success("address copied");
+  //   } catch (error) {
+  //     toast.error("Please refresh the page and try again..");
+  //   }
+  // };
 
 
   const handlerLogout = () => {
