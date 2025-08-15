@@ -61,7 +61,7 @@ const CvOutputPage = () => {
       <h1 className="text-md md:text-2xl text-center font-semibold text-[#006666]">
         Verified Curriculum Vitae (CV) on the Blockchain
       </h1>
-      <a className="border border-gray-500 p-2 rounded-lg hover:text-[#006666]" href={`http://localhost:5173/new-cv/${id}`} target="_blank">View Other Template</a>
+      <a className="border border-gray-500 p-2 rounded-lg hover:text-[#006666]" href={`https://tru-cv-lisk.vercel.app/new-cv/${id}`} target="_blank">View Other Template</a>
       </div>
       <div className="mt-2 max-w-6xl mx-auto w-full border  border-l-0 shadow-lg   rounded-md overflow-x-scroll xl:overflow-x-clip">
         {/* main */}
