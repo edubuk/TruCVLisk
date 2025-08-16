@@ -62,9 +62,10 @@ const DashBoard = () => {
           },
         });
         const data = await response.json();
-        if(data.Ids.length===0)
+        if(!data.success)
         {
-          return toast.error("No CV found")
+          toast.dismiss(id);
+          return toast.error("No CV found");
         }
         setCvData(data?.Ids);
         toast.dismiss(id);
