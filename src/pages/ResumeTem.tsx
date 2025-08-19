@@ -64,7 +64,7 @@ const Resume: React.FC = () => {
   //         "Content-Type":"application/json",
   //         "Authorization": `Bearer ${localStorage.getItem("googleIdToken")}`
   //       },
-  //       body:JSON.stringify({url:`http://localhost:5173/new-cv/${id}`,selector:"#cv-preview-wrapper",loginMailId:localStorage.getItem("email")})
+  //       body:JSON.stringify({url:`http://:5173/new-cv/${id}`,selector:"#cv-preview-wrapper",loginMailId:localStorage.getItem("email")})
   //     })
   //     if(!response.ok){
   //       throw new Error("Failed to generate PDF");

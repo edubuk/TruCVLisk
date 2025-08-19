@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AccessDeniedPage from "./AccessDenied";
+import { API_BASE_URL } from "@/main";
 
 const AdminUsersPage = () => {
     const [usersData,setUsersData] = useState<any>([]);
     const [checkAccess,setCheckAccess] = useState<boolean>(false);
     const fetchUserData = async()=>{
         try {
-            const response = await fetch("http://localhost:8000/admin/getAllUser",{
+            const response = await fetch(`${API_BASE_URL}/admin/getAllUser`,{
                 method:"GET",
                 headers:{
                     "Content-Type":"application/json",
