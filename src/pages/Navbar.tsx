@@ -200,6 +200,10 @@ console.log("currentPath",currentPath);
     {
       name: "Dashboard",
       path: "/dashboard",
+    },
+    {
+      name:"Admin",
+      path:"/admin"
     }
   ];
 

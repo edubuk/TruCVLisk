@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 //import Razorpay from "razorpay";
 import SmallLoader from "@/components/Loader/Loader";
 import { API_BASE_URL } from "@/main";
@@ -25,6 +26,7 @@ const PaymentPopup: React.FC<Props> = ({ showPopup, setShowPopup}) => {
   const [isCouponValid, setCouponValid] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [currType,setCurrType] = useState<string>("INR");
+  const navigate = useNavigate();
 
   const checkOutHandler = async () => {
     try {
@@ -78,7 +80,8 @@ const PaymentPopup: React.FC<Props> = ({ showPopup, setShowPopup}) => {
                 setShowPopup(false);
                 setLoading(false);
                 localStorage.setItem("paymentId", res.data.paymentId);
-              } else {
+                navigate("/");
+                  } else {
                 toast.error("Payment verification failed.");
                 setLoading(false);
               }
@@ -105,31 +108,40 @@ const PaymentPopup: React.FC<Props> = ({ showPopup, setShowPopup}) => {
 
   const verifyCoupon = async () => {
     try {
-      const query = `?couponCode=${coupon}&currType=${currType}`
+      const query = `?couponCode=${coupon}&currType=${currType}&userMailId=${localStorage.getItem("email")}`
       const res = await axios.get(
         `${API_BASE_URL}/cv/coupon_verify${query}`
       );
-      if (res.data.success) {
+      //console.log("coupon log", res);
+      if (res.data.success && res.data.applied) {
         if(res.data.value===0)
         {
-          localStorage.setItem("isFreeCoupon","true");
-          toast.success("This one's on us! Enjoy your free access.")
-          setAmount(res.data.value);
-          setCouponValid(true);
+          toast.success(res.data.message);
+          setAmount(0);
           setShowPopup(false);
+          navigate("/");
         }
         else{
         console.log("coupon log", res);
         setAmount(res.data.value);
+        toast.success(res.data.message);
         setCouponValid(true);
         }
       } else {
         setAmount(res.data.value);
-        setErrorMsg("Invalid coupon code");
+        setErrorMsg(res.data.message);
         setCouponValid(false);
       }
     } catch (error) {
       console.log("error while coupon verification");
+    }
+  };
+
+  const couponHandler = (e:any) => {
+    e.preventDefault();
+    setCoupon(e.target.value);
+    if(errorMsg){
+      setErrorMsg("");
     }
   };
 
@@ -177,11 +189,11 @@ const PaymentPopup: React.FC<Props> = ({ showPopup, setShowPopup}) => {
                   </h2>
                 )}
                 <div className="relative">
-                  {isCouponValid && <ConfettiExplosion zIndex={60} />}
+                  {(isCouponValid || amount===0) && <ConfettiExplosion zIndex={60} />}
                   <div className="flex justify-between gap-2">
                     <input
                       type="text"
-                      onChange={(e) => setCoupon(e.target.value)}
+                      onChange={(e) => couponHandler(e)}
                       value={coupon}
                       placeholder="Enter Coupon Code"
                       className="w-full px-4 py-2 border rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"

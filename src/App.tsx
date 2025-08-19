@@ -16,12 +16,14 @@ const TermsAndConditions = lazy(() => import("./pages/TermCond"));
 const CancellationPolicy = lazy(() => import("./pages/CancellationPol"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 import AOS from "aos";
 import "aos/dist/aos.css";
 import AppPrivacyPolicy from "./pages/AppPrivacy";
 import SubscriptionPlans from "./components/Subscription/Subscription";
 import GoogleLoginModal from "./pages/Login";
 import ProtectedRoute from "./protectRoute";
+import AdminUsersPage from "./pages/Admin";
 
 
 function App() {
@@ -48,6 +50,7 @@ function App() {
                 path="/"
                 element={<Home />}
               />
+              <Route path="*" element={<NotFoundPage />} />
               <Route path="/new-cv/:id" element={<Resume />} />
               <Route path="/refund-policy" element={<RefundPolicy />} />
               <Route path="/about-us" element={<About />} />
@@ -58,6 +61,7 @@ function App() {
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/login" element={<GoogleLoginModal />} />
               <Route path="/cv/:id" element={<CvOutputPage />} />
+              <Route path="/admin" element={<AdminUsersPage/>} />
               <Route path="/subscription" element={<ProtectedRoute><SubscriptionPlans /></ProtectedRoute>} />
                 <Route path="/create-cv" element={<HomePage />} />
                 <Route path="/dashboard" element={<ProtectedRoute><DashBoard /></ProtectedRoute>} />

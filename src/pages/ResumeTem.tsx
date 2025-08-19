@@ -3,6 +3,8 @@ import { FaPhoneAlt, FaEnvelope, FaLinkedin, FaGithub, FaDownload, FaCopy } from
 import { useGetCv } from "@/api/cv.apis";
 import { Link, useParams } from "react-router-dom";
 import ThreeDotLoader from "@/components/Loader/ThreeDotLoader";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { CVDocument } from "@/components/PDFDownloader/ReactPDF";
 // import { SiHyperskill } from "react-icons/si";
 // import { FaBriefcase } from "react-icons/fa";
 // import { GiAchievement } from "react-icons/gi";
@@ -15,11 +17,11 @@ import ThreeDotLoader from "@/components/Loader/ThreeDotLoader";
 import { useUserData } from "@/context/AuthContext";
 
 import toast from "react-hot-toast";
+//import PdfDownloader from "@/components/PDFDownloader/PdfDownloader";
 
 
 const Resume: React.FC = () => {
   const { id } = useParams();
-  const [loading,setLoading] = useState(false);
   const [copied,setCopied] = useState(false);
   const pdfRef = useRef<HTMLDivElement>(null);
   const { subscriptionPlan } = useUserData();
@@ -53,35 +55,35 @@ const Resume: React.FC = () => {
   }
 
 
-  const downloadPdfHandler = async()=>{
-    try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:8000/cv/pdfmaker`,{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "Authorization": `Bearer ${localStorage.getItem("googleIdToken")}`
-        },
-        body:JSON.stringify({url:`http://localhost:5173/new-cv/${id}`,selector:"#cv-preview-wrapper",loginMailId:localStorage.getItem("email")})
-      })
-      if(!response.ok){
-        throw new Error("Failed to generate PDF");
-      }
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${cvData.personalDetails.name}.pdf`;
-      link.click();
-      URL.revokeObjectURL(url);
-      toast.success("PDF downloaded successfully");
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to download PDF");
-    }finally{
-      setLoading(false);
-    }
-  }
+  // const downloadPdfHandler = async()=>{
+  //   try {
+  //     setLoading(true);
+  //     const response = await fetch(`http://localhost:8000/cv/pdfmaker`,{
+  //       method:"POST",
+  //       headers:{
+  //         "Content-Type":"application/json",
+  //         "Authorization": `Bearer ${localStorage.getItem("googleIdToken")}`
+  //       },
+  //       body:JSON.stringify({url:`http://localhost:5173/new-cv/${id}`,selector:"#cv-preview-wrapper",loginMailId:localStorage.getItem("email")})
+  //     })
+  //     if(!response.ok){
+  //       throw new Error("Failed to generate PDF");
+  //     }
+  //     const blob = await response.blob();
+  //     const url = URL.createObjectURL(blob);
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.download = `${cvData.personalDetails.name}.pdf`;
+  //     link.click();
+  //     URL.revokeObjectURL(url);
+  //     toast.success("PDF downloaded successfully");
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error("Failed to download PDF");
+  //   }finally{
+  //     setLoading(false);
+  //   }
+  // }
 
   const copyResumeLink = async(link:string)=>{
     await navigator.clipboard.writeText(link).then(() =>setCopied(true)).catch((err) => {toast.error("something went wrong",err.message)});
@@ -106,7 +108,10 @@ const Resume: React.FC = () => {
             className="rounded flex items-center justify-center text-white bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] px-4 py-2 hover:opacity-90">
               Upgrade to Pro to Download
             </Link>
-        :<button onClick={downloadPdfHandler} className="bg-[#006666] flex items-center text-white px-4 py-2 rounded" disabled={loading}>{loading ? "Generating PDF..." :<span className="flex items-center"><FaDownload className="mr-2"/> Download as PDF</span>}</button>
+            :<PDFDownloadLink document={<CVDocument cvData={cvData} />} fileName={`${cvData.personalDetails.name}.pdf`}>
+            {({ loading }) => (loading ? "Preparing document..." :<button className="flex items-center bg-[#006666] text-white px-4 py-2 rounded"><FaDownload className="mr-2"/>Download as PDF</button>)}
+          </PDFDownloadLink>
+        // :<button onClick={downloadPdfHandler} className="bg-[#006666] flex items-center text-white px-4 py-2 rounded" disabled={loading}>{loading ? "Generating PDF..." :<span className="flex items-center"><FaDownload className="mr-2"/> Download as PDF</span>}</button>
 }
       </div>
       <div ref={pdfRef} className="font-family min-h-screen flex justify-center px-4 py-3 overflow-hidden w-full">

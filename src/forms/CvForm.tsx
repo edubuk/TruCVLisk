@@ -37,6 +37,7 @@ const CvForm = () => {
   const [profession, setProfession] = useState<string | null>(null);
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>(new FormData());
+  const [isAgree, setIsAgree] = useState<boolean>(false);
   //const oktoClient = useOkto();
   const { subscriptionPlan } = useUserData();
 
@@ -676,6 +677,7 @@ const CvForm = () => {
             {step === 4 && <Skills />}
             {step === 5 && <Achievements />}
             {step === 6 && <ProfileSummary />}
+            {step === 6 && <div className="flex items-center justify-start ml-12 w-full gap-2"><input type="checkbox" onChange={(e) => setIsAgree(e.target.checked)} checked={isAgree} /><p className="text-sm w-[500px] md:w-[600px] lg:w-[700px] xl:w-[800px]">I want to share my certificates & TruCV with recruiters globally for potential placement opportunities in India and Internationally, remote or in-person.</p></div>}
             {/* save and next button */}
             <div className="w-full mt-40 px-0 md:px-12 flex flex-col gap-5 sm:flex-row sm:w-full">
               {step !== 1 && (
@@ -698,7 +700,7 @@ const CvForm = () => {
                       <Button
                         type="button"
                         onClick={stepsHandler}
-                        disabled={isImageUploading}
+                        disabled={isImageUploading || step===6 && !isAgree}
                         className={`w-auto sm:w-full bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] hover:opacity-90 ${
                           isImageUploading
                             ? "cursor-not-allowed opacity-100"
