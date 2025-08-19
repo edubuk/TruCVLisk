@@ -107,6 +107,21 @@ export const CVDocument = ({ cvData }: any) => (
       {/* Education */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Education</Text>
+        {cvData.education.postGraduateCollege && (
+        <View style={styles.rowBetween}>
+          <View>
+            <Text style={styles.bold}>{cvData.education.postGraduateCollege}</Text>
+            <Text style={styles.italic}>{cvData.education.postGraduateDegree}</Text>
+          </View>
+          <View>
+            <Text>
+              {cvData.education.postGraduateDuration.duration.from} -{" "}
+              {cvData.education.postGraduateDuration.duration.to}
+            </Text>
+            <Text>GPA: <Text style={styles.bold}>{cvData.education.postGraduateGPA}/10</Text></Text>
+          </View>
+        </View>
+        )}
         {cvData.education.underGraduateCollege && (
         <View style={styles.rowBetween}>
           <View>
