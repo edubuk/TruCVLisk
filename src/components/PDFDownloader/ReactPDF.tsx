@@ -9,7 +9,7 @@ import {
   Font,
   Image
 } from "@react-pdf/renderer";
-import { color } from "framer-motion";
+
 
 
 // Register Times font (built-in)
