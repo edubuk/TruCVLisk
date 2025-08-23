@@ -139,7 +139,7 @@ export const CVDocument = ({ cvData,id }: any) => (
           </Link>
         </View>
       </View>
-      <View style={styles.trucvLink}><Image src="/truCv.png" style={{width:50}}></Image><Text>{" "}by Edubuk: </Text><Link src={`http://localhost:5173/cv/${id}`}>Click to view verifiable CV</Link></View>
+      <View style={styles.trucvLink}><Image src="/truCv.png" style={{width:50}}></Image><Text>{" "}by Edubuk: </Text><Link src={`https://edubuktrucv.com/cv/${id}`}>Click to view verifiable CV</Link></View>
 
       {/* Education */}
       <View style={styles.section}>
