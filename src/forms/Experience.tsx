@@ -35,12 +35,12 @@ const Experience = () => {
             control={control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>How many years of experience do you have?</FormLabel>
+                <FormLabel>How many months of experience do you have?</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
                     {...field}
-                    placeholder="Enter years of experience"
+                    placeholder="Enter months of experience"
                   />
                 </FormControl>
                 <FormMessage />

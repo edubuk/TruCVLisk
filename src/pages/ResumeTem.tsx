@@ -108,7 +108,7 @@ const Resume: React.FC = () => {
             className="rounded flex items-center justify-center text-white bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] px-4 py-2 hover:opacity-90">
               Upgrade to Pro to Download
             </Link>
-            :<PDFDownloadLink document={<CVDocument cvData={cvData} />} fileName={`${cvData.personalDetails.name}.pdf`}>
+            :<PDFDownloadLink document={<CVDocument cvData={cvData} id={id} />} fileName={`${cvData.personalDetails.name}.pdf`}>
             {({ loading }) => (loading ? "Preparing document..." :<button className="flex items-center bg-[#006666] text-white px-4 py-2 rounded"><FaDownload className="mr-2"/>Download as PDF</button>)}
           </PDFDownloadLink>
         // :<button onClick={downloadPdfHandler} className="bg-[#006666] flex items-center text-white px-4 py-2 rounded" disabled={loading}>{loading ? "Generating PDF..." :<span className="flex items-center"><FaDownload className="mr-2"/> Download as PDF</span>}</button>

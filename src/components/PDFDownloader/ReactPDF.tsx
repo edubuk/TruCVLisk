@@ -9,6 +9,7 @@ import {
   Font,
   Image
 } from "@react-pdf/renderer";
+import { color } from "framer-motion";
 
 
 // Register Times font (built-in)
@@ -77,11 +78,46 @@ const styles = StyleSheet.create({
     marginRight: 6,
     fontWeight:"bold",
     fontSize: 9,
+  },
+  footer: {
+    position: "absolute",
+    display:"flex",
+    alignItems:"center",
+    justifyContent:"center",
+    bottom: 10,    
+    right:20,    // distance from bottom edge
+    fontSize: 10,
+    color: "#444", 
+    width:"100%",     // prevent overflowing
+  },
+  trucvLink:{
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    justifyContent:"center",        // distance from bottom edge
+    fontSize: 10,
+    fontWeight:"bold",
+    color: "#444",
+    width: "100%",      // prevent overflowing
+  },
+  alignRight:{
+    display:"flex",
+    flexDirection:"column",
+    alignItems:"flex-end",
+    justifyContent:"center"
   }
 });
 
-export const CVDocument = ({ cvData }: any) => (
-  <Document>
+export const CVDocument = ({ cvData,id }: any) => (
+  <Document
+  title="Edubuk Certificate"
+  author="Edubuk"
+  subject="Blockchain Verification"
+  producer="Edubuk Generator"
+  creator="Edubuk"
+  creationDate={new Date("2023-01-01T00:00:00Z")}  // fixed date
+  modificationDate={new Date("2023-01-01T00:00:00Z")}
+  >
     <Page size="A4" style={styles.page}>
       {/* Header */}
       <View style={styles.header}>
@@ -103,6 +139,7 @@ export const CVDocument = ({ cvData }: any) => (
           </Link>
         </View>
       </View>
+      <View style={styles.trucvLink}><Image src="/truCv.png" style={{width:50}}></Image><Text>{" "}by Edubuk: </Text><Link src={`http://localhost:5173/cv/${id}`}>Click to view verifiable CV</Link></View>
 
       {/* Education */}
       <View style={styles.section}>
@@ -113,7 +150,7 @@ export const CVDocument = ({ cvData }: any) => (
             <Text style={styles.bold}>{cvData.education.postGraduateCollege}</Text>
             <Text style={styles.italic}>{cvData.education.postGraduateDegree}</Text>
           </View>
-          <View>
+          <View style={styles.alignRight}>
             <Text>
               {cvData.education.postGraduateDuration.duration.from} -{" "}
               {cvData.education.postGraduateDuration.duration.to}
@@ -128,7 +165,7 @@ export const CVDocument = ({ cvData }: any) => (
             <Text style={styles.bold}>{cvData.education.underGraduateCollege}</Text>
             <Text style={styles.italic}>{cvData.education.underGraduateDegree}</Text>
           </View>
-          <View>
+          <View style={styles.alignRight}>
             <Text>
               {cvData.education.underGraduateDuration.duration.from} -{" "}
               {cvData.education.underGraduateDuration.duration.to}
@@ -144,7 +181,7 @@ export const CVDocument = ({ cvData }: any) => (
         <Text style={styles.italic}>Class XII | {cvData.education.class12Board}</Text>
          </View>
          <View>
-        <Text>{cvData.education.class12Grade}</Text>
+        <Text>{cvData.education.class12Grade}%</Text>
         </View>
         </View>
         )}
@@ -155,7 +192,7 @@ export const CVDocument = ({ cvData }: any) => (
         <Text style={styles.italic}>Class X | {cvData.education.class10Board}</Text>
         </View>
         <View>
-        <Text>{cvData.education.class10Grade}</Text>
+        <Text>{cvData.education.class10Grade}%</Text>
         </View>
         </View>
         )}
@@ -247,6 +284,17 @@ export const CVDocument = ({ cvData }: any) => (
         ))}
       </View>
       )}
+      {/* eseal-link */}
+      <View style={styles.footer}>
+        <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center",width:"100%"}}>
+        <Text style={styles.bold}>
+        This CV is Recorded on the Blockchain by</Text><Image src="/newLogo.png" style={{width:30,height:30}}/><Text style={styles.bold}> and is part of TruCV.{" "}
+          <Link style={styles.bold} src="https://www.edubukeseal.org/verifier">
+            Click to Verify
+          </Link>
+        </Text>
+        </View>
+      </View>
     </Page>
   </Document>
 );
