@@ -18,7 +18,6 @@ import { AnimatedVerification } from "@/components/ui/AnimatedVerification";
 import { convertDateToString } from "@/utils";
 import dayjs from "dayjs";
 
-
 type Props = {
   fields: Record<"id", string>[];
   index: number;
@@ -38,6 +37,7 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
 
   const { Experience, experienceVerificationsValidations: storedVerification } =
     getValues();
+  console.log("stored experience verification is", storedVerification);
   // const [dateFrom, setDateFrom] = useState<any | null>(null);
   // const [dateTo, setDateTo] = useState<any | null>(null);
 
@@ -57,7 +57,7 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
   });
 
   const [date, setDate] = useState(initialDate.current);
-  const [isCurrentlyWorking, setCurrentlyWorking] = useState<boolean>(false)
+  const [isCurrentlyWorking, setCurrentlyWorking] = useState<boolean>(false);
   const [dateFrom, setDateFrom] = useState(dayjs(date.from));
   const [dateTo, setDateTo] = useState(dayjs(date.to));
   console.log("date check is ", date);
@@ -73,7 +73,7 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
     if (dateFrom && dateTo) {
       setDate({
         from: convertDateToString(dateFrom),
-        to:isCurrentlyWorking? "present":convertDateToString(dateTo),
+        to: isCurrentlyWorking ? "present" : convertDateToString(dateTo),
       });
     }
   }, [dateFrom, dateTo]);
@@ -141,11 +141,14 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
           render={() => (
             <FormItem className="flex flex-1 gap-1 flex-col justify-center mt-2">
               <FormLabel className="">Duration</FormLabel>
-              <FormLabel className="flex  gap-1"><Input
-                     className="size-4"
-                     type="checkbox" 
-                     onChange={()=>setCurrentlyWorking(!isCurrentlyWorking)}
-                     />You are currently working here</FormLabel>
+              <FormLabel className="flex  gap-1">
+                <Input
+                  className="size-4"
+                  type="checkbox"
+                  onChange={() => setCurrentlyWorking(!isCurrentlyWorking)}
+                />
+                You are currently working here
+              </FormLabel>
               <FormControl>
                 <div className="flex gap-10">
                   <div className="">
@@ -165,7 +168,7 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
                       setValue={setDateTo}
                       defaultDate={date}
                       index={index}
-                    isCurrentlyWorking={isCurrentlyWorking}
+                      isCurrentlyWorking={isCurrentlyWorking}
                     />
                   </div>
                 </div>
@@ -206,14 +209,14 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
           </Button>
         )} */}
         <Button
-            type="button"
-            variant={"destructive"}
-            className="mt-5 text-sm px-10"
-            onClick={deleteHandler}
-          >
-            Remove
-            <MdDeleteOutline className="text-xl ml-2" />
-          </Button>
+          type="button"
+          variant={"destructive"}
+          className="mt-5 text-sm px-10"
+          onClick={deleteHandler}
+        >
+          Remove
+          <MdDeleteOutline className="text-xl ml-2" />
+        </Button>
       </div>
       {/* Animated Verification section */}
       <div className="flex flex-col gap-4 sm:px-2">
@@ -233,7 +236,7 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
                   setterVerificationObject={setExperienceVerifications}
                   jobRole={Experience[index].job_role}
                   companyName={Experience[index].company_name}
-                  companyInfo = {`Experience[${index}]`}
+                  companyInfo={`Experience[${index}]`}
                 />
                 <FormMessage />
               </FormItem>

@@ -40,6 +40,7 @@ const skills: string[] = [
 // };
 
 const Skills = () => {
+  const { control, setValue, getValues } = useFormContext();
   const {
     selectedSkills,
     setSelectedSkills,
@@ -52,25 +53,36 @@ const Skills = () => {
   } = useCvFromContext();
   const [typerSkill, setTyperSkill] = useState<string>("");
   const [isKeyDown, setIsKeyDown] = useState<boolean>(false);
-  const { control, setValue, getValues } = useFormContext();
-  // const [skillsVerification, setSkillsVerification] =
-  //   useState<SkillsVerificationType>({});
-  // console.log(skillError);
+
   console.log("skills verification", skillsVerification);
   console.log("form object", getValues());
-  const { skillsVerificationsValidations: storedVerification,
+  const {
+    skillsVerificationsValidations: storedVerification,
     Skills: formSkills,
-   } = getValues();
+  } = getValues();
 
+  const localItem = JSON.parse(localStorage.getItem("step4CvData") || "{}");
+  console.log(
+    "stored skills verifications",
+    localItem.skillsVerificationsValidations
+  );
   const selectSkillsHandler = (skill: string) => {
-    if (!selectedSkills.includes(skill)) {
+    // Check if skill already exists by looking at skillName property
+    const skillExists = selectedSkills.some(
+      (selectedSkill) => selectedSkill.skillName === skill
+    );
+
+    if (!skillExists) {
       if (selectedSkills.length >= 5) {
         setSkillShowError(true);
         setSkillError("You can only select 5 skills");
         return;
       }
-      setSelectedSkills((prev) => [...prev, skill]);
-      setValue("Skills", [...formSkills, {skillName:skill,skillUrl:""}]);
+      setSelectedSkills((prev) => [
+        ...prev,
+        { skillName: skill, skillUrl: "" },
+      ]);
+      setValue("Skills", [...formSkills, { skillName: skill, skillUrl: "" }]);
       const updatedSKillsVerifications = {
         ...skillsVerification,
         [skill]: {
@@ -81,25 +93,20 @@ const Skills = () => {
       };
       // setting skills verification object;
       setSkillsVerification(updatedSKillsVerifications);
-      // setSkillsVerification((prev) => ({
-      //   ...prev,
-      //   [skill]: {
-      //     isSelfAttested: false,
-      //     proof: "",
-      //     mailStatus: "",
-      //   },
-      // }));
+
       setValue("skillsVerifications", updatedSKillsVerifications);
       return;
     }
 
     setSelectedSkills((prev) =>
-      prev.filter((prevSkill) => prevSkill !== skill)
+      prev.filter((prevSkill) => prevSkill.skillName !== skill)
     );
     // const filteredSkills = selectedSkills.filter(
     //   (prevSkill) => prevSkill !== skill
     // );
-    const formFilteredSkills = formSkills.filter((prevSkill:any) => prevSkill.skillName !== skill);
+    const formFilteredSkills = formSkills.filter(
+      (prevSkill: any) => prevSkill.skillName !== skill
+    );
     setValue("Skills", formFilteredSkills);
     setSkillsVerification((prev) => {
       let updatedSkillsVerifications = { ...prev };
@@ -111,11 +118,13 @@ const Skills = () => {
 
   const removeSkillHandler = (skill: string) => {
     setSelectedSkills((prev) =>
-      prev.filter((prevSkill) => prevSkill !== skill)
+      prev.filter((prevSkill) => prevSkill.skillName !== skill)
     );
-    const formFilteredSkill = formSkills.filter((prevSkill:any) => prevSkill.skillName !== skill);
+    const formFilteredSkill = formSkills.filter(
+      (prevSkill: any) => prevSkill.skillName !== skill
+    );
     const filteredSkills = selectedSkills.filter(
-      (prevSkill) => prevSkill !== skill
+      (prevSkill) => prevSkill.skillName !== skill
     );
     if (filteredSkills.length < 5) {
       setSkillShowError(false);
@@ -144,8 +153,14 @@ const Skills = () => {
         return;
       }
 
-      setSelectedSkills((prev) => [...prev, typerSkill]);
-      setValue("Skills", [...formSkills, {skillName:typerSkill,skillUrl:""}]);
+      setSelectedSkills((prev) => [
+        ...prev,
+        { skillName: typerSkill, skillUrl: "" },
+      ]);
+      setValue("Skills", [
+        ...formSkills,
+        { skillName: typerSkill, skillUrl: "" },
+      ]);
       const updatedSkillsVerifications = {
         ...skillsVerification,
         [typerSkill]: {
@@ -168,8 +183,14 @@ const Skills = () => {
       setSkillError("You can only add 5 skills");
       return;
     }
-    setSelectedSkills((prev) => [...prev, typerSkill]);
-    setValue("Skills", [...formSkills, {skillName:typerSkill,skillUrl:""}]);
+    setSelectedSkills((prev) => [
+      ...prev,
+      { skillName: typerSkill, skillUrl: "" },
+    ]);
+    setValue("Skills", [
+      ...formSkills,
+      { skillName: typerSkill, skillUrl: "" },
+    ]);
     const updatedSkillsVerifications = {
       ...skillsVerification,
       [typerSkill]: {
@@ -183,7 +204,8 @@ const Skills = () => {
     setValue("skillsVerifications", updatedSkillsVerifications);
     setTyperSkill("");
   };
-  console.log("stored skills verifications", storedVerification);
+  console.log("stores skill verifications", storedVerification);
+  console.log("skills are", skills);
   return (
     <div className="space-y-7">
       <div className="flex flex-col gap-2 px-5 sm:px-10 mt-4">
@@ -194,45 +216,49 @@ const Skills = () => {
       </div>
 
       <div className="flex flex-wrap  mt-4 px-2 sm:px-10 gap-5">
-        {skills.map((skill) => (
-          <Button
-            type="button"
-            key={skill}
-            className={`px-2 sm:px-5 py-1 shadow-md bg-white text-black border border-[#FA9110] hover:bg-white hover:text-black text-sm sm:text-md font-semibold${
-              selectedSkills.includes(skill)
-                ? "border-green-500 text-green-600 hover:border-green-500 hover:text-green-600"
-                : "border-[#FA9110]"
-            }`}
-            onClick={() => selectSkillsHandler(skill)}
-          >
-            {selectedSkills.includes(skill) && (
-              <IoMdCheckmark className="text-lg mr-2 mt-1" />
-            )}
-            {/* <IoMdCheckmark className="text-lg mr-2 mt-1" /> */}
-            {skill}
-          </Button>
-        ))}
+        {skills.map((skill) => {
+          const skillExist = selectedSkills.some((s) => s.skillName === skill);
+          return (
+            <Button
+              type="button"
+              key={skill}
+              className={`px-2 sm:px-5 py-1 shadow-md bg-white text-black border border-[#FA9110] hover:bg-white hover:text-black text-sm sm:text-md font-semibold${
+                skillExist
+                  ? "border-green-500 text-green-600 hover:border-green-500 hover:text-green-600"
+                  : "border-[#FA9110]"
+              }`}
+              onClick={() => selectSkillsHandler(skill)}
+            >
+              {skillExist && <IoMdCheckmark className="text-lg mr-2 mt-1" />}
+              {/* <IoMdCheckmark className="text-lg mr-2 mt-1" /> */}
+              {skill}
+            </Button>
+          );
+        })}
       </div>
 
+      {/* FIXME: bug culprit section start----------------- */}
       <div className="flex px-2 sm:px-10">
         <div className="border p-1 rounded-md flex flex-wrap w-full gap-2">
           {selectedSkills.length > 0 &&
-            selectedSkills.map((skill) => (
-              <Button
-                key={skill}
-                type="button"
-                className="px-2 sm:px-4  bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] flex items-center text-xs sm:text-base"
-              >
-                {skill}
-                <X
+            selectedSkills.map(({ skillName }) => {
+              return (
+                <Button
+                  key={skillName}
                   type="button"
-                  onClick={() => removeSkillHandler(skill)}
-                  size={20}
-                  strokeWidth={2}
-                  className="ml-2 mt-1"
-                />
-              </Button>
-            ))}
+                  className="px-2 sm:px-4  bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] flex items-center text-xs sm:text-base"
+                >
+                  {skillName}
+                  <X
+                    type="button"
+                    onClick={() => removeSkillHandler(skillName)}
+                    size={20}
+                    strokeWidth={2}
+                    className="ml-2 mt-1"
+                  />
+                </Button>
+              );
+            })}
           {/* <Button className="px-4  bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)]   flex items-center text-base">
             test
             <X size={20} strokeWidth={2} className="ml-2 mt-1" />
@@ -271,25 +297,11 @@ const Skills = () => {
                 </FormItem>
               )}
             />
-            {/* <Input
-              value={typerSkill}
-              onChange={(e) => setTyperSkill(e.target.value)}
-              className="border-none outline-none focus-visible:ring-0 focus-visible:ring-transparent flex-1  min-w-48"
-              placeholder={`Add custom skills`}
-              onKeyDown={handleKeyDown}
-            />
-            {typerSkill && (
-              <div
-                className={`border border-zinc-300 absolute top-full left-5 px-5  max-w-xl w-full rounded-md ${
-                  isKeyDown ? "bg-[#F4F4F5]" : "bg-white"
-                } py-2  mt-2 overflow-hidden text-wrap z-10`}
-              >
-                <span className="">{typerSkill}</span>
-              </div>
-            )} */}
           </div>
         </div>
       </div>
+      {/* bug culprit section end ----------------- */}
+
       {/* alert instruction */}
       <div className="px-2 sm:px-10">
         <Alert className="">
@@ -303,7 +315,7 @@ const Skills = () => {
       </div>
       {/* Animated skills section */}
       <div className="flex flex-col gap-4 sm:px-2">
-        {formSkills.map((formSkill:any, i:any) => (
+        {formSkills.map((formSkill: any, i: any) => (
           <FormField
             name={`skillsVerificationsValidations[${formSkill.skillName}]`}
             control={control}
@@ -318,7 +330,7 @@ const Skills = () => {
                   validationStep="skillsVerificationsValidations"
                   setterVerificationObject={setSkillsVerification}
                   verificationStep="skillsVerifications"
-                  formSkill = {`Skills[${i}]`}
+                  formSkill={`Skills[${i}]`}
                 />
                 <FormMessage />
               </FormItem>
