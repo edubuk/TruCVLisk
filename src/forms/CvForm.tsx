@@ -40,7 +40,7 @@ const CvForm = () => {
   const [isAgree, setIsAgree] = useState<boolean>(false);
   //const oktoClient = useOkto();
   const { subscriptionPlan } = useUserData();
-
+  console.log("current step is", step);
   useEffect(() => {
     const nanoId = nanoid(16);
     const storedNanoId = localStorage.getItem("nanoId");
@@ -81,14 +81,25 @@ const CvForm = () => {
       return storedQualification ? storedQualification : "class10";
     }
   );
-  console.log(selectedQualification);
+
   const { createCVInBackend, isLoading } = useCV();
   console.log("form errors", form.formState.errors);
   useEffect(() => {
-    const savedData = localStorage.getItem(`step${step}CvData`);
-
+    console.log("inside the useEffect 2805");
+    const currentStep = localStorage.getItem("currentStep") || "1";
+    const savedData = localStorage.getItem(
+      step !== 1
+        ? `step${Number(currentStep) - 1}CvData`
+        : `step${currentStep}CvData`
+    );
+    console.log(
+      `reading the step fetching from id= 2805 localstorage step = ${step}CvData`
+    );
+    console.log("userEffect runs and savedData is", savedData);
     if (savedData) {
+      console.log("inside the if block!");
       let parsedData = JSON.parse(savedData);
+      console.log("inside if block parsed data", parsedData);
       setProfession(parsedData.profession || null);
       if (parsedData?.Experience?.length > 0) {
         parsedData.Experience = parsedData.Experience.map((exp: any) => {
@@ -274,13 +285,12 @@ const CvForm = () => {
       fieldsToValidate.push("Years_of_experience");
     } else if (step === 4) {
       const currentFormData = form.getValues();
-
+      console.log("Step 4 validation calls");
       fieldsToValidate.push("Skills");
-      currentFormData.Skills.forEach((skill) => {
+      currentFormData.Skills.forEach(({ skillName }) => {
         fieldsToValidate.push(
-          `skillsVerificationsValidations[${skill}]` as any
+          `skillsVerificationsValidations[${skillName}]` as any
         );
-        // fieldsToValidate = ["Skills"];
       });
     } else if (step === 5) {
       const currentFormData = form.getValues();
@@ -326,7 +336,7 @@ const CvForm = () => {
         "profileSummarVerificationValidations.profile_summary" as any,
       ];
     }
-
+    console.log("fields to validate", fieldsToValidate);
     // validate step;
     const isValid = await form.trigger(fieldsToValidate);
     //console.log("is valid ?? ", isValid);

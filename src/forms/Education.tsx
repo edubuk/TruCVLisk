@@ -68,7 +68,7 @@ const Education = ({
 
   const initialDate2 = useRef(() => {
     const storedFormData = localStorage.getItem("step2CvData");
-    console.log("stored farm data", storedFormData);
+    // console.log("stored farm data", storedFormData);
     if (storedFormData) {
       const parsedFormData = JSON.parse(storedFormData);
       return (
