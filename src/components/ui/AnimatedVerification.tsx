@@ -9,12 +9,11 @@ import { twMerge } from "tailwind-merge";
 import { useFormContext } from "react-hook-form";
 import { Dialog, DialogContent, DialogTrigger } from "./dialog";
 import { FileUpload } from "./file-upload";
-import {uploadToIpfs} from "./PinFileOnPinata";
+import { uploadToIpfs } from "./PinFileOnPinata";
 // import {sendEmail} from './MailToVerify';
 // import toast from "react-hot-toast";
 // import { Input } from "./input";
 // import { Button } from "./button";
-
 
 const Circle = forwardRef<
   HTMLDivElement,
@@ -74,23 +73,23 @@ export function AnimatedVerification({
     };
   };
   setterVerificationObject: React.Dispatch<React.SetStateAction<any>>;
-  jobRole?:string;
-  companyName?:string;
-  companyInfo?:any;
-  formSkill?:any;
-  awardName?:string;
-  awardOrg?:string;
-  awardInfo?:string;
-  courseInfo?:string;
-  courseName?:string;
-  courseOrg?:string;
-  projectInfo?:string;
-  class12CollegeName?:string;
-  class10SchoolName?:string;
-  underGraduateCollegeName?:string;
-  postGraduateCollegeName?:string;
-  underGraduateDegreeName?:string;
-  postGraduateDegreeName?:string;
+  jobRole?: string;
+  companyName?: string;
+  companyInfo?: any;
+  formSkill?: any;
+  awardName?: string;
+  awardOrg?: string;
+  awardInfo?: string;
+  courseInfo?: string;
+  courseName?: string;
+  courseOrg?: string;
+  projectInfo?: string;
+  class12CollegeName?: string;
+  class10SchoolName?: string;
+  underGraduateCollegeName?: string;
+  postGraduateCollegeName?: string;
+  underGraduateDegreeName?: string;
+  postGraduateDegreeName?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   // const div1Ref = useRef<HTMLDivElement>(null);
@@ -103,7 +102,7 @@ export function AnimatedVerification({
 
   // states;
   const [files, setFiles] = useState<File[]>([]);
-  const [ipfsHash,setIpfsHash] = useState<string>("");
+  const [ipfsHash, setIpfsHash] = useState<string>("");
   const { setValue, getValues } = useFormContext();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -111,8 +110,9 @@ export function AnimatedVerification({
   // const [openMailDialog, setOpenMailDialog] = useState<boolean>(false);
   // Safely check if the verificationObject contains the field
   // const verificationData = verificationObject[field] || {};
-  console.log("skill",);
+  console.log("skill");
   const verificationData = storedVerifications[field] || {};
+  console.log("verification data is", verificationData);
   //console.log(files);
   // console.log("form object", getValues());
   const formObject = getValues();
@@ -132,74 +132,66 @@ export function AnimatedVerification({
     // for validations needed to stop the user from directly skip verifications;
     setValue(`${validationStep}[${field}].isSelfAttested`, true);
   };
-  
+
   const uploadImageToDB = async () => {
     if (files.length === 0) return;
-  
+
     let docHash;
-    switch(verificationStep)
-    {
+    switch (verificationStep) {
       case "educationVerifications":
-        if(field==="class10")
-        {
-        docHash = await uploadToIpfs(files[0], setIsUploading);
-        try {
-          setIsUploading(false);
-          setDialogOpen(false); //closing dialog after upload;
-          // Ensure setValue is called after all uploads are complete
-          setValue(`class10CertUrl`,docHash);
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-          setIpfsHash(docHash as string);
-        } catch (error) {
-          console.error("Error uploading files:", error);
-          setIsUploading(false);
+        if (field === "class10") {
+          docHash = await uploadToIpfs(files[0], setIsUploading);
+          try {
+            setIsUploading(false);
+            setDialogOpen(false); //closing dialog after upload;
+            // Ensure setValue is called after all uploads are complete
+            setValue(`class10CertUrl`, docHash);
+            //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+            setIpfsHash(docHash as string);
+          } catch (error) {
+            console.error("Error uploading files:", error);
+            setIsUploading(false);
+          }
+        } else if (field === "class12") {
+          docHash = await uploadToIpfs(files[0], setIsUploading);
+          try {
+            setIsUploading(false);
+            setDialogOpen(false); //closing dialog after upload;
+            // Ensure setValue is called after all uploads are complete
+            setValue(`class12CertUrl`, docHash);
+            //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+            setIpfsHash(docHash as string);
+          } catch (error) {
+            console.error("Error uploading files:", error);
+            setIsUploading(false);
+          }
+        } else if (field === "undergraduation") {
+          docHash = await uploadToIpfs(files[0], setIsUploading);
+          try {
+            setIsUploading(false);
+            setDialogOpen(false); //closing dialog after upload;
+            // Ensure setValue is called after all uploads are complete
+            setValue(`undergraduateCertUrl`, docHash);
+            //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+            setIpfsHash(docHash as string);
+          } catch (error) {
+            console.error("Error uploading files:", error);
+            setIsUploading(false);
+          }
+        } else if (field === "postgraduation") {
+          docHash = await uploadToIpfs(files[0], setIsUploading);
+          try {
+            setIsUploading(false);
+            setDialogOpen(false); //closing dialog after upload;
+            // Ensure setValue is called after all uploads are complete
+            setValue(`postgraduateCertUrl`, docHash);
+            //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+            setIpfsHash(docHash as string);
+          } catch (error) {
+            console.error("Error uploading files:", error);
+            setIsUploading(false);
+          }
         }
-        }
-        else if(field==="class12")
-        {
-        docHash = await uploadToIpfs(files[0], setIsUploading);
-        try {
-          setIsUploading(false);
-          setDialogOpen(false); //closing dialog after upload;
-          // Ensure setValue is called after all uploads are complete
-          setValue(`class12CertUrl`,docHash);
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-          setIpfsHash(docHash as string);
-        } catch (error) {
-          console.error("Error uploading files:", error);
-          setIsUploading(false);
-        }
-        }
-        else if(field==="undergraduation")
-        {
-        docHash = await uploadToIpfs(files[0], setIsUploading);
-        try {
-          setIsUploading(false);
-          setDialogOpen(false); //closing dialog after upload;
-          // Ensure setValue is called after all uploads are complete
-          setValue(`undergraduateCertUrl`,docHash);
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-          setIpfsHash(docHash as string);
-        } catch (error) {
-          console.error("Error uploading files:", error);
-          setIsUploading(false);
-        }
-            }
-        else if(field==="postgraduation")
-        {
-        docHash = await uploadToIpfs(files[0], setIsUploading);
-        try {
-          setIsUploading(false);
-          setDialogOpen(false); //closing dialog after upload;
-          // Ensure setValue is called after all uploads are complete
-          setValue(`postgraduateCertUrl`,docHash);
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-          setIpfsHash(docHash as string);
-            } catch (error) {
-          console.error("Error uploading files:", error);
-          setIsUploading(false);
-        }
-            }
         break;
       case "experienceVerifications":
         docHash = await uploadToIpfs(files[0], setIsUploading);
@@ -207,14 +199,14 @@ export function AnimatedVerification({
           setIsUploading(false);
           setDialogOpen(false); //closing dialog after upload;
           // Ensure setValue is called after all uploads are complete
-          setValue(`${companyInfo}.experienceCertUrl`,docHash);
+          setValue(`${companyInfo}.experienceCertUrl`, docHash);
           //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
           setIpfsHash(docHash as string);
         } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
         }
-          break;
+        break;
 
       case "skillsVerifications":
         try {
@@ -222,23 +214,22 @@ export function AnimatedVerification({
           setIsUploading(false);
           setDialogOpen(false); //closing dialog after upload;
           // Ensure setValue is called after all uploads are complete
-          setValue(`${formSkill}.skillUrl`,docHash);
+          setValue(`${formSkill}.skillUrl`, docHash);
           //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
           setIpfsHash(docHash as string);
         } catch (error) {
           console.error("Error uploading files:", error);
           setIsUploading(false);
         }
-          break;
+        break;
 
       case "awardVerifications":
-
         try {
           docHash = await uploadToIpfs(files[0], setIsUploading);
           setIsUploading(false);
           setDialogOpen(false); //closing dialog after upload;
           // Ensure setValue is called after all uploads are complete
-          setValue(`${awardInfo}.awardCertUrl`,docHash);
+          setValue(`${awardInfo}.awardCertUrl`, docHash);
           setIpfsHash(docHash as string);
           //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
         } catch (error) {
@@ -247,39 +238,38 @@ export function AnimatedVerification({
         }
         break;
       case "courseVerifications":
-        try{
-        docHash = await uploadToIpfs(files[0], setIsUploading);
-        setIsUploading(false);
-        setDialogOpen(false); //closing dialog after upload;
-        // Ensure setValue is called after all uploads are complete
-        setValue(`${courseInfo}.courseCertUrl`,docHash);
-        if(docHash)
-        {
-          console.log("docHash while setting",docHash);
-          setIpfsHash(docHash as string);
+        try {
+          docHash = await uploadToIpfs(files[0], setIsUploading);
+          setIsUploading(false);
+          setDialogOpen(false); //closing dialog after upload;
+          // Ensure setValue is called after all uploads are complete
+          setValue(`${courseInfo}.courseCertUrl`, docHash);
+          if (docHash) {
+            console.log("docHash while setting", docHash);
+            setIpfsHash(docHash as string);
+          }
+          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+        } catch (error) {
+          console.error("Error uploading files:", error);
+          setIsUploading(false);
         }
-        //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-      } catch (error) {
-        console.error("Error uploading files:", error);
-        setIsUploading(false);
-      }
-      break;
+        break;
       case "projectsVerifications":
-        try{
-        docHash = await uploadToIpfs(files[0], setIsUploading);
-        setIsUploading(false);
-        setDialogOpen(false); //closing dialog after upload;
-        // Ensure setValue is called after all uploads are complete
-        setValue(`${projectInfo}.projectCertUrl`,docHash);
-        setIpfsHash(docHash as string);
-        //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-      } catch (error) {
-        console.error("Error uploading files:", error);
-        setIsUploading(false);
-      }
-      break;
+        try {
+          docHash = await uploadToIpfs(files[0], setIsUploading);
+          setIsUploading(false);
+          setDialogOpen(false); //closing dialog after upload;
+          // Ensure setValue is called after all uploads are complete
+          setValue(`${projectInfo}.projectCertUrl`, docHash);
+          setIpfsHash(docHash as string);
+          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+        } catch (error) {
+          console.error("Error uploading files:", error);
+          setIsUploading(false);
+        }
+        break;
     }
-    console.log("docHash",docHash);
+    console.log("docHash", docHash);
     // if(docHash)
     //   {
     //     if (
@@ -294,20 +284,20 @@ export function AnimatedVerification({
     //       console.log("verification data : ",verificationData)
     //       // Retrieve existing hashArray from localStorage
     //       let data = localStorage.getItem("hashArray");
-        
+
     //       let updatedArray = [];
     //       if (data) {
     //         // Parse existing data if not null
     //         updatedArray = JSON.parse(data);
     //       }
-        
+
     //       // Combine existing hashes with the new ones
     //       updatedArray = [...updatedArray, ...hashArray];
-        
+
     //       // Store the updated array back in localStorage
     //       localStorage.setItem("hashArray", JSON.stringify(updatedArray));
     //     }
-        
+
     //   setIpfsHash(docHash as string);
     //   proofArray.push(docHash as string);
     //   setDialogOpen(false);
@@ -347,16 +337,7 @@ export function AnimatedVerification({
     setFiles((prev) => [...prev, ...files]);
   };
   setValue(`${verificationStep}[${field}].mailStatus`, "pending");
-  // handle mail to issuer;
-  // const handleMailToIssuer = () => {
-  //   // TODO: handling mail to issuer;
-  //   //e.preventDefault();
-  //   if(!ipfsHash)
-  //   {
-  //     return toast.error("proof document is not uploaded");
-  //   }
-  //   sendEmail(ipfsHash,verificationStep,field,mailId);
-  // };
+
   return (
     <div
       className={cn(
@@ -429,21 +410,21 @@ export function AnimatedVerification({
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger>
                 {/* triggering dialogue */}
-              {!ipfsHash&&
-                <UploadProofButton
-                  col
-                  className="-ml-7 text-xs sm:text-base sm:ml-0"
-                  ipfsHash={ipfsHash}
-                />
-              }
+                {!ipfsHash && (
+                  <UploadProofButton
+                    col
+                    className="-ml-7 text-xs sm:text-base sm:ml-0"
+                    ipfsHash={ipfsHash}
+                  />
+                )}
               </DialogTrigger>
-              {ipfsHash&&
-              <UploadProofButton
+              {ipfsHash && (
+                <UploadProofButton
                   col
                   className="-ml-7 text-xs sm:text-base sm:ml-0 -mt-3"
                   ipfsHash={ipfsHash}
                 />
-              }
+              )}
               <DialogContent className="max-w-80 sm:max-w-2xl">
                 <FileUpload
                   onChange={handleUploadProof}

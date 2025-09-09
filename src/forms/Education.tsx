@@ -15,7 +15,7 @@ import { convertDateToString } from "@/utils";
 import dayjs from "dayjs";
 //import { convertDateToString } from "@/utils";
 //import dayjs from "dayjs";
-import { useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 const highestQualification: string[] = [
@@ -40,14 +40,19 @@ const Education = ({
   );
   const { educationVerifications, setEducationVerifications } =
     useCvFromContext();
-  const {class10SchoolName,class12CollegeName,underGraduateCollegeName,
-    postGraduateCollegeName,underGraduateDegreeName,
-    postGraduateDegreeName, educationVerificationValidations: storedVerifications } = getValues();
+  const {
+    class10SchoolName,
+    class12CollegeName,
+    underGraduateCollegeName,
+    postGraduateCollegeName,
+    underGraduateDegreeName,
+    postGraduateDegreeName,
+    educationVerificationValidations: storedVerifications,
+  } = getValues();
   console.log(getValues());
 
-
-   // Initialize date from localStorage only once
-   const initialDate = useRef(() => {
+  // Initialize date from localStorage only once
+  const initialDate = useRef(() => {
     const storedFormData = localStorage.getItem("step2CvData");
     if (storedFormData) {
       const parsedFormData = JSON.parse(storedFormData);
@@ -61,9 +66,9 @@ const Education = ({
     return { from: null, to: null };
   });
 
-   const initialDate2 = useRef(() => {
+  const initialDate2 = useRef(() => {
     const storedFormData = localStorage.getItem("step2CvData");
-    console.log("stored farm data",storedFormData);
+    // console.log("stored farm data", storedFormData);
     if (storedFormData) {
       const parsedFormData = JSON.parse(storedFormData);
       return (
@@ -76,8 +81,7 @@ const Education = ({
     return { from: null, to: null };
   });
 
-  const {setValue} = useFormContext();
-
+  const { setValue } = useFormContext();
 
   const [date, setDate] = useState(initialDate.current);
   const [date2, setDate2] = useState(initialDate2.current);
@@ -95,7 +99,7 @@ const Education = ({
     if (date2.from && date2.to) {
       setValue(`postGraduateDuration.duration`, date2);
     }
-  }, [date,date2,setValue]);
+  }, [date, date2, setValue]);
 
   // Update date when dateFrom or dateTo changes
   useEffect(() => {
@@ -111,12 +115,14 @@ const Education = ({
         to: convertDateToString(dateTo2),
       });
     }
-  }, [dateFrom, dateTo,dateFrom2, dateTo2]);
+  }, [dateFrom, dateTo, dateFrom2, dateTo2]);
 
-  useEffect(()=>{
-    setIsAnswered(localStorage.getItem("qualificationAnswered") === "true"?true:false);
-  },[localStorage.getItem("qualificationAnswered")?.length])
-
+  useEffect(() => {
+    setIsAnswered(
+      localStorage.getItem("qualificationAnswered") === "true" ? true : false
+    );
+  }, [localStorage.getItem("qualificationAnswered")?.length]);
+  console.log("stored verfications are", storedVerifications);
   return (
     <>
       {!isAnswered ? (
@@ -156,10 +162,7 @@ const Education = ({
                 <FormItem className="flex-1">
                   <FormLabel>Class 10th school name</FormLabel>
                   <FormControl>
-                    <Input 
-                    placeholder="Enter 10th school name" {...field}
-                    
-                    />
+                    <Input placeholder="Enter 10th school name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -360,38 +363,37 @@ const Education = ({
                 />
               </div>
 
-    <div className="flex justify-center gap-2 items-center py-2">
-  
-        <FormField
-          name={`underGraduateDuration.duration`}
-          control={control}
-          render={() => (
-            <FormItem className="flex  gap-1 flex-col justify-center mt-2">
-              <FormLabel className="">Graduation Duration</FormLabel>
-              <FormControl>
-                <div className="flex gap-10">
-                  <div className="">
-                    <p className="text-base">From</p>
-                    <UnderGraduateCal
-                      value={dateFrom}
-                      setValue={setDateFrom}
-                      isDateFrom
-                    />
-                  </div>
-                  <div>
-                    <p className="text-base">To</p>
-                    <UnderGraduateCal
-                      value={dateTo}
-                      setValue={setDateTo}
-                    />
-                  </div>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div> 
+              <div className="flex justify-center gap-2 items-center py-2">
+                <FormField
+                  name={`underGraduateDuration.duration`}
+                  control={control}
+                  render={() => (
+                    <FormItem className="flex  gap-1 flex-col justify-center mt-2">
+                      <FormLabel className="">Graduation Duration</FormLabel>
+                      <FormControl>
+                        <div className="flex gap-10">
+                          <div className="">
+                            <p className="text-base">From</p>
+                            <UnderGraduateCal
+                              value={dateFrom}
+                              setValue={setDateFrom}
+                              isDateFrom
+                            />
+                          </div>
+                          <div>
+                            <p className="text-base">To</p>
+                            <UnderGraduateCal
+                              value={dateTo}
+                              setValue={setDateTo}
+                            />
+                          </div>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               {/* Animated skills section */}
               <div className="flex flex-col gap-4 sm:px-10">
                 {/* for tablets and desktops */}
@@ -504,37 +506,38 @@ const Education = ({
                 />
               </div>
               <div className="flex justify-center gap-2 items-center py-2">
-  
-        <FormField
-          name={`postGraduateDuration.duration`}
-          control={control}
-          render={() => (
-            <FormItem className="flex  gap-1 flex-col justify-center mt-2">
-              <FormLabel className="">Post Graduation Duration</FormLabel>
-              <FormControl>
-                <div className="flex gap-10">
-                  <div className="">
-                    <p className="text-base">From</p>
-                    <PostGraduateCal
-                      value={dateFrom2}
-                      setValue={setDateFrom2}
-                      isDateFrom
-                    />
-                  </div>
-                  <div>
-                    <p className="text-base">To</p>
-                     <PostGraduateCal
-                      value={dateTo2}
-                      setValue={setDateTo2}
-                    />
-                  </div>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+                <FormField
+                  name={`postGraduateDuration.duration`}
+                  control={control}
+                  render={() => (
+                    <FormItem className="flex  gap-1 flex-col justify-center mt-2">
+                      <FormLabel className="">
+                        Post Graduation Duration
+                      </FormLabel>
+                      <FormControl>
+                        <div className="flex gap-10">
+                          <div className="">
+                            <p className="text-base">From</p>
+                            <PostGraduateCal
+                              value={dateFrom2}
+                              setValue={setDateFrom2}
+                              isDateFrom
+                            />
+                          </div>
+                          <div>
+                            <p className="text-base">To</p>
+                            <PostGraduateCal
+                              value={dateTo2}
+                              setValue={setDateTo2}
+                            />
+                          </div>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               {/* Animated skills section */}
               <div className="flex flex-col gap-4 sm:px-10">
                 {/* for tablets and desktops */}

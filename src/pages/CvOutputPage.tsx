@@ -1,7 +1,7 @@
 import { useGetCv } from "@/api/cv.apis";
 import { useParams } from "react-router-dom";
 import { SiHyperskill } from "react-icons/si";
-import { FaBriefcase, FaCopy, FaExternalLinkAlt} from "react-icons/fa";
+import { FaBriefcase, FaCopy, FaExternalLinkAlt } from "react-icons/fa";
 import { GiAchievement } from "react-icons/gi";
 import { BiSolidBriefcase } from "react-icons/bi";
 import { GraduationCap, Mail, MapPinned, Phone } from "lucide-react";
@@ -13,9 +13,38 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useState, useRef } from "react";
 import ThreeDotLoader from "@/components/Loader/ThreeDotLoader";
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+
+  // Check if year is 1970, return "Present"
+  if (date.getFullYear() === 1970) {
+    return "Present";
+  }
+
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const month = months[date.getMonth()];
+  const day = date.getDate().toString().padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${month} ${day} ${year}`;
+};
 const CvOutputPage = () => {
   const { id } = useParams();
-  const [copied,setCopied] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
 
   const pdfRef = useRef<HTMLDivElement>(null);
 
@@ -26,52 +55,60 @@ const CvOutputPage = () => {
   const { cvData, isLoading } = useGetCv(id);
   console.log(cvData);
   if (isLoading) {
-    return(
-    <div className="flex justify-center items-center">
-      <ThreeDotLoader w={4} h={4} yPos={'center'}/>
-    </div>
+    return (
+      <div className="flex justify-center items-center">
+        <ThreeDotLoader w={4} h={4} yPos={"center"} />
+      </div>
     );
   }
 
   if (!cvData) {
-    return(
+    return (
       <div className="flex justify-center items-center">
         <h1 className="text-4xl font-bold text-[#006666]">No CV Found</h1>
       </div>
-      );
+    );
   }
 
-  const copyResumeLink = async(link:string)=>{
-    await navigator.clipboard.writeText(link).then(() =>setCopied(true)).catch((err) => {toast.error("something went wrong",err.message)});
+  const copyResumeLink = async (link: string) => {
+    await navigator.clipboard
+      .writeText(link)
+      .then(() => setCopied(true))
+      .catch((err) => {
+        toast.error("something went wrong", err.message);
+      });
     //console.log("Link copied to clipboard");
-  }
-
-
+  };
 
   return (
     <div className="px-1 mt-5 md:mt-0 md:px-10 mb-10 overflow-hidden">
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-6 px-4 py-4">
-  <h1 className="text-xl md:text-2xl text-center font-bold text-[#006666]">
-    Verified Curriculum Vitae (CV) on the Blockchain
-  </h1>
+        <h1 className="text-xl md:text-2xl text-center font-bold text-[#006666]">
+          Verified Curriculum Vitae (CV) on the Blockchain
+        </h1>
 
-  <Link
-    to={`/new-cv/${id}`}
-    className="px-4 py-2 border-2 border-[#f14419] text-[#f14419] font-semibold rounded-lg hover:bg-[#f14419] hover:text-white transition duration-200"
-  >
-    View Other Template
-  </Link>
+        <Link
+          to={`/new-cv/${id}`}
+          className="px-4 py-2 border-2 border-[#f14419] text-[#f14419] font-semibold rounded-lg hover:bg-[#f14419] hover:text-white transition duration-200"
+        >
+          View Other Template
+        </Link>
 
-  <div
-    className="flex items-center gap-2 cursor-pointer text-[#03257e] hover:text-[#006666]"
-    onClick={() => copyResumeLink(`https://www.edubuktrucv.com/cv/${id}`)}
-  >
-    <FaCopy />
-    <span className="font-medium">{copied?"Copied":"Copy CV Link"}</span>
-  </div>  
-</div>
+        <div
+          className="flex items-center gap-2 cursor-pointer text-[#03257e] hover:text-[#006666]"
+          onClick={() => copyResumeLink(`https://www.edubuktrucv.com/cv/${id}`)}
+        >
+          <FaCopy />
+          <span className="font-medium">
+            {copied ? "Copied" : "Copy CV Link"}
+          </span>
+        </div>
+      </div>
 
-      <div ref={pdfRef} className="mt-2 max-w-6xl mx-auto w-full border  border-l-0 shadow-lg   rounded-md overflow-x-scroll xl:overflow-x-clip">
+      <div
+        ref={pdfRef}
+        className="mt-2 max-w-6xl mx-auto w-full border  border-l-0 shadow-lg   rounded-md overflow-x-scroll xl:overflow-x-clip"
+      >
         {/* main */}
         <div className="flex gap-3 md:gap-7">
           {/* left sidebar */}
@@ -96,7 +133,7 @@ const CvOutputPage = () => {
             </div>
 
             {/* Education */}
-            <div >
+            <div>
               <div className="flex items-center gap-3 px-1">
                 <div className="h-10 w-10 bg-[#FB980E] rounded-full text-white flex items-center justify-center">
                   <GraduationCap size={20} />
@@ -114,14 +151,27 @@ const CvOutputPage = () => {
                   cvData.education.postGraduateGPA && (
                     <div className="flex flex-col">
                       <h1 className="font-semibold text-sm md:text-base">
-                        {cvData.education.postGraduateCollege} {cvData.education.postGraduateCertUrl&&<a href={cvData.education.postGraduateCertUrl} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-md mt-2"><FaExternalLinkAlt /></a>}
+                        {cvData.education.postGraduateCollege}{" "}
+                        {cvData.education.postGraduateCertUrl && (
+                          <a
+                            href={cvData.education.postGraduateCertUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#FB980E] font-semibold text-md mt-2"
+                          >
+                            <FaExternalLinkAlt />
+                          </a>
+                        )}
                       </h1>
                       <ShowVerifications
                         isAttested={
                           cvData.educationVerifications.postgraduation
                             .isSelfAttested || false
                         }
-                        mailStatus={cvData.educationVerifications.postgraduation.mailStatus}
+                        mailStatus={
+                          cvData.educationVerifications.postgraduation
+                            .mailStatus
+                        }
                         className="my-2"
                         textClass="text-white"
                         fillCheck
@@ -145,14 +195,27 @@ const CvOutputPage = () => {
                   cvData.education.underGraduateGPA && (
                     <div className="flex flex-col">
                       <h1 className="font-semibold text-sm md:text-base">
-                        {cvData.education.underGraduateCollege} {cvData.education.underGraduateCertUrl&&<a href={cvData.education.underGraduateCertUrl} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-md mt-2"><FaExternalLinkAlt /></a>}
+                        {cvData.education.underGraduateCollege}{" "}
+                        {cvData.education.underGraduateCertUrl && (
+                          <a
+                            href={cvData.education.underGraduateCertUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#FB980E] font-semibold text-md mt-2"
+                          >
+                            <FaExternalLinkAlt />
+                          </a>
+                        )}
                       </h1>
                       <ShowVerifications
                         isAttested={
                           cvData.educationVerifications.undergraduation
                             .isSelfAttested || false
                         }
-                        mailStatus={cvData.educationVerifications.undergraduation.mailStatus}
+                        mailStatus={
+                          cvData.educationVerifications.undergraduation
+                            .mailStatus
+                        }
                         className="my-2"
                         textClass="text-white"
                         fillCheck
@@ -176,14 +239,28 @@ const CvOutputPage = () => {
                   cvData.education.class12Grade && (
                     <div className="flex flex-col">
                       <h1 className="font-semibold text-sm md:text-base">
-                        {cvData.education.class12College} {cvData.education.class12CertUrl&&<a href={`${import.meta.env.VITE_AzureGATWAY}/${cvData.education.class12CertUrl}`} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-md mt-2"><FaExternalLinkAlt /></a>}
+                        {cvData.education.class12College}{" "}
+                        {cvData.education.class12CertUrl && (
+                          <a
+                            href={`${import.meta.env.VITE_AzureGATWAY}/${
+                              cvData.education.class12CertUrl
+                            }`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#FB980E] font-semibold text-md mt-2"
+                          >
+                            <FaExternalLinkAlt />
+                          </a>
+                        )}
                       </h1>
                       <ShowVerifications
                         isAttested={
                           cvData.educationVerifications.class12
                             .isSelfAttested || false
                         }
-                        mailStatus={cvData.educationVerifications.class12.mailStatus}
+                        mailStatus={
+                          cvData.educationVerifications.class12.mailStatus
+                        }
                         className="my-2"
                         textClass="text-white"
                         fillCheck
@@ -207,14 +284,28 @@ const CvOutputPage = () => {
                   cvData.education.class10Grade && (
                     <div className="flex flex-col">
                       <h1 className="font-semibold text-sm md:text-base">
-                        {cvData.education.class10School} {cvData.education.class10CertUrl&&<a href={`${import.meta.env.VITE_AzureGATWAY}/${cvData.education.class10CertUrl}`} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-md mt-2"><FaExternalLinkAlt /></a>}
+                        {cvData.education.class10School}{" "}
+                        {cvData.education.class10CertUrl && (
+                          <a
+                            href={`${import.meta.env.VITE_AzureGATWAY}/${
+                              cvData.education.class10CertUrl
+                            }`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#FB980E] font-semibold text-md mt-2"
+                          >
+                            <FaExternalLinkAlt />
+                          </a>
+                        )}
                       </h1>
                       <ShowVerifications
                         isAttested={
                           cvData.educationVerifications.class10
                             .isSelfAttested || false
                         }
-                        mailStatus={cvData.educationVerifications.class10.mailStatus}
+                        mailStatus={
+                          cvData.educationVerifications.class10.mailStatus
+                        }
                         className="my-2"
                         textClass="text-white"
                         fillCheck
@@ -368,10 +459,11 @@ const CvOutputPage = () => {
                   {cvData.profile_summary}
                 </p>
                 <ShowVerifications
-                  isAttested={
-                    cvData.profileSummaryVerification.profile_summary
-                      .isSelfAttested
-                  }
+                  // isAttested={
+                  //   cvData.profileSummaryVerification.profile_summary
+                  //     .isSelfAttested
+                  // }
+                  isAttested={true}
                   className="self-start mt-2"
                   onlySelfAttest
                   // textClass="text-white"
@@ -395,10 +487,13 @@ const CvOutputPage = () => {
                   <div className="flex flex-col  mt-2 gap-5 md:gap-3 ">
                     {cvData.skills.length > 0 &&
                       cvData.skills.map((skill) => {
-                        const isSelfAttested =
-                          cvData.skillsVerifications[skill.skillName].isSelfAttested ||
-                          false;
-                        const mailStatus=cvData.skillsVerifications[skill.skillName].mailStatus;
+                        // const isSelfAttested =
+                        //   cvData.skillsVerifications[skill.skillName]
+                        //     .isSelfAttested || false;
+                        const isSelfAttested = true;
+                        const mailStatus =
+                          cvData.skillsVerifications[skill.skillName]
+                            .mailStatus;
                         return (
                           <div>
                             {/* <div
@@ -424,16 +519,16 @@ const CvOutputPage = () => {
               {/* experience */}
               <div className="mt-5">
                 {/* title */}
-                {cvData.experience.length>0&&
-                <div className="flex items-center gap-5">
-                  <div className="h-10 w-10 bg-[#FB980E] rounded-full text-white flex items-center justify-center">
-                    <BiSolidBriefcase size={20} />
+                {cvData.experience.length > 0 && (
+                  <div className="flex items-center gap-5">
+                    <div className="h-10 w-10 bg-[#FB980E] rounded-full text-white flex items-center justify-center">
+                      <BiSolidBriefcase size={20} />
+                    </div>
+                    <h1 className="text-2xl font-semibold tracking-wider uppercase">
+                      Work Experience
+                    </h1>
                   </div>
-                  <h1 className="text-2xl font-semibold tracking-wider uppercase">
-                    Work Experience
-                  </h1>
-                </div>
-                }
+                )}
 
                 {/* experience cards */}
                 <div className="relative">
@@ -441,11 +536,14 @@ const CvOutputPage = () => {
 
                   {cvData.experience.map((exp, index) => {
                     const verificationKey = exp.company_name;
-                    const isSeflAtetsted =
+                    // const isSeflAtetsted =
+                    //   cvData.experienceVerifications[verificationKey]
+                    //     .isSelfAttested || false;
+                    const isSeflAtetsted = true;
+                    const mailStatus =
                       cvData.experienceVerifications[verificationKey]
-                        .isSelfAttested || false;
-                    const mailStatus= cvData.experienceVerifications[verificationKey].mailStatus
-                    const hash=exp.experienceCertUrl
+                        .mailStatus;
+                    const hash = exp.experienceCertUrl;
                     return (
                       <div
                         key={index}
@@ -463,7 +561,19 @@ const CvOutputPage = () => {
                             </h1>
                             <div className="flex flex-col">
                               <p className="text-sm md:text-lg capitalize line-clamp-1">
-                                {exp.company_name} {hash&&<a href={`${import.meta.env.VITE_AzureGATWAY}/${hash}`} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-sm">🔗</a>}
+                                {exp.company_name}{" "}
+                                {hash && (
+                                  <a
+                                    href={`${
+                                      import.meta.env.VITE_AzureGATWAY
+                                    }/${hash}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[#FB980E] font-semibold text-sm"
+                                  >
+                                    🔗
+                                  </a>
+                                )}
                               </p>{" "}
                               <ShowVerifications
                                 isAttested={isSeflAtetsted}
@@ -474,10 +584,13 @@ const CvOutputPage = () => {
                             </div>
                           </div>
                           {/* duration */}
+                          {/* yash */}
                           <div className="">
                             <p className="text-[#006666] italic text-xs md:text-base text-nowrap">
                               <>
-                                {exp.duration.from} - {exp.duration.to}
+                                {/* {exp.duration.from} - {exp.duration.to} */}
+                                {formatDate(exp.duration.from)} -{" "}
+                                {formatDate(exp.duration.to)}
                               </>
                             </p>
                           </div>
@@ -522,9 +635,11 @@ const CvOutputPage = () => {
                             const verificationKey = award.award_name;
                             const isSelfAttetsted =
                               cvData.awardVerifications[verificationKey]
-                                .isSelfAttested || false;
-                            const hash=award.awardCertUrl;
-                            const mailStatus=cvData.awardVerifications[verificationKey].mailStatus
+                                .isSelfAttested || true;
+                            const hash = award.awardCertUrl;
+                            const mailStatus =
+                              cvData.awardVerifications[verificationKey]
+                                .mailStatus;
                             return (
                               <div key={index} className="flex flex-col ml-3">
                                 <div className="flex justify-between">
@@ -535,7 +650,19 @@ const CvOutputPage = () => {
                                       className={`absolute bg-[#FB980E] h-3 w-3 rounded-full top-2 left-[-17px]`}
                                     ></div>
                                     <h1 className="text-md md:text-xl font-semibold tracking-tight line-clamp-1">
-                                      {award.award_name} {hash&&<a href={`${import.meta.env.VITE_AzureGATWAY}/${hash}`} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-sm">🔗</a>}
+                                      {award.award_name}{" "}
+                                      {hash && (
+                                        <a
+                                          href={`${
+                                            import.meta.env.VITE_AzureGATWAY
+                                          }/${hash}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-[#FB980E] font-semibold text-sm"
+                                        >
+                                          🔗
+                                        </a>
+                                      )}
                                     </h1>
                                     <div className="flex flex-col">
                                       <p className="text-sm md:text-lg capitalize line-clamp-1 mb-1">
@@ -585,7 +712,7 @@ const CvOutputPage = () => {
                               const verificationKey = project.project_name;
                               const isSelfAttested =
                                 cvData.projectsVerifications[verificationKey]
-                                  .isSelfAttested || false;
+                                  .isSelfAttested || true;
                               return (
                                 <div key={index} className="flex flex-col ml-3">
                                   <div className="flex justify-between">
@@ -597,7 +724,17 @@ const CvOutputPage = () => {
                                       ></div>
                                       <div className="flex flex-col">
                                         <h1 className="text-md md:text-xl font-semibold tracking-tight line-clamp-2">
-                                          {project.project_name} {project.project_url&&<a href={project.project_url} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-sm">🔗</a>}
+                                          {project.project_name}{" "}
+                                          {project.project_url && (
+                                            <a
+                                              href={project.project_url}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="text-[#FB980E] font-semibold text-sm"
+                                            >
+                                              🔗
+                                            </a>
+                                          )}
                                         </h1>
                                         <ShowVerifications
                                           isAttested={isSelfAttested}
@@ -606,7 +743,9 @@ const CvOutputPage = () => {
                                       </div>
                                       {project.projectCertUrl && (
                                         <a
-                                          href={`${import.meta.env.VITE_AzureGATWAY}/${project.projectCertUrl}`}
+                                          href={`${
+                                            import.meta.env.VITE_AzureGATWAY
+                                          }/${project.projectCertUrl}`}
                                           target="_blank"
                                           className="hover:underline text-blue-600 cursor-pointer text-sm font-medium text-nowrap mt-5 lg:mt-0"
                                         >
@@ -655,9 +794,11 @@ const CvOutputPage = () => {
                             const verificationKey = course.course_name;
                             const isSelfAttested =
                               cvData.courseVerifications[verificationKey]
-                                .isSelfAttested || false;
-                            const mailStatus=cvData.courseVerifications[verificationKey].mailStatus
-                            const hash=course.courseCertUrl
+                                .isSelfAttested || true;
+                            const mailStatus =
+                              cvData.courseVerifications[verificationKey]
+                                .mailStatus;
+                            const hash = course.courseCertUrl;
                             return (
                               <div key={index} className="flex flex-col ml-3">
                                 <div className="flex justify-between">
@@ -668,11 +809,23 @@ const CvOutputPage = () => {
                                       className={`absolute bg-[#FB980E] h-3 w-3 rounded-full top-2 -left-[19px]`}
                                     ></div>
                                     <h1 className="text-md md:text-xl font-semibold tracking-tight line-clamp-1">
-                                      {course.course_name} 
+                                      {course.course_name}
                                     </h1>
                                     <div className="flex flex-col mb-1">
                                       <p className="text-sm md:text-lg capitalize line-clamp-1">
-                                        {course.organization} {course.courseCertUrl&&<a href={`${import.meta.env.VITE_AzureGATWAY}/${course.courseCertUrl}`} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-sm">🔗</a>}
+                                        {course.organization}{" "}
+                                        {course.courseCertUrl && (
+                                          <a
+                                            href={`${
+                                              import.meta.env.VITE_AzureGATWAY
+                                            }/${course.courseCertUrl}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[#FB980E] font-semibold text-sm"
+                                          >
+                                            🔗
+                                          </a>
+                                        )}
                                       </p>
                                       <ShowVerifications
                                         isAttested={isSelfAttested}

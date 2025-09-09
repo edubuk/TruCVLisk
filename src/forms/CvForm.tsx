@@ -33,22 +33,24 @@ const CvForm = () => {
     },
   });
 
-  const { step, setStep} = useCvFromContext();
+  const { step, setStep } = useCvFromContext();
   const [profession, setProfession] = useState<string | null>(null);
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>(new FormData());
   const [isAgree, setIsAgree] = useState<boolean>(false);
   //const oktoClient = useOkto();
   const { subscriptionPlan } = useUserData();
-
+  console.log("current step is", step);
   useEffect(() => {
     const nanoId = nanoid(16);
     const storedNanoId = localStorage.getItem("nanoId");
     if (!storedNanoId) {
       const username = localStorage.getItem("userName");
       const firstName = username?.split(" ")[0];
-      const lastName = username?.split(" ")[2]?username?.split(" ")[2]:username?.split(" ")[1] || "CV";
-      const idWithName= `${firstName}-${lastName}-${nanoId}`;
+      const lastName = username?.split(" ")[2]
+        ? username?.split(" ")[2]
+        : username?.split(" ")[1] || "CV";
+      const idWithName = `${firstName}-${lastName}-${nanoId}`;
       localStorage.setItem("nanoId", idWithName);
     }
     //const paymentId = localStorage.getItem("paymentId");
@@ -79,14 +81,25 @@ const CvForm = () => {
       return storedQualification ? storedQualification : "class10";
     }
   );
-  console.log(selectedQualification);
+
   const { createCVInBackend, isLoading } = useCV();
-  console.log("form errors",form.formState.errors)
+  console.log("form errors", form.formState.errors);
   useEffect(() => {
-    const savedData = localStorage.getItem(`step${step}CvData`);
-     
+    console.log("inside the useEffect 2805");
+    const currentStep = localStorage.getItem("currentStep") || "1";
+    const savedData = localStorage.getItem(
+      step !== 1
+        ? `step${Number(currentStep) - 1}CvData`
+        : `step${currentStep}CvData`
+    );
+    console.log(
+      `reading the step fetching from id= 2805 localstorage step = ${step}CvData`
+    );
+    console.log("userEffect runs and savedData is", savedData);
     if (savedData) {
+      console.log("inside the if block!");
       let parsedData = JSON.parse(savedData);
+      console.log("inside if block parsed data", parsedData);
       setProfession(parsedData.profession || null);
       if (parsedData?.Experience?.length > 0) {
         parsedData.Experience = parsedData.Experience.map((exp: any) => {
@@ -271,17 +284,13 @@ const CvForm = () => {
 
       fieldsToValidate.push("Years_of_experience");
     } else if (step === 4) {
-      // console.log(selectedSkills);
       const currentFormData = form.getValues();
-      // currentFormData.Skills = selectedSkills.length > 0 ? selectedSkills : [];
-      // console.log(currentFormData);
-      // currentFormData.skillsVerificationsValidations[]
+      console.log("Step 4 validation calls");
       fieldsToValidate.push("Skills");
-      currentFormData.Skills.forEach((skill) => {
+      currentFormData.Skills.forEach(({ skillName }) => {
         fieldsToValidate.push(
-          `skillsVerificationsValidations[${skill}]` as any
+          `skillsVerificationsValidations[${skillName}]` as any
         );
-        // fieldsToValidate = ["Skills"];
       });
     } else if (step === 5) {
       const currentFormData = form.getValues();
@@ -327,7 +336,7 @@ const CvForm = () => {
         "profileSummarVerificationValidations.profile_summary" as any,
       ];
     }
-
+    console.log("fields to validate", fieldsToValidate);
     // validate step;
     const isValid = await form.trigger(fieldsToValidate);
     //console.log("is valid ?? ", isValid);
@@ -432,8 +441,7 @@ const CvForm = () => {
       }
     } else if (step === 6) {
       const nanoId = localStorage.getItem("nanoId") ?? "12345678";
-      const loginMailId =
-        localStorage.getItem("email") ?? "ajeet@gmail.com";
+      const loginMailId = localStorage.getItem("email") ?? "ajeet@gmail.com";
       //const userName= sessionStorage.getItem("userName"); // Use a fallback string
       console.log("Form is getting submitted now");
       console.log(currentFormData);
@@ -463,154 +471,6 @@ const CvForm = () => {
   };
 
   //console.log("step- ", step);
-
-
-  // const abi = [
-  //   {
-  //     inputs: [
-  //       {
-  //         internalType: "address",
-  //         name: "to",
-  //         type: "address",
-  //       },
-  //       {
-  //         internalType: "string[]",
-  //         name: "tokenURIs",
-  //         type: "string[]",
-  //       },
-  //     ],
-  //     name: "mintMyNFT",
-  //     outputs: [],
-  //     stateMutability: "nonpayable",
-  //     type: "function",
-  //   },
-  // ];
-
-  //mint NFT on chain
-  //   const mintNFT = async () => {
-  //   setTxStarted(true);
-  //   const id = toast.loading("Registration started....");
-  //   const authToken = await oktoAuthTokenGenerator();
-  //   const accounts= await getAccount(oktoClient);
-  //   let toAddress= null;
-  //     console.log("accounts",accounts)
-  //     if(accounts?.length>0)
-  //     {
-  //       console.log("accounts",accounts)
-  //       const acc= accounts.find((accs:any)=>accs.networkName==="POLYGON");
-  //       toAddress=acc?.address
-  //     }
-  //     console.log("address",toAddress)
-  //   const arr = localStorage.getItem("hashArray");
-  //   const uris = arr? JSON.parse(arr): ["b204c7e7223a415258c4fc1808f11b4db71af44d97d93242693c4d1a85bb7a48_1751876460.json"];
-
-  //     const iface = new ethers.utils.Interface(abi);
-  //     const txData = iface.encodeFunctionData("mintMyNFT", [
-  //       toAddress,
-  //       uris,
-  //     ]);
-  //     //console.log("txData",txData)
-  //   try {
-
-  //     if (authToken && toAddress) {
-
-  //       const response = await fetch(
-  //       `${API_BASE_URL}/cv/xerawtx`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${authToken}`
-  //         },
-  //         body: JSON.stringify({
-  //           txData:txData,
-  //           caip2Id:"eip155:137"
-  //         }),
-  //       }
-  //     );
-
-  //     const res = await response.json();
-  //     if(res.jobId===undefined)
-  //     {
-  //       return toast.error("something went wrong");
-  //     }
-  //     console.log("tx:", res.jobId);
-  //       // //a2ee394d-027b-4eaf-ae71-14324a6854b7
-        
-  //       if (res.jobId) {
-  //         const intentId: any = res.jobId;
-  //         const intentType="RAW_TRANSACTION";
-  //         //console.log("fetched orderId",fetchedOrderId);
-  //         let count = 0;
-  //         toast.dismiss(id);
-  //         setLoading(true);
-  //         const timer = setInterval(async () => {
-                  
-  //     const response = await fetch(
-  //       `${API_BASE_URL}/cv/gettxstatus/${intentId}/${intentType}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${authToken}`,
-  //           "Content-Type": "application/json",
-  //         }
-  //       }
-  //     );
-
-  //     const statusData = await response.json();
-
-  //           //const orderIdRes = await axios.get(statusUrl);
-  //           console.log("orderId res", statusData.currStatus);
-  //           setStatus(
-  //             statusData.currStatus as "INITIATED" | "IN_PROGRESS" | "SUCCESSFUL" 
-  //           );
-  //           count++;
-
-  //           if (statusData.currStatus === "SUCCESSFUL") {
-  //             toast.dismiss();
-  //             setTxStarted(false);
-  //             if(statusData?.txHash?.length>0)
-  //             setTxHash(statusData.txHash[0]);
-  //             localStorage.setItem("txHash", statusData.txHash[0]);
-  //             toast.success("CV Registered Successfully.");
-  //             localStorage.setItem("transactionSuccess", "success");
-  //             clearInterval(timer);
-  //             setLoading(false);
-  //             return;
-  //           } else if (statusData.currStatus.status === "FAILED") {
-  //             toast.dismiss();
-  //             setTxStarted(false);
-  //             toast.error("Transaction Failed. Please try again");
-  //             clearInterval(timer);
-  //             setLoading(false);
-  //           }
-  //           if (count > 15) {
-  //             toast.dismiss();
-  //             setTxStarted(false);
-  //             toast.custom(
-  //               <div className="flex p-4 bg-white rounded shadow-md">
-  //                 <h1 className="font-bold text-[#006666]">Timeout: </h1>
-  //                 <p>
-  //                   {" "}
-  //                   Please click on view transaction button for further status
-  //                 </p>
-  //               </div>
-  //             );
-  //             //setTxHash(orderIdRes.data.data[0].transaction_hash);
-  //             clearInterval(timer);
-  //             setLoading(false);
-  //           }
-  //         }, 10000);
-  //       }
-  //     }
-  //   } catch (err) {
-  //     toast.dismiss();
-  //     setTxStarted(false);
-  //     console.log("error", err);
-  //     setLoading(false);
-  //     toast.error("Something went wrong. please try again.");
-  //   }
-  // };
   //console.log("statusCurr",paymentCurrStatus);
   // reset page data
   const resetPageHandler = (step: number): void => {
@@ -622,7 +482,7 @@ const CvForm = () => {
         break;
       case 2:
         localStorage.removeItem("step2CvData");
-        localStorage.setItem("qualificationAnswered","false")
+        localStorage.setItem("qualificationAnswered", "false");
         localStorage.setItem("currentStep", step.toString());
         window.location.reload();
         break;
@@ -677,7 +537,20 @@ const CvForm = () => {
             {step === 4 && <Skills />}
             {step === 5 && <Achievements />}
             {step === 6 && <ProfileSummary />}
-            {step === 6 && <div className="flex items-center justify-start ml-12 w-full gap-2"><input type="checkbox" onChange={(e) => setIsAgree(e.target.checked)} checked={isAgree} /><p className="text-sm w-[500px] md:w-[600px] lg:w-[700px] xl:w-[800px]">I want to share my certificates & TruCV with recruiters globally for potential placement opportunities in India and Internationally, remote or in-person.</p></div>}
+            {step === 6 && (
+              <div className="flex items-center justify-start ml-12 w-full gap-2">
+                <input
+                  type="checkbox"
+                  onChange={(e) => setIsAgree(e.target.checked)}
+                  checked={isAgree}
+                />
+                <p className="text-sm w-[500px] md:w-[600px] lg:w-[700px] xl:w-[800px]">
+                  I want to share my certificates & TruCV with recruiters
+                  globally for potential placement opportunities in India and
+                  Internationally, remote or in-person.
+                </p>
+              </div>
+            )}
             {/* save and next button */}
             <div className="w-full mt-40 px-0 md:px-12 flex flex-col gap-5 sm:flex-row sm:w-full">
               {step !== 1 && (
@@ -697,24 +570,27 @@ const CvForm = () => {
                 <LoadingButton className="w-auto bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)]" />
               ) : (
                 <div className="flex gap-2 w-full flex-col sm:flex-row">
-                      <Button
-                        type="button"
-                        onClick={stepsHandler}
-                        disabled={isImageUploading || step===6 && !isAgree}
-                        className={`w-auto sm:w-full bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] hover:opacity-90 ${
-                          isImageUploading
-                            ? "cursor-not-allowed opacity-100"
-                            : "cursor-pointer"
-                        }`}
-                      >
-                        {step === 6 ? "Submit" : "Save and next"}
-                      </Button>
-                      {subscriptionPlan === "Free" && step === 6 && <Link  
+                  <Button
+                    type="button"
+                    onClick={stepsHandler}
+                    disabled={isImageUploading || (step === 6 && !isAgree)}
+                    className={`w-auto sm:w-full bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] hover:opacity-90 ${
+                      isImageUploading
+                        ? "cursor-not-allowed opacity-100"
+                        : "cursor-pointer"
+                    }`}
+                  >
+                    {step === 6 ? "Submit" : "Save and next"}
+                  </Button>
+                  {subscriptionPlan === "Free" && step === 6 && (
+                    <Link
                       to="/subscription"
-                      className="w-auto sm:w-full rounded flex items-center justify-center text-white bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] hover:opacity-90">
-                        Upgrade to Pro
-                      </Link>}
-                  {step !== 6 &&
+                      className="w-auto sm:w-full rounded flex items-center justify-center text-white bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] hover:opacity-90"
+                    >
+                      Upgrade to Pro
+                    </Link>
+                  )}
+                  {step !== 6 && (
                     <Button
                       type="button"
                       onClick={() => resetPageHandler(step)}
@@ -722,9 +598,9 @@ const CvForm = () => {
                     >
                       Reset
                     </Button>
-                  }
-                </div>)
-}
+                  )}
+                </div>
+              )}
             </div>
           </form>
         </Form>
