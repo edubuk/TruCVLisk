@@ -119,7 +119,7 @@ const PaymentPopup: React.FC<Props> = ({ showPopup, setShowPopup}) => {
           toast.success(res.data.message);
           setAmount(0);
           setShowPopup(false);
-          navigate("/");
+          window.location.href="/";
         }
         else{
         console.log("coupon log", res);

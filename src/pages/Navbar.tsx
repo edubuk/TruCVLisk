@@ -2,16 +2,11 @@ import React, {useState,useEffect} from "react";
 import logo from "../assets/newLogo.png";
 import truCv from "../assets/truCV2.png";
 import { Link } from "react-router-dom";
-import { useNavigate,useLocation } from "react-router-dom";
-import {useOkto,getAccount} from "@okto_web3/react-sdk"
+import { useLocation } from "react-router-dom";
 import {
-  MdCancel,
   MdClose,
-  MdContentCopy,
 } from "react-icons/md";
-import { LiaNetworkWiredSolid } from "react-icons/lia";
 import toast from "react-hot-toast";
-import { googleLogout } from "@react-oauth/google";
 
 
 
@@ -52,17 +47,12 @@ interface SidebarProps {
 
 
 
-const Navbar:React.FC = () => {
+const Navbar:React.FC<{handlerLogout:()=>void}> = ({handlerLogout}) => {
   const [isActive, setActive] = useState("/");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // const [auth, setAuth] = useState<string>();
-  const [address, setAddress] = useState<string>();
-  const [networkName, setNetworkName] = useState<string>();
-  const [showText, setShowText] = useState(false);
   
-  const oktoClient = useOkto();
-  const [openWalletInfo, setOpenWalletInfo] = useState(false);
-  const navigate = useNavigate();
+  //const oktoClient = useOkto();
   const location = useLocation();
   const currentPath = location.pathname;
 console.log("currentPath",currentPath);
@@ -73,24 +63,24 @@ console.log("currentPath",currentPath);
     setIsSidebarOpen((prevState) => !prevState);
   };
 
-  const fetchUserPortfolio = async () => {
-    try {
-      const accounts= await getAccount(oktoClient);
-      console.log("accounts",accounts)
-      if(accounts?.length>0)
-      {
-        console.log("accounts",accounts)
-        const acc= accounts.find((accs)=>accs.networkName==="POLYGON");
-        setAddress(acc?.address);
-        setNetworkName(acc?.networkName);
-        setOpenWalletInfo(true);
-      }
+  // const fetchUserPortfolio = async () => {
+  //   try {
+  //     const accounts= await getAccount(oktoClient);
+  //     console.log("accounts",accounts)
+  //     if(accounts?.length>0)
+  //     {
+  //       console.log("accounts",accounts)
+  //       const acc= accounts.find((accs)=>accs.networkName==="POLYGON");
+  //       setAddress(acc?.address);
+  //       setNetworkName(acc?.networkName);
+  //       setOpenWalletInfo(true);
+  //     }
       
-    } catch (error) {
-      toast.error("something went wrong...");
-      console.log("error while fetching user details...", error);
-    }
-  };
+  //   } catch (error) {
+  //     toast.error("something went wrong...");
+  //     console.log("error while fetching user details...", error);
+  //   }
+  // };
 
 
   //    useEffect(() => {
@@ -154,33 +144,7 @@ console.log("currentPath",currentPath);
   //   }
   // };
 
- 
-  const copyAddress = async () => {
-    try {
-      if (address) await navigator.clipboard.writeText(address);
-      toast.success("address copied");
-    } catch (error) {
-      toast.error("Please refresh the page and try again..");
-    }
-  };
 
-
-  const handlerLogout = () => {
-    try {
-            googleLogout();    // Perform Google OAuth logout and remove stored token
-            oktoClient.sessionClear();  
-            localStorage.removeItem("googleIdToken");
-            localStorage.removeItem("email");
-            localStorage.removeItem("userName");
-            localStorage.removeItem("userImage");
-            localStorage.removeItem("tokenExpiry");
-            navigate("/");
-            return { result: "Logout success" };
-        } catch (error) {
-            console.error("Logout failed:", error);
-            return { result: "Logout failed" };
-        }
-  };
 
   const handlerActive = (linkName: string): void => {
     setActive(linkName);
@@ -287,57 +251,6 @@ console.log("currentPath",currentPath);
           )}
         {/* Hamburger Menu */}
         <div className="flex items-center justify-center gap-2 ml-2">
-          {oktoClient.isLoggedIn() && (
-            <div className="relative">
-            <div className="relative rounded-full p-[2px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]">
-              <button
-                onClick={fetchUserPortfolio}
-                className=" w-full bg-white py-1 px-4 text-[12px] sm:text-[20px] font-bold rounded-full text-[#03257e] hover:text-[#f14419]"
-              >
-                View Wallet
-              </button>
-            </div>
-{showText&&    <div className="relative w-fit mt-2">
-  <div className="absolute flex justify-center flex-col items-center w-[200px] shadow p-2 bg-white z-20 rounded-md gap-2">
-  <p className="text-[#03257e]">
-    Please click on view wallet to setup your wallet before proceeding to{" "}
-    <span className="text-[#f14419]">Create CV</span>
-  </p>
-  <button className="py-1 px-3 bg-[#03257e] text-white rounded-lg" onClick={()=>setShowText(false)}>OK</button>
-  </div>
-  <div className="absolute left-1/2 top-full translate-x-20 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-[#f14419] rotate-180 z-20"></div>
-</div>}
-
-            </div>
-          )}
-          {openWalletInfo && (
-            <div className="absolute rounded px-6 py-4 flex flex-col justify-start items-start mt-44   mr-10 bg-white z-20 shadow-lg gap-4" data-aso="zoom-in">
-              <div className="flex justify-evenly items-center gap-2">
-                <p className="p-2 border border-[#006666] rounded-full  bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]"></p>
-                <p className="text-lg font-bold text-[#006666]">
-                  {address?.slice(0, 6)}...{address?.slice(-5)}
-                </p>
-                <MdCancel
-                  onClick={() => setOpenWalletInfo(false)}
-                  className="text-lg text-[#ff7300] cursor-pointer"
-                />
-              </div>
-              {networkName && (
-                <div className="flex justify-center items-center gap-4">
-                  <LiaNetworkWiredSolid className="text-lg text-[#006666] cursor-pointer" />
-                  <p className="text-[#03257e] font-medium">{networkName}</p>
-                </div>
-              )}
-              
-              <button
-                className="flex justify-center items-center gap-4"
-                onClick={copyAddress}
-              >
-                <MdContentCopy className="text-lg text-[#006666] cursor-pointer" />
-                <p className="text-[#03257e] font-medium">Copy Address</p>
-              </button>
-            </div>
-          )}
           <div
             className={`relative flex lg:hidden flex-col items-center justify-center w-8 h-8 cursor-pointer space-y-1.5 transition-all duration-300 ease-in-out ${
               isSidebarOpen ? "open" : ""

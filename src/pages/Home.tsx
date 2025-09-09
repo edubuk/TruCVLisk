@@ -13,7 +13,7 @@ import ProfilePopup from "@/components/ui/Profile";
 import { Link } from "react-router-dom";
 
 
-const Home:React.FC = () => {
+const Home:React.FC<{handlerLogout:()=>void}> = ({handlerLogout}) => {
   const [openProfile, setOpenProfile] = useState(false);
   const [userImage, setUserImage] = useState<string>("");
   useEffect(() => {
@@ -34,7 +34,15 @@ const Home:React.FC = () => {
           <p className="text-white bg-[#006666] px-6 py-4 font-bold rounded-lg text-2xl sm:text-3xl md:text-4xl" data-aos="fade-right">
             TruCV
           </p>
-          <div className="flex lg:hidden relative rounded-lg p-[2px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]" data-aos="fade-left">
+          {localStorage.getItem("googleIdToken")?<div className="flex lg:hidden relative rounded-lg p-[2px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]" data-aos="fade-left">
+              <button
+              onClick={handlerLogout}
+                className="w-full bg-white text-[20px] px-6 py-4 font-bold text-center rounded-lg text-[#03257e] hover:text-[#f14419]"
+                
+              >
+                Logout
+              </button>
+            </div>:<div className="flex lg:hidden relative rounded-lg p-[2px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]" data-aos="fade-left">
               <Link
               to="/login"
                 className="w-full bg-white text-[20px] px-6 py-4 font-bold text-center rounded-lg text-[#03257e] hover:text-[#f14419]"
@@ -42,7 +50,7 @@ const Home:React.FC = () => {
               >
                 Login
               </Link>
-            </div>
+            </div>}
           </div>
           <p className="text-[#03257E] text-center text-2xl sm:text-3xl md:text-5xl font-bold" data-aos="fade-up">
             Your Verifiable CV<br></br> on Blockchain

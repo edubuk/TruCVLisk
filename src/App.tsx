@@ -24,6 +24,7 @@ import SubscriptionPlans from "./components/Subscription/Subscription";
 import GoogleLoginModal from "./pages/Login";
 import ProtectedRoute from "./protectRoute";
 import AdminUsersPage from "./pages/Admin";
+import { googleLogout } from "@react-oauth/google";
 
 
 function App() {
@@ -40,15 +41,31 @@ function App() {
     });
   }, []);
 
+    const handlerLogout = () => {
+      try {
+              googleLogout();    // Perform Google OAuth logout and remove stored token  
+              localStorage.removeItem("googleIdToken");
+              localStorage.removeItem("email");
+              localStorage.removeItem("userName");
+              localStorage.removeItem("userImage");
+              localStorage.removeItem("tokenExpiry");
+              window.location.href="/";
+              return { result: "Logout success" };
+          } catch (error) {
+              console.error("Logout failed:", error);
+              return { result: "Logout failed" };
+          }
+    };
+
   return (
     <div>
         <OktoProvider  config={config}>
-          <Navbar />
+          <Navbar handlerLogout={handlerLogout}/>
           <Suspense fallback={<div className="flex justify-center items-center text-3xl text-[#03257e] font-bold h-[80vh]" data-aos="zoom-in">Loading {""} <ThreeDotLoader w={2} h={2} yPos={'end'} /></div>}>
             <Routes>
               <Route
                 path="/"
-                element={<Home />}
+                element={<Home handlerLogout={handlerLogout}/>}
               />
               <Route path="*" element={<NotFoundPage />} />
               <Route path="/new-cv/:id" element={<Resume />} />
