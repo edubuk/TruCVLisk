@@ -1,1 +1,1 @@
-## Edubuk : CV-ON-chain
+## Edubuk : CV-ON-chain-v2
