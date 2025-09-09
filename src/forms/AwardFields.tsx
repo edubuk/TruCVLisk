@@ -107,7 +107,7 @@ const AwardFields = ({ index, removeAwardFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Award name</FormLabel>
+              <FormLabel>Award name*</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Enter award name" />
               </FormControl>
@@ -120,7 +120,7 @@ const AwardFields = ({ index, removeAwardFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Awarding organization</FormLabel>
+              <FormLabel>Awarding organization*</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Enter organization" />
               </FormControl>
@@ -134,7 +134,7 @@ const AwardFields = ({ index, removeAwardFields, fields }: Props) => {
           control={control}
           render={() => (
             <FormItem className="flex flex-1 gap-1 flex-col justify-center">
-              <FormLabel className="">Date of achievement</FormLabel>
+              <FormLabel className="">Date of achievement*</FormLabel>
               <FormControl>
                 {/* <Popover>
                   <PopoverTrigger asChild>
@@ -180,7 +180,7 @@ const AwardFields = ({ index, removeAwardFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Award description</FormLabel>
+              <FormLabel>Award description*</FormLabel>
               <FormDescription className="text-sm">
                 A brief description of the award or achievement and its
                 significance.

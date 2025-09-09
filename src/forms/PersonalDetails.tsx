@@ -165,7 +165,7 @@ const PersonalDetails = ({
             name="name"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"> <MdPerson className="text-[#006666]"/>Full name</div></FormLabel>
+                <FormLabel><div className="flex gap-1"> <MdPerson className="text-[#006666]"/>Full name*</div></FormLabel>
                 <FormControl>
                   <Input placeholder="Enter full name" {...field} />
                 </FormControl>
@@ -183,6 +183,7 @@ const PersonalDetails = ({
                   onClick={() => {
                     handleSelfAttest("name");
                   }}
+                  required={true}
                   isAttested={
                     storedVerification &&
                     storedVerification?.name?.isSelfAttested
@@ -200,7 +201,7 @@ const PersonalDetails = ({
             name="email"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><MdEmail className="text-[#006666]"/>Email</div></FormLabel>
+                <FormLabel><div className="flex gap-1"><MdEmail className="text-[#006666]"/>Email*</div></FormLabel>
                 <FormControl>
                   <Input
                     required
@@ -223,6 +224,7 @@ const PersonalDetails = ({
                   onClick={() => {
                     handleSelfAttest("email");
                   }}
+                  required={true}
                   isAttested={
                     storedVerification &&
                     storedVerification?.email?.isSelfAttested
@@ -239,7 +241,7 @@ const PersonalDetails = ({
             name="location"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><MdLocationPin className="text-[#006666]"/>Location</div></FormLabel>
+                <FormLabel><div className="flex gap-1"><MdLocationPin className="text-[#006666]"/>Location*</div></FormLabel>
                 <FormControl>
                   <Input placeholder="Your current location" {...field} />
                 </FormControl>
@@ -257,6 +259,7 @@ const PersonalDetails = ({
                   onClick={() => {
                     handleSelfAttest("location");
                   }}
+                  required={true}
                   isAttested={
                     storedVerification &&
                     storedVerification?.location?.isSelfAttested
@@ -277,7 +280,7 @@ const PersonalDetails = ({
             name="phoneNumber"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><MdPhone className="text-[#006666]"/> Phone number</div></FormLabel>
+                <FormLabel><div className="flex gap-1"><MdPhone className="text-[#006666]"/> Phone number*</div></FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -299,6 +302,7 @@ const PersonalDetails = ({
                   onClick={() => {
                     handleSelfAttest("phoneNumber");
                   }}
+                  required={true}
                   isAttested={
                     storedVerification &&
                     storedVerification?.phoneNumber?.isSelfAttested
@@ -503,7 +507,7 @@ const PersonalDetails = ({
             name="profession"
             render={() => (
               <FormItem className="lg:flex-1">
-                <FormLabel>Profession</FormLabel>
+                <FormLabel>Profession*</FormLabel>
                 <FormControl>
                   <div className="flex gap-10 lg:px-12">
                     {/* student */}
@@ -575,6 +579,7 @@ const PersonalDetails = ({
                   onClick={() => {
                     handleSelfAttest("profession");
                   }}
+                  required={true}
                   isAttested={
                     storedVerification &&
                     storedVerification?.profession?.isSelfAttested
@@ -592,7 +597,7 @@ const PersonalDetails = ({
           name="imageFile"
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Upload image</FormLabel>
+              <FormLabel>Upload image*</FormLabel>
               <FormControl>
                 <Input
                   type="file"
@@ -634,6 +639,7 @@ const PersonalDetails = ({
                           onClick={() => {
                             handleSelfAttest("imageUrl");
                           }}
+                          required={true}
                           isAttested={
                             storedVerification &&
                             storedVerification?.imageUrl?.isSelfAttested

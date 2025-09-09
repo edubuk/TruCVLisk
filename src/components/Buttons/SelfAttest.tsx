@@ -4,9 +4,9 @@ import { ComponentPropsWithoutRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 const SelfAttestButton = (
-  props: ComponentPropsWithoutRef<"button"> & { isAttested?: boolean }
+  props: ComponentPropsWithoutRef<"button"> & { isAttested?: boolean ,required?:boolean}
 ) => {
-  const { className, onClick, isAttested = false } = props;
+  const { className, onClick, isAttested = false ,required=false} = props;
   return (
     <Button
       onClick={onClick}
@@ -19,7 +19,7 @@ const SelfAttestButton = (
       )}
     >
       <CheckCircle size={26} className="size-5 mr-3" />{" "}
-      {isAttested ? "Self attested" : "Self attest"}
+      {isAttested ? "Self attested" : (required ? "Self attest*" : "Self attest")}
     </Button>
   );
 };

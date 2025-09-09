@@ -94,10 +94,10 @@ const DashBoard = () => {
       setNFT(false);
       fetchIds();
      }
-     const nftFetchHandler = ()=>{
-      setActiveButton(false)
-      setNFT(true);
-     }
+    //  const nftFetchHandler = ()=>{
+    //   setActiveButton(false)
+    //   setNFT(true);
+    //  }
 
   return (
     <div className="flex flex-col justify-start items-center h-auto w-full mt-2">
@@ -109,9 +109,9 @@ const DashBoard = () => {
         <Button type="button" onClick={getAccount}>Connect Wallet</Button>:
         <>
         {/* <Button className={`text-center border border-slate-300 text-[#006666] hover:bg-slate-100 ${!isActiveButton?"bg-slate-100":"bg-white border"}`} onClick={fetchDataHandler}>Fetch your on-chain documents</Button> */}
-        <div className="relative rounded-lg p-[1px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]">
+        {/* <div className="relative rounded-lg p-[1px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]">
         <Button className={`text-center border border-slate-300 text-[#006666] hover:bg-slate-100 ${isNFT?"bg-slate-100":"bg-white border"}`} onClick={nftFetchHandler}>Fetch your NFTs</Button>
-        </div>
+        </div> */}
         </>
 }
         </div>

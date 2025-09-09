@@ -107,7 +107,7 @@ const CourseFields = ({ index, removeCourseFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Course name</FormLabel>
+              <FormLabel>Course name*</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Enter course name" />
               </FormControl>
@@ -120,7 +120,7 @@ const CourseFields = ({ index, removeCourseFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Institution/Organization</FormLabel>
+              <FormLabel>Institution/Organization*</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -137,7 +137,7 @@ const CourseFields = ({ index, removeCourseFields, fields }: Props) => {
           control={control}
           render={() => (
             <FormItem className="flex flex-1 gap-1 flex-col justify-center">
-              <FormLabel className="">Duration</FormLabel>
+              <FormLabel className="">Duration*</FormLabel>
               <FormControl>
                 <div className="flex gap-10">
                   <div className="">
@@ -171,7 +171,7 @@ const CourseFields = ({ index, removeCourseFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Course description</FormLabel>
+              <FormLabel>Course description*</FormLabel>
               <FormDescription className="text-sm">
                 You can share a short description of the course content and what
                 was learned.

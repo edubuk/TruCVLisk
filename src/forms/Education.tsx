@@ -128,7 +128,7 @@ const Education = ({
       {!isAnswered ? (
         <div className="px-1 md:px-10 mt-5 space-y-5">
           <h1 className="text-xl font-semibold">
-            What is your highest qualification?
+            What is your highest qualification?*
           </h1>
           <div className="flex flex-wrap gap-5">
             {highestQualification.map((qualification) => (
@@ -160,7 +160,7 @@ const Education = ({
               control={control}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Class 10th school name</FormLabel>
+                  <FormLabel>Class 10th school name*</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter 10th school name" {...field} />
                   </FormControl>
@@ -173,7 +173,7 @@ const Education = ({
               control={control}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>10th Board (Ex:CBSE,ICSE,regional)</FormLabel>
+                  <FormLabel>10th Board (Ex:CBSE,ICSE,regional)*</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter 10th Board" {...field} />
                   </FormControl>
@@ -186,7 +186,7 @@ const Education = ({
               control={control}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Class 10th Grade</FormLabel>
+                  <FormLabel>Class 10th Grade*</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -239,7 +239,7 @@ const Education = ({
                   control={control}
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Class 12th college name</FormLabel>
+                      <FormLabel>Class 12th college name*</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Enter 12th college name"
@@ -256,7 +256,7 @@ const Education = ({
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel className="text-nowrap">
-                        12th Board (Ex:CBSE,ICSE,regional)
+                        12th Board (Ex:CBSE,ICSE,regional)*
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Enter 12 th Board" {...field} />
@@ -270,7 +270,7 @@ const Education = ({
                   control={control}
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Class 12th Grade</FormLabel>
+                      <FormLabel>Class 12th Grade*</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -323,7 +323,7 @@ const Education = ({
                   control={control}
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Undergraduation College name</FormLabel>
+                      <FormLabel>Undergraduation College name*</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter college name" {...field} />
                       </FormControl>
@@ -336,7 +336,7 @@ const Education = ({
                   control={control}
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Degree (Ex:B-tech)</FormLabel>
+                      <FormLabel>Degree (Ex:B-tech)*</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter degree" {...field} />
                       </FormControl>
@@ -349,7 +349,7 @@ const Education = ({
                   control={control}
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>CGPA</FormLabel>
+                      <FormLabel>CGPA*</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -369,7 +369,7 @@ const Education = ({
                   control={control}
                   render={() => (
                     <FormItem className="flex  gap-1 flex-col justify-center mt-2">
-                      <FormLabel className="">Graduation Duration</FormLabel>
+                      <FormLabel className="">Graduation Duration*</FormLabel>
                       <FormControl>
                         <div className="flex gap-10">
                           <div className="">
@@ -466,7 +466,7 @@ const Education = ({
                   control={control}
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Postgraduation College name</FormLabel>
+                      <FormLabel>Postgraduation College name*</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter college name" {...field} />
                       </FormControl>
@@ -479,7 +479,7 @@ const Education = ({
                   control={control}
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Degree</FormLabel>
+                      <FormLabel>Degree*</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter degree" {...field} />
                       </FormControl>
@@ -492,7 +492,7 @@ const Education = ({
                   control={control}
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>CGPA</FormLabel>
+                      <FormLabel>CGPA*</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -512,7 +512,7 @@ const Education = ({
                   render={() => (
                     <FormItem className="flex  gap-1 flex-col justify-center mt-2">
                       <FormLabel className="">
-                        Post Graduation Duration
+                        Post Graduation Duration*
                       </FormLabel>
                       <FormControl>
                         <div className="flex gap-10">

@@ -105,7 +105,7 @@ const ProjectFields = ({ index, removeProjectFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Project name</FormLabel>
+              <FormLabel>Project name*</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Enter project name" />
               </FormControl>
@@ -132,7 +132,7 @@ const ProjectFields = ({ index, removeProjectFields, fields }: Props) => {
           control={control}
           render={() => (
             <FormItem className="flex flex-1 gap-1 flex-col justify-center">
-              <FormLabel className="">Duration</FormLabel>
+              <FormLabel className="">Duration*</FormLabel>
               <FormControl>
                 <div className="flex gap-10">
                   <div className="">
@@ -166,7 +166,7 @@ const ProjectFields = ({ index, removeProjectFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Project description</FormLabel>
+              <FormLabel>Project description*</FormLabel>
               <FormDescription className="text-sm">
                 A brief overview of the project, its objectives, and outcomes.
               </FormDescription>

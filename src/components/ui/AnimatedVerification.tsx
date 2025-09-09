@@ -379,6 +379,7 @@ export function AnimatedVerification({
             <SelfAttestButton
               className="text-xs sm:text-base"
               onClick={() => handleSelfAttest(field)}
+              required={true}
               // isAttested={verificationObject[field].isSelfAttested}
               // isAttested={verificationData.isSelfAttested}
               isAttested={verificationData?.isSelfAttested}

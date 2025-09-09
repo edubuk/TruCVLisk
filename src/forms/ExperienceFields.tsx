@@ -111,7 +111,7 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Company name</FormLabel>
+              <FormLabel>Company name*</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Enter company name" />
               </FormControl>
@@ -124,7 +124,7 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Job role / title</FormLabel>
+              <FormLabel>Job role / title*</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Enter job role/title" />
               </FormControl>
@@ -140,7 +140,7 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
           control={control}
           render={() => (
             <FormItem className="flex flex-1 gap-1 flex-col justify-center mt-2">
-              <FormLabel className="">Duration</FormLabel>
+              <FormLabel className="">Duration*</FormLabel>
               <FormLabel className="flex  gap-1">
                 <Input
                   className="size-4"
@@ -185,7 +185,7 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
           control={control}
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Work description</FormLabel>
+              <FormLabel>Work description*</FormLabel>
               <FormDescription className="text-sm">
                 You can share your work experience, including your previous
                 roles, key responsibilities
