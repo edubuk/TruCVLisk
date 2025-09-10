@@ -611,14 +611,14 @@ const CvForm = () => {
                     <Button
                       type="button"
                       onClick={() => resetPageHandler(step)}
-                      className="w-auto sm:w-full mt-2 sm:mt-0 "
+                      className="w-full mt-2 sm:mt-0 "
                     >
                       Reset
                     </Button>
                     <Button
                       type="button"
                       onClick={resetAllPageHandler}
-                      className="w-auto sm:w-full mt-2 sm:mt-0 bg-[#f14419] hover:bg-[#f14419] hover:opacity-90"
+                      className="w-full mt-2 sm:mt-0 bg-[#f14419] hover:bg-[#f14419] hover:opacity-90"
                     >
                       Erase All
                     </Button>
