@@ -104,10 +104,12 @@ const CvOutputPage = () => {
           </span>
         </div>
       </div>
-
+      <div className="w-full text-center text-[#F1441C] text-lg mt-2 lg:hidden">
+        👉 Swipe left/right to view the full CV
+      </div>
       <div
         ref={pdfRef}
-        className="mt-2 max-w-6xl mx-auto w-full border  border-l-0 shadow-lg   rounded-md overflow-x-scroll xl:overflow-x-clip"
+        className=" mt-2 max-w-6xl mx-auto w-full border  border-l-0 shadow-lg   rounded-md overflow-x-scroll xl:overflow-x-clip"
       >
         {/* main */}
         <div className="flex gap-3 md:gap-7">

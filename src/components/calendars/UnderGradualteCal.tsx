@@ -35,15 +35,14 @@ export default function UnderGraduateCal({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          value={value}
-          onChange={setValue}
-          defaultValue={initialDefaultDate}
-          views={["year", "month", "day"]}
-          className="w-[130px] sm:w-full"
-        />
+      <DatePicker
+        value={value}
+        onChange={setValue}
+        {...(isDateFrom && { maxDate: dayjs() })}
+        defaultValue={initialDefaultDate}
+        views={["year", "month", "day"]}
+        className="w-[130px] sm:w-full"
+      />
     </LocalizationProvider>
   );
 }
-
-

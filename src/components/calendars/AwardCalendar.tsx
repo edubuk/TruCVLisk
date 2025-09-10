@@ -15,9 +15,9 @@ interface Props {
 export default function AwardCalendar({
   value,
   setValue,
-  // defaultDate,
-  index,
-}: Props) {
+}: // defaultDate,
+// index,
+Props) {
   const storedFormData = localStorage.getItem("step5CvData");
   let Awards;
   if (storedFormData) {
@@ -26,19 +26,16 @@ export default function AwardCalendar({
     Awards = aw;
   }
 
-  // Determine the initial default date as a dayjs object
-  const initialDefaultDate =
-    dayjs(Awards?.[index]?.date_of_achievement) || dayjs("2022-04-17"); // Fallback to a specific date if undefined
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          value={value}
-          onChange={setValue}
-          defaultValue={initialDefaultDate}
-          views={["year", "month", "day"]}
-          className="w-[130px] sm:w-full"
-        />
+      <DatePicker
+        value={value}
+        onChange={setValue}
+        maxDate={dayjs()}
+        // defaultValue={initialDefaultDate}
+        views={["year", "month", "day"]}
+        className="w-[130px] sm:w-full"
+      />
     </LocalizationProvider>
   );
 }
