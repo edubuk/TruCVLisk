@@ -67,9 +67,13 @@ const DashBoard = () => {
         });
         const data = await response.json();
         console.log("ids response",data);
-        if(data.success===false)
+        if(!data.success)
         {
           toast.dismiss(id);
+          if(data.message==="Invalid token")
+          {
+            window.location.href="/invalid-token"
+          }
           return toast.error(data.message ||"No CV found")
         }
         setCvData(data?.userData.nanoIds);
@@ -113,7 +117,7 @@ const DashBoard = () => {
         <Button className={`text-center border border-slate-300 text-[#006666] hover:bg-slate-100 ${isNFT?"bg-slate-100":"bg-white border"}`} onClick={nftFetchHandler}>Fetch your NFTs</Button>
         </div> */}
         </>
-}
+      }
         </div>
         <div className="flex justify-center items-center gap-2 my-4">
           {/* {

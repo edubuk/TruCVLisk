@@ -25,6 +25,7 @@ import GoogleLoginModal from "./pages/Login";
 import ProtectedRoute from "./protectRoute";
 import AdminUsersPage from "./pages/Admin";
 import { googleLogout } from "@react-oauth/google";
+import InvalidTokenModal from "./pages/InvalidTokenModel";
 
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
                 path="/"
                 element={<Home handlerLogout={handlerLogout}/>}
               />
+              <Route path="/invalid-token" element={<InvalidTokenModal open={true} redirectUrl="/login"/>}></Route>
               <Route path="*" element={<NotFoundPage />} />
               <Route path="/new-cv/:id" element={<Resume />} />
               <Route path="/refund-policy" element={<RefundPolicy />} />
