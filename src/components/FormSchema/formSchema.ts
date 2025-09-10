@@ -292,7 +292,14 @@ export const formSchema = z.object({
         project_name: z
           .string({ required_error: "Project name is required" })
           .min(1, { message: "Project name is required" }),
-        project_url: z.string().optional(),
+        project_url: z
+          .string()
+          .transform((val) => (val === "" ? undefined : val)) // treat "" as undefined
+          .optional()
+          .refine(
+            (url) => !url || url.startsWith("https://"),
+                { message: "Project url must start with https://" }
+              ),
         duration: z
           .object({
             from: z
