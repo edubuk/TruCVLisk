@@ -16,11 +16,11 @@ const GoogleLoginModal = ()=>{
     const handleGoogleLogin = (credentialResponse: any) => {
         setLoading(true);
             const userData:UserLoginData = jwtDecode(credentialResponse.credential);
-            localStorage.setItem('userName', userData.name);
-            localStorage.setItem('email', userData.email);
-            localStorage.setItem('userImage', userData.picture);
+            localStorage.setItem('userName', userData?.name);
+            localStorage.setItem('email', userData?.email);
+            localStorage.setItem('userImage', userData?.picture);
             localStorage.setItem('googleIdToken', credentialResponse.credential);
-            localStorage.setItem('tokenExpiry', userData.exp.toString());
+            localStorage.setItem('tokenExpiry', userData?.exp.toString());
             window.location.href = '/';
       };
     

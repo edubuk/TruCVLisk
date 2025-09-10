@@ -19,10 +19,15 @@ export const useCV = () => {
       body: JSON.stringify(formData),
     });
 
+    const data = await response.json();
+
+    if(!data.success && data.message==="Invalid token")
+    {
+      window.location.href="/invalid-token"
+    }
     if (!response.ok) {
       throw new Error("Could not create cv at the moment try again latter");
     }
-    const data = await response.json();
     //console.log("cv data",data);
 
     //const localData = localStorage.getItem("AUTH_DETAILS");
