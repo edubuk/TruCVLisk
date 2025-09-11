@@ -38,10 +38,62 @@ export const FileUpload = ({
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const validateProofFile = (file: File) => {
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "application/pdf",
+    ];
+    const allowedExtensions = [".jpg", ".jpeg", ".png", ".pdf"];
+    const maxSize = 10 * 1024 * 1024; // 10MB limit (optional)
 
-  const handleFileChange = (newFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-    onChange && onChange(newFiles);
+    if (!file) return { isValid: false, error: "No file selected" };
+
+    const fileExtension = file.name
+      .toLowerCase()
+      .substring(file.name.lastIndexOf("."));
+
+    if (!allowedTypes.includes(file.type)) {
+      return {
+        isValid: false,
+        error:
+          "Invalid file type. Please upload JPG, JPEG, PNG, or PDF files only.",
+      };
+    }
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      return {
+        isValid: false,
+        error:
+          "Invalid file extension. Please upload JPG, JPEG, PNG, or PDF files only.",
+      };
+    }
+
+    if (file.size > maxSize) {
+      return {
+        isValid: false,
+        error: "File size too large. Please upload files smaller than 10MB.",
+      };
+    }
+
+    return { isValid: true };
+  };
+  const handleFileChange = (files: File[]) => {
+    if (!files || files.length === 0) {
+      alert("Please select a file to upload.");
+      return;
+    }
+
+    const file = files[0];
+    const validation = validateProofFile(file);
+
+    if (!validation.isValid) {
+      alert(validation.error);
+      return;
+    }
+    setFiles((prevFiles) => [...prevFiles, ...files]);
+    onChange && onChange(files);
   };
 
   const handleClick = () => {

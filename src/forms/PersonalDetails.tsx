@@ -13,7 +13,13 @@ import employee from "/employee.png";
 import { useState } from "react";
 import SelfAttestButton from "@/components/Buttons/SelfAttest";
 import { useCvFromContext } from "@/context/CvForm.context";
-import { FaGithub, FaInstagram, FaLinkedin, FaTelegram, FaTwitter } from "react-icons/fa";
+import {
+  FaGithub,
+  FaInstagram,
+  FaLinkedin,
+  FaTelegram,
+  FaTwitter,
+} from "react-icons/fa";
 import { MdEmail, MdLocationPin, MdPerson, MdPhone } from "react-icons/md";
 import { uploadFile } from "@/uploadFile";
 
@@ -46,21 +52,21 @@ type PersonalVerificationsType = {
   phoneNumber: {
     isSelfAttested: boolean;
   };
-  linkedinProfile:{
+  linkedinProfile: {
     isSelfAttested: boolean;
   };
-  twitterProfile:{
+  twitterProfile: {
     isSelfAttested: boolean;
   };
-  telegramProfile:{
+  telegramProfile: {
     isSelfAttested: boolean;
   };
-  instagramProfile:{
+  instagramProfile: {
     isSelfAttested: boolean;
   };
-  githubProfile:{
+  githubProfile: {
     isSelfAttested: boolean;
-  }
+  };
 };
 
 const PersonalDetails = ({
@@ -90,7 +96,7 @@ const PersonalDetails = ({
 
   // const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   const { personalDetailsVerification: storedVerification } = getValues();
-  const uploadImageToDB = async(e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadImageToDB = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     setImageError("");
     setImagePreview("");
@@ -99,20 +105,17 @@ const PersonalDetails = ({
     console.log("imageFile", e.target.files[0]);
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append('file',file);
-    console.log("file",file);
-    const response:any = await uploadFile(formData);
-    console.log("Imgres",response);
-    if(response)
-    {
-      if(response.data.success)
-      {
-      setImagePreview(response.data.url);
-      setValue("imageUrl", response.data.url);
-      setIsImageUploading(false);
-      }else if(!response.response.data.success)
-      {
-        setImageError(`Could not upload (${response.response.data.error})`)
+    formData.append("file", file);
+    console.log("file", file);
+    const response: any = await uploadFile(formData);
+    console.log("Imgres", response);
+    if (response) {
+      if (response.data.success) {
+        setImagePreview(response.data.url);
+        setValue("imageUrl", response.data.url);
+        setIsImageUploading(false);
+      } else if (!response.response.data.success) {
+        setImageError(`Could not upload (${response.response.data.error})`);
         setIsImageUploading(false);
       }
     }
@@ -132,15 +135,15 @@ const PersonalDetails = ({
     //     setImageError("Could not upload image (file must be less than 2MB)");
     //     setIsImageUploading(false);
     //   },
-      // () => {
-      //   getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
-      //     // imageUrl = downloadUrl;
-      //     // console.log(downloadUrl);
-      //     setImagePreview(downloadUrl);
-      //     setValue("imageUrl", downloadUrl);
-      //     setIsImageUploading(false);
-      //   });
-      // }
+    // () => {
+    //   getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+    //     // imageUrl = downloadUrl;
+    //     // console.log(downloadUrl);
+    //     setImagePreview(downloadUrl);
+    //     setValue("imageUrl", downloadUrl);
+    //     setIsImageUploading(false);
+    //   });
+    // }
     //);
   };
   const handleSelfAttest = (field: keyof PersonalVerificationsType) => {
@@ -154,6 +157,42 @@ const PersonalDetails = ({
     setValue(`personalVerifications.${field}.isSelfAttested`, true);
   };
 
+  const validateImageFile = (file: File) => {
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    const allowedExtensions = [".jpg", ".jpeg", ".png"];
+    const maxSize = 5 * 1024 * 1024; // 5MB limit (optional)
+
+    if (!file) return { isValid: false, error: "No file selected" };
+
+    const fileExtension = file.name
+      .toLowerCase()
+      .substring(file.name.lastIndexOf("."));
+
+    if (!allowedTypes.includes(file.type)) {
+      return {
+        isValid: false,
+        error: "Invalid file type. Please upload JPG, JPEG, or PNG files only.",
+      };
+    }
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      return {
+        isValid: false,
+        error:
+          "Invalid file extension. Please upload JPG, JPEG, or PNG files only.",
+      };
+    }
+
+    if (file.size > maxSize) {
+      return {
+        isValid: false,
+        error: "File size too large. Please upload files smaller than 5MB.",
+      };
+    }
+
+    return { isValid: true };
+  };
+
   // console.log(personalDetailsVerifications);
   return (
     <div className="flex flex-col gap-4 py-2">
@@ -165,7 +204,13 @@ const PersonalDetails = ({
             name="name"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"> <MdPerson className="text-[#006666]"/>Full name*</div></FormLabel>
+                <FormLabel>
+                  <div className="flex gap-1">
+                    {" "}
+                    <MdPerson className="text-[#006666]" />
+                    Full name*
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Enter full name" {...field} />
                 </FormControl>
@@ -201,7 +246,12 @@ const PersonalDetails = ({
             name="email"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><MdEmail className="text-[#006666]"/>Email*</div></FormLabel>
+                <FormLabel>
+                  <div className="flex gap-1">
+                    <MdEmail className="text-[#006666]" />
+                    Email*
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <Input
                     required
@@ -241,7 +291,12 @@ const PersonalDetails = ({
             name="location"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><MdLocationPin className="text-[#006666]"/>Location*</div></FormLabel>
+                <FormLabel>
+                  <div className="flex gap-1">
+                    <MdLocationPin className="text-[#006666]" />
+                    Location*
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Your current location" {...field} />
                 </FormControl>
@@ -270,7 +325,6 @@ const PersonalDetails = ({
             )}
           />
         </div>
-
       </div>
       {/* location and phone number */}
       <div className="flex flex-col md:flex-row gap-2 px-2 md:px-10">
@@ -280,7 +334,11 @@ const PersonalDetails = ({
             name="phoneNumber"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><MdPhone className="text-[#006666]"/> Phone number*</div></FormLabel>
+                <FormLabel>
+                  <div className="flex gap-1">
+                    <MdPhone className="text-[#006666]" /> Phone number*
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -319,7 +377,12 @@ const PersonalDetails = ({
             name="linkedinProfile"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><FaLinkedin className="text-[#0a66c2]"/>LinkedIn Profile URL</div></FormLabel>
+                <FormLabel>
+                  <div className="flex gap-1">
+                    <FaLinkedin className="text-[#0a66c2]" />
+                    LinkedIn Profile URL
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Your linkedin url" {...field} />
                 </FormControl>
@@ -353,7 +416,12 @@ const PersonalDetails = ({
             name="twitterProfile"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><FaTwitter className="text-[#1da1f2]"/> X(twitter) Profile URL </div></FormLabel>
+                <FormLabel>
+                  <div className="flex gap-1">
+                    <FaTwitter className="text-[#1da1f2]" /> X(twitter) Profile
+                    URL{" "}
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="string"
@@ -394,7 +462,12 @@ const PersonalDetails = ({
             name="telegramProfile"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><FaTelegram className="text-[#0088cc]"/>Telegram Profile URL</div></FormLabel>
+                <FormLabel>
+                  <div className="flex gap-1">
+                    <FaTelegram className="text-[#0088cc]" />
+                    Telegram Profile URL
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Your telegram url" {...field} />
                 </FormControl>
@@ -428,7 +501,12 @@ const PersonalDetails = ({
             name="instagramProfile"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><FaInstagram className="text-[#c32aa3]"/>Instagram Profile URL</div></FormLabel>
+                <FormLabel>
+                  <div className="flex gap-1">
+                    <FaInstagram className="text-[#c32aa3]" />
+                    Instagram Profile URL
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="string"
@@ -466,7 +544,12 @@ const PersonalDetails = ({
             name="githubProfile"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel><div className="flex gap-1"><FaGithub className="text-[#171515]"/>Github Profile URL</div></FormLabel>
+                <FormLabel>
+                  <div className="flex gap-1">
+                    <FaGithub className="text-[#171515]" />
+                    Github Profile URL
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="string"
@@ -591,7 +674,7 @@ const PersonalDetails = ({
           />
         </div>
 
-        {/* image section */}
+        {/* image section id:2805*/}
         <FormField
           control={control}
           name="imageFile"
@@ -599,7 +682,7 @@ const PersonalDetails = ({
             <FormItem className="flex-1">
               <FormLabel>Upload image*</FormLabel>
               <FormControl>
-                <Input
+                {/* <Input
                   type="file"
                   accept=".jpg, .jpeg, .png"
                   onChange={(event) => {
@@ -608,6 +691,25 @@ const PersonalDetails = ({
                     );
                     uploadImageToDB(event);
                     // setImagePreview(event);
+                  }}
+                /> */}
+                <Input
+                  type="file"
+                  accept=".jpg, .jpeg, .png"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+                    const validation = validateImageFile(file);
+
+                    if (!validation.isValid) {
+                      alert(validation.error);
+                      event.target.value = ""; // Clear the input
+                      // field.onChange(null);
+                      return;
+                    }
+
+                    field.onChange(file);
+                    uploadImageToDB(event);
                   }}
                 />
               </FormControl>

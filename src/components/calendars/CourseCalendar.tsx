@@ -37,13 +37,14 @@ export default function CourseCalendar({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          value={value}
-          onChange={setValue}
-          defaultValue={initialDefaultDate}
-          views={["year", "month", "day"]}
-          className="w-[130px] sm:w-full"
-        />
+      <DatePicker
+        value={value}
+        onChange={setValue}
+        maxDate={dayjs()}
+        defaultValue={initialDefaultDate}
+        views={["year", "month", "day"]}
+        className="w-[130px] sm:w-full"
+      />
     </LocalizationProvider>
   );
 }
