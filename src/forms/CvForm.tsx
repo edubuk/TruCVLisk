@@ -46,6 +46,10 @@ const CvForm = () => {
     const storedNanoId = localStorage.getItem("nanoId");
     if (!storedNanoId) {
       const username = localStorage.getItem("userName");
+      if(!username)
+      {
+        window.location.href = "/login";
+      }
       const firstName = username?.split(" ")[0];
       const lastName = username?.split(" ")[2]
         ? username?.split(" ")[2]
@@ -506,6 +510,18 @@ const CvForm = () => {
     }
   };
 
+  const resetAllPageHandler = (): void => {
+    if (window.confirm("Are you sure you want to reset all pages?")) {
+    localStorage.removeItem("step1CvData");
+    localStorage.removeItem("step2CvData");
+    localStorage.removeItem("step3CvData");
+    localStorage.removeItem("step4CvData");
+    localStorage.removeItem("step5CvData");
+    localStorage.removeItem("currentStep");
+    window.location.reload();
+    }
+    };
+
   return (
     <>
       <div>
@@ -591,13 +607,22 @@ const CvForm = () => {
                     </Link>
                   )}
                   {step !== 6 && (
+                    <div className="flex gap-2 w-full">
                     <Button
                       type="button"
                       onClick={() => resetPageHandler(step)}
-                      className="w-auto sm:w-full mt-2 sm:mt-0 "
+                      className="w-full mt-2 sm:mt-0 "
                     >
                       Reset
                     </Button>
+                    <Button
+                      type="button"
+                      onClick={resetAllPageHandler}
+                      className="w-full mt-2 sm:mt-0 bg-[#f14419] hover:bg-[#f14419] hover:opacity-90"
+                    >
+                      Erase All
+                    </Button>
+                    </div>
                   )}
                 </div>
               )}

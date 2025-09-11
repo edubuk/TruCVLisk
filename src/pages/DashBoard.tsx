@@ -2,9 +2,8 @@ import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 //import OnChainData from "./OnChainData";
 import CvById from "./CvById";
-import { connectWallet } from "@/api/contract.api";
+//import { connectWallet } from "@/api/contract.api";
 import toast from "react-hot-toast";
-import { useCvFromContext } from "@/context/CvForm.context";
 //import { API_BASE_URL } from "@/main";
 import { contractNFTAddress,abiNFT } from "@/contract/nft.contractData";
 import NFTGallery from "./NFTData";
@@ -12,7 +11,6 @@ import { API_BASE_URL } from "@/main";
 
 const DashBoard = () => {
     const [isActiveButton , setActiveButton] = useState<boolean>(true);
-    const {account,setAccount} = useCvFromContext();
  //   const [docData, setDocData] = useState([]);
     const [cvData, setCvData] = useState([]);
     const [isNFT, setNFT] = useState<boolean>(false);
@@ -34,20 +32,20 @@ const DashBoard = () => {
     // }
     //  }
 
-     const getAccount = async()=>{
+    //  const getAccount = async()=>{
   
-      try
-      {
-        console.log("clicked")
-        const acc = await connectWallet();
-        if(acc)
-        setAccount(acc);
-        console.log("logged acc",acc);
-      }
-      catch(e){
-        console.log("error",e)
-      }
-     }
+    //   try
+    //   {
+    //     console.log("clicked")
+    //     const acc = await connectWallet();
+    //     if(acc)
+    //     setAccount(acc);
+    //     console.log("logged acc",acc);
+    //   }
+    //   catch(e){
+    //     console.log("error",e)
+    //   }
+    //  }
 
     //  const fetchDataHandler=()=>{
     //   setActiveButton(false);
@@ -67,9 +65,13 @@ const DashBoard = () => {
         });
         const data = await response.json();
         console.log("ids response",data);
-        if(data.success===false)
+        if(!data.success)
         {
           toast.dismiss(id);
+          if(data.message==="Invalid token")
+          {
+            window.location.href="/invalid-token"
+          }
           return toast.error(data.message ||"No CV found")
         }
         setCvData(data?.userData.nanoIds);
@@ -105,15 +107,6 @@ const DashBoard = () => {
           <div className="relative rounded-lg p-[1px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]">
         <Button className={`text-center border border-slate-300 text-[#006666] hover:bg-slate-100 ${isActiveButton?"bg-slate-100":"bg-white border"}`} onClick={idFetchHandler}>Get Your CV</Button>
         </div>
-        {account?
-        <Button type="button" onClick={getAccount}>Connect Wallet</Button>:
-        <>
-        {/* <Button className={`text-center border border-slate-300 text-[#006666] hover:bg-slate-100 ${!isActiveButton?"bg-slate-100":"bg-white border"}`} onClick={fetchDataHandler}>Fetch your on-chain documents</Button> */}
-        {/* <div className="relative rounded-lg p-[1px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]">
-        <Button className={`text-center border border-slate-300 text-[#006666] hover:bg-slate-100 ${isNFT?"bg-slate-100":"bg-white border"}`} onClick={nftFetchHandler}>Fetch your NFTs</Button>
-        </div> */}
-        </>
-}
         </div>
         <div className="flex justify-center items-center gap-2 my-4">
           {/* {
