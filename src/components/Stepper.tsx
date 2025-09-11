@@ -60,7 +60,7 @@ const Stepper = () => {
         {/* step indicator */}
         <div
           className={twMerge(
-            "hidden md:flex flex-col mt-5",
+            "hidden lg:flex flex-col mt-5",
             step === 1 && "gap-11 mt-7",
             step === 2 && "gap-11",
             step === 3 && "gap-9",

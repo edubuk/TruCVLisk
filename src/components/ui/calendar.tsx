@@ -11,7 +11,7 @@ interface Props {
   setValue: React.Dispatch<React.SetStateAction<any>>;
   defaultDate: any;
   isDateFrom?: boolean;
-  isCurrentlyWorking?:boolean;
+  isCurrentlyWorking?: boolean;
   index: number;
 }
 
@@ -23,7 +23,7 @@ export default function ReferenceDateUsingValue({
   isDateFrom = false,
   index,
 }: Props) {
-  console.log("value to date",value);
+  console.log("value to date", value);
   const storedFormData = localStorage.getItem("step3CvData");
   let Experience;
   if (storedFormData) {
@@ -42,29 +42,15 @@ export default function ReferenceDateUsingValue({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          disabled={!isDateFrom&&isCurrentlyWorking}
-          value={value}
-          onChange={setValue}
-          // defaultValue={dayjs(`2022-04-17`)}
-          // defaultValue={dayjs(
-          //   // `${
-          //   //   isDateFrom
-          //   //     ? Experience[index]?.duration?.from
-          //   //     : Experience[index]?.duration?.to || "2022-04-17"
-          //   // }`
-          //   `${
-          //     (Experience &&
-          //       (isDateFrom
-          //         ? Experience[index]?.duration?.from
-          //         : Experience[index]?.duration?.to)) ||
-          //     "2022-04-17"
-          //   }`
-          // )}
-          defaultValue={initialDefaultDate}
-          views={["year", "month", "day"]}
-          className="w-[130px] sm:w-full"
-        />
+      <DatePicker
+        disabled={!isDateFrom && isCurrentlyWorking}
+        value={value}
+        onChange={setValue}
+        maxDate={dayjs()}
+        defaultValue={initialDefaultDate}
+        views={["year", "month", "day"]}
+        className="w-[130px] sm:w-full"
+      />
     </LocalizationProvider>
   );
 }

@@ -135,7 +135,7 @@ const Education = ({
               <Button
                 type="button"
                 key={qualification}
-                className={`px-5 py-1 flex-1 md:flex-none shadow-md bg-white text-black border border-[#FA9110] hover:bg-white hover:text-black text-md font-semibold`}
+                className={`px-5 py-1 flex-1 md:flex-none shadow-md bg-white text-black border border-[#FA9110] hover:bg-white hover:text-black text-md font-semibold capitalize`}
                 onClick={() => {
                   setIsAnswered(true);
                   localStorage.setItem("qualificationAnswered", "true");
@@ -175,7 +175,17 @@ const Education = ({
                 <FormItem className="flex-1">
                   <FormLabel>10th Board (Ex:CBSE,ICSE,regional)*</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter 10th Board" {...field} />
+                    <Input
+                      type="text"
+                      placeholder="Enter 10th Board"
+                      {...field}
+                      onKeyDown={(e) => {
+                        // Block numbers
+                        if (/[0-9]/.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -259,7 +269,16 @@ const Education = ({
                         12th Board (Ex:CBSE,ICSE,regional)*
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter 12 th Board" {...field} />
+                        <Input
+                          placeholder="Enter 12 th Board"
+                          {...field}
+                          onKeyDown={(e) => {
+                            // Block numbers
+                            if (/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                            }
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -338,7 +357,16 @@ const Education = ({
                     <FormItem className="flex-1">
                       <FormLabel>Degree (Ex:B-tech)*</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter degree" {...field} />
+                        <Input
+                          placeholder="Enter degree"
+                          {...field}
+                          onKeyDown={(e) => {
+                            // Block numbers
+                            if (/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                            }
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -481,7 +509,16 @@ const Education = ({
                     <FormItem className="flex-1">
                       <FormLabel>Degree*</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter degree" {...field} />
+                        <Input
+                          placeholder="Enter degree"
+                          {...field}
+                          onKeyDown={(e) => {
+                            // Block numbers
+                            if (/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                            }
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
