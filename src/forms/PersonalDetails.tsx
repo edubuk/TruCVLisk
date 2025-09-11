@@ -157,6 +157,42 @@ const PersonalDetails = ({
     setValue(`personalVerifications.${field}.isSelfAttested`, true);
   };
 
+  const validateImageFile = (file: File) => {
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    const allowedExtensions = [".jpg", ".jpeg", ".png"];
+    const maxSize = 5 * 1024 * 1024; // 5MB limit (optional)
+
+    if (!file) return { isValid: false, error: "No file selected" };
+
+    const fileExtension = file.name
+      .toLowerCase()
+      .substring(file.name.lastIndexOf("."));
+
+    if (!allowedTypes.includes(file.type)) {
+      return {
+        isValid: false,
+        error: "Invalid file type. Please upload JPG, JPEG, or PNG files only.",
+      };
+    }
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      return {
+        isValid: false,
+        error:
+          "Invalid file extension. Please upload JPG, JPEG, or PNG files only.",
+      };
+    }
+
+    if (file.size > maxSize) {
+      return {
+        isValid: false,
+        error: "File size too large. Please upload files smaller than 5MB.",
+      };
+    }
+
+    return { isValid: true };
+  };
+
   // console.log(personalDetailsVerifications);
   return (
     <div className="flex flex-col gap-4 py-2">
@@ -638,7 +674,7 @@ const PersonalDetails = ({
           />
         </div>
 
-        {/* image section */}
+        {/* image section id:2805*/}
         <FormField
           control={control}
           name="imageFile"
@@ -646,7 +682,7 @@ const PersonalDetails = ({
             <FormItem className="flex-1">
               <FormLabel>Upload image*</FormLabel>
               <FormControl>
-                <Input
+                {/* <Input
                   type="file"
                   accept=".jpg, .jpeg, .png"
                   onChange={(event) => {
@@ -655,6 +691,25 @@ const PersonalDetails = ({
                     );
                     uploadImageToDB(event);
                     // setImagePreview(event);
+                  }}
+                /> */}
+                <Input
+                  type="file"
+                  accept=".jpg, .jpeg, .png"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+                    const validation = validateImageFile(file);
+
+                    if (!validation.isValid) {
+                      alert(validation.error);
+                      event.target.value = ""; // Clear the input
+                      // field.onChange(null);
+                      return;
+                    }
+
+                    field.onChange(file);
+                    uploadImageToDB(event);
                   }}
                 />
               </FormControl>

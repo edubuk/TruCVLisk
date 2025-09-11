@@ -46,8 +46,7 @@ const CvForm = () => {
     const storedNanoId = localStorage.getItem("nanoId");
     if (!storedNanoId) {
       const username = localStorage.getItem("userName");
-      if(!username)
-      {
+      if (!username) {
         window.location.href = "/login";
       }
       const firstName = username?.split(" ")[0];
@@ -82,7 +81,7 @@ const CvForm = () => {
       const storedQualification = localStorage.getItem(
         "educationSelectedQualifications"
       );
-      return storedQualification ? storedQualification : "class10";
+      return storedQualification ? storedQualification : "";
     }
   );
 
@@ -203,6 +202,11 @@ const CvForm = () => {
         ];
       }
     } else if (step === 2) {
+      console.log("id:4445 ", selectedQualification);
+      if (!selectedQualification) {
+        alert("Please select a qualification");
+        return;
+      }
       const currentFormData = form.getValues();
 
       form.setValue("class10Grade", Number(currentFormData.class10Grade));
@@ -488,6 +492,7 @@ const CvForm = () => {
         localStorage.removeItem("step2CvData");
         localStorage.setItem("qualificationAnswered", "false");
         localStorage.setItem("currentStep", step.toString());
+        localStorage.setItem("educationSelectedQualifications", "");
         window.location.reload();
         break;
       case 3:
@@ -498,6 +503,9 @@ const CvForm = () => {
       case 4:
         localStorage.removeItem("step4CvData");
         localStorage.setItem("currentStep", step.toString());
+        form.setValue("Skills", []);
+        // form.setValue("sk", {});
+        form.setValue("skillsVerificationsValidations", {});
         window.location.reload();
         break;
       case 5:
@@ -512,15 +520,19 @@ const CvForm = () => {
 
   const resetAllPageHandler = (): void => {
     if (window.confirm("Are you sure you want to reset all pages?")) {
-    localStorage.removeItem("step1CvData");
-    localStorage.removeItem("step2CvData");
-    localStorage.removeItem("step3CvData");
-    localStorage.removeItem("step4CvData");
-    localStorage.removeItem("step5CvData");
-    localStorage.removeItem("currentStep");
-    window.location.reload();
+      localStorage.removeItem("step1CvData");
+      localStorage.removeItem("step2CvData");
+      localStorage.removeItem("step3CvData");
+      localStorage.removeItem("step4CvData");
+      localStorage.removeItem("step5CvData");
+      localStorage.removeItem("currentStep");
+      localStorage.removeItem("educationSelectedQualifications");
+      localStorage.removeItem("qualificationAnswered");
+      localStorage.removeItem("userImage");
+      localStorage.removeItem("userName");
+      window.location.reload();
     }
-    };
+  };
 
   return (
     <>
@@ -608,20 +620,20 @@ const CvForm = () => {
                   )}
                   {step !== 6 && (
                     <div className="flex gap-2 w-full">
-                    <Button
-                      type="button"
-                      onClick={() => resetPageHandler(step)}
-                      className="w-full mt-2 sm:mt-0 "
-                    >
-                      Reset
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={resetAllPageHandler}
-                      className="w-full mt-2 sm:mt-0 bg-[#f14419] hover:bg-[#f14419] hover:opacity-90"
-                    >
-                      Erase All
-                    </Button>
+                      <Button
+                        type="button"
+                        onClick={() => resetPageHandler(step)}
+                        className="w-full mt-2 sm:mt-0 "
+                      >
+                        Reset
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={resetAllPageHandler}
+                        className="w-full mt-2 sm:mt-0 bg-[#f14419] hover:bg-[#f14419] hover:opacity-90"
+                      >
+                        Erase All
+                      </Button>
                     </div>
                   )}
                 </div>
