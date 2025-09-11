@@ -503,9 +503,9 @@ const CvForm = () => {
       case 4:
         localStorage.removeItem("step4CvData");
         localStorage.setItem("currentStep", step.toString());
-        form.setValue("Skills", []);
+        // form.setValue("Skills", []);
         // form.setValue("sk", {});
-        form.setValue("skillsVerificationsValidations", {});
+        // form.setValue("skillsVerificationsValidations", {});
         window.location.reload();
         break;
       case 5:
