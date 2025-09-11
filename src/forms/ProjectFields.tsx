@@ -126,39 +126,39 @@ const ProjectFields = ({ index, removeProjectFields, fields }: Props) => {
             </FormItem>
           )}
         />
-        {/* duration */}
-        <FormField
-          name={`Projects.${index}.duration`}
-          control={control}
-          render={() => (
-            <FormItem className="flex flex-1 gap-1 flex-col justify-center">
-              <FormLabel className="">Duration*</FormLabel>
-              <FormControl>
-                <div className="flex gap-10">
-                  <div className="">
-                    <p className="text-base">From</p>
-                    <ProjectCalendar
-                      value={dateFrom}
-                      setValue={setDateFrom}
-                      index={index}
-                      isDateFrom
-                    />
-                  </div>
-                  <div>
-                    <p className="text-base">To</p>
-                    <ProjectCalendar
-                      value={dateTo}
-                      setValue={setDateTo}
-                      index={index}
-                    />
-                  </div>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
       </div>
+      {/* duration */}
+      <FormField
+        name={`Projects.${index}.duration`}
+        control={control}
+        render={() => (
+          <FormItem className="flex flex-1 gap-1 flex-col justify-center mt-10">
+            <FormLabel className="mt-5">Duration*</FormLabel>
+            <FormControl>
+              <div className="flex flex-col md:flex-row items-center gap-10">
+                <div className="">
+                  <p className="text-base">From</p>
+                  <ProjectCalendar
+                    value={dateFrom}
+                    setValue={setDateFrom}
+                    index={index}
+                    isDateFrom
+                  />
+                </div>
+                <div>
+                  <p className="text-base">To</p>
+                  <ProjectCalendar
+                    value={dateTo}
+                    setValue={setDateTo}
+                    index={index}
+                  />
+                </div>
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       {/* work description */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:gap-5">
         <FormField
@@ -188,15 +188,15 @@ const ProjectFields = ({ index, removeProjectFields, fields }: Props) => {
             <MdDeleteOutline className="text-xl ml-2" />
           </Button>
         )} */}
-                  <Button
-            type="button"
-            variant={"destructive"}
-            className="mt-5 text-sm px-10"
-            onClick={deleteHandler}
-          >
-            Remove
-            <MdDeleteOutline className="text-xl ml-2" />
-          </Button>
+        <Button
+          type="button"
+          variant={"destructive"}
+          className="mt-5 text-sm px-10"
+          onClick={deleteHandler}
+        >
+          Remove
+          <MdDeleteOutline className="text-xl ml-2" />
+        </Button>
       </div>
       {/* Animated Verification section */}
       <div className="flex flex-col gap-4 sm:px-2">
@@ -214,7 +214,7 @@ const ProjectFields = ({ index, removeProjectFields, fields }: Props) => {
                   validationStep="projectVerificationsValidations"
                   setterVerificationObject={setProjectVerification}
                   verificationStep="projectsVerifications"
-                  projectInfo = {`Projects[${index}]`}
+                  projectInfo={`Projects[${index}]`}
                 />
                 <FormMessage />
               </FormItem>
