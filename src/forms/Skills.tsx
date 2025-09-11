@@ -42,7 +42,7 @@ const skills: string[] = [
 const Skills = () => {
   const { control, setValue, getValues } = useFormContext();
   const {
-    selectedSkills,
+    // selectedSkills,
     setSelectedSkills,
     skillError,
     setSkillError,
@@ -56,6 +56,7 @@ const Skills = () => {
 
   console.log("skills verification", skillsVerification);
   console.log("form object", getValues());
+
   const {
     skillsVerificationsValidations: storedVerification,
     Skills: formSkills,
@@ -68,12 +69,12 @@ const Skills = () => {
   );
   const selectSkillsHandler = (skill: string) => {
     // Check if skill already exists by looking at skillName property
-    const skillExists = selectedSkills.some(
-      (selectedSkill) => selectedSkill.skillName === skill
+    const skillExists = formSkills.some(
+      (selectedSkill: any) => selectedSkill.skillName === skill
     );
 
     if (!skillExists) {
-      if (selectedSkills.length >= 5) {
+      if (formSkills.length >= 5) {
         setSkillShowError(true);
         setSkillError("You can only select 5 skills");
         return;
@@ -123,8 +124,8 @@ const Skills = () => {
     const formFilteredSkill = formSkills.filter(
       (prevSkill: any) => prevSkill.skillName !== skill
     );
-    const filteredSkills = selectedSkills.filter(
-      (prevSkill) => prevSkill.skillName !== skill
+    const filteredSkills = formFilteredSkill.filter(
+      (prevSkill: any) => prevSkill.skillName !== skill
     );
     if (filteredSkills.length < 5) {
       setSkillShowError(false);
@@ -146,7 +147,7 @@ const Skills = () => {
       setIsKeyDown(true);
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (selectedSkills.length >= 5) {
+      if (formSkills.length >= 5) {
         setTyperSkill("");
         setSkillShowError(true);
         setSkillError("You can only add 5 skills");
@@ -178,7 +179,7 @@ const Skills = () => {
   };
 
   const typeSkillClickHanlder = () => {
-    if (selectedSkills.length >= 5) {
+    if (formSkills.length >= 5) {
       setSkillShowError(true);
       setSkillError("You can only add 5 skills");
       return;
@@ -217,7 +218,7 @@ const Skills = () => {
 
       <div className="flex flex-wrap  mt-4 px-2 sm:px-10 gap-5">
         {skills.map((skill) => {
-          const skillExist = selectedSkills.some((s) => s.skillName === skill);
+          const skillExist = formSkills.some((s: any) => s.skillName === skill);
           return (
             <Button
               type="button"
@@ -240,8 +241,8 @@ const Skills = () => {
       {/* FIXME: bug culprit section start----------------- */}
       <div className="flex px-2 sm:px-10">
         <div className="border p-1 rounded-md flex flex-wrap w-full gap-2">
-          {selectedSkills.length > 0 &&
-            selectedSkills.map(({ skillName }) => {
+          {formSkills.length > 0 &&
+            formSkills.map(({ skillName }: any) => {
               return (
                 <Button
                   key={skillName}
