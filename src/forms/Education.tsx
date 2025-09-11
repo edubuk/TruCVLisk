@@ -49,7 +49,7 @@ const Education = ({
     postGraduateDegreeName,
     educationVerificationValidations: storedVerifications,
   } = getValues();
-  console.log(getValues());
+  console.log("form values are", getValues());
 
   // Initialize date from localStorage only once
   const initialDate = useRef(() => {

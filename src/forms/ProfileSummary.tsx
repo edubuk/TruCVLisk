@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useCvFromContext } from "@/context/CvForm.context";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 // type ProfileSummaryVerificationType = {
 //   profile_summary: {
@@ -19,6 +20,13 @@ const ProfileSummary = () => {
   const { profileSummaryVerification, setProfileSummaryVerification } =
     useCvFromContext();
   console.log(profileSummaryVerification);
+  useEffect(() => {
+    setProfileSummaryVerification({
+      profile_summary: {
+        isSelfAttested: false,
+      },
+    });
+  }, []);
   const handleSelfAttest = () => {
     setProfileSummaryVerification({
       profile_summary: {

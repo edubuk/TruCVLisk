@@ -316,25 +316,91 @@ export function AnimatedVerification({
     //   setIsUploading(false);
     // }
   };
+  const validateProofFile = (file: File) => {
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "application/pdf",
+    ];
+    const allowedExtensions = [".jpg", ".jpeg", ".png", ".pdf"];
+    const maxSize = 10 * 1024 * 1024; // 10MB limit (optional)
 
-  // TODO: uploadProof button onClick handler;
+    if (!file) return { isValid: false, error: "No file selected" };
+
+    const fileExtension = file.name
+      .toLowerCase()
+      .substring(file.name.lastIndexOf("."));
+
+    if (!allowedTypes.includes(file.type)) {
+      return {
+        isValid: false,
+        error:
+          "Invalid file type. Please upload JPG, JPEG, PNG, or PDF files only.",
+      };
+    }
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      return {
+        isValid: false,
+        error:
+          "Invalid file extension. Please upload JPG, JPEG, PNG, or PDF files only.",
+      };
+    }
+
+    if (file.size > maxSize) {
+      return {
+        isValid: false,
+        error: "File size too large. Please upload files smaller than 10MB.",
+      };
+    }
+
+    return { isValid: true };
+  };
   const uploadProofOnclickHandler = () => {
-    //console.log("onclick called for upload button");
-    // you can have files in files[] before upload it to the database;
-    // <<---------------------------------------->>
+    if (!files || files.length === 0) {
+      alert("Please select a file to upload.");
+      return;
+    }
 
-    // write your code here; try console.log(files);
+    const file = files[0];
+    const validation = validateProofFile(file);
 
-    // <<------------------------------------------>>
+    if (!validation.isValid) {
+      alert(validation.error);
+      return;
+    }
+
+    // Proceed with upload if validation passes
     uploadImageToDB().then(() => {
       setFiles([]);
     });
   };
+  //  uploadProof button onClick handler;
+  // const uploadProofOnclickHandler = () => {
+  //   // <<------------------------------------------>>
+  //   uploadImageToDB().then(() => {
+  //     setFiles([]);
+  //   });
+  // };
 
-  // TODO: handle files and setting files;
+  //  handle files and setting files;
   const handleUploadProof = (files: File[]) => {
     console.log(files);
-    setFiles((prev) => [...prev, ...files]);
+    if (!files || files.length === 0) {
+      alert("Please select a file to upload.");
+      return;
+    }
+
+    const file = files[0];
+    const validation = validateProofFile(file);
+
+    if (!validation.isValid) {
+      return alert(validation.error);
+    }
+    if (validation.isValid) {
+      setFiles((prev) => [...prev, ...files]);
+    }
   };
   setValue(`${verificationStep}[${field}].mailStatus`, "pending");
 
