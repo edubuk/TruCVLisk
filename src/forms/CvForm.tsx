@@ -45,7 +45,7 @@ const CvForm = () => {
     const nanoId = nanoid(16);
     const storedNanoId = localStorage.getItem("nanoId");
     if (!storedNanoId) {
-      const username = localStorage.getItem("userName");
+      const username = localStorage.getItem("userProfileName");
       if(!username)
       {
         window.location.href = "/login";
