@@ -181,7 +181,7 @@ const PaymentPopup: React.FC<Props> = ({ showPopup, setShowPopup}) => {
               <div className="w-full md:w-1/2 p-6">
                 {isCouponValid ? (
                   <h2 className="text-xl text-[#03257e] font-semibold mb-4 animate-bounce">
-                    Hurrey! You got an amazing discount 🎉
+                    Hurray!! You got an amazing discount 🎉
                   </h2>
                 ) : (
                   <h2 className="text-xl text-[#03257e] font-semibold mb-4">

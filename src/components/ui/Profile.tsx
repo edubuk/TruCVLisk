@@ -9,7 +9,7 @@ console.log("userData",userEmail,subscriptionPlan)
   return (
     <div className={`absolute right-4 top-16 w-72 rounded-lg shadow-lg border border-gray-200 bg-white p-4 z-50 ${openProfile ? 'block' : 'hidden'}`}>
       <div className="flex items-center gap-4 mb-4">
-        <div className='flex justify-center items-center bg-[#03257e] rounded-full w-12 h-12'>
+        <div className='flex justify-center items-center bg-[#03257e] rounded-full w-12 h-12 flex-shrink-0'>
           <p className="text-center text-white font-bold cursor-pointer text-center md:text-2xl text-xl">{localStorage.getItem('userProfileName')?.slice(0,1)?.toUpperCase()}</p>
         </div>
         <div>

@@ -15,7 +15,7 @@ export default function AccessDeniedPage() {
         className="pointer-events-none absolute -bottom-40 -left-40 h-[28rem] w-[28rem] rounded-full blur-3xl opacity-20"
       />
 
-      <div className="relative z-10 flex h-auto items-center justify-center px-4 py-16">
+      <div className="relative z-0 flex h-auto items-center justify-center px-4 py-16">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
