@@ -18,13 +18,15 @@ export default function AwardCalendar({
 }: // defaultDate,
 // index,
 Props) {
-  const storedFormData = localStorage.getItem("step5CvData");
-  let Awards;
-  if (storedFormData) {
-    const parsedData = JSON.parse(storedFormData);
-    const { Awards: aw } = parsedData;
-    Awards = aw;
-  }
+  // const storedFormData = localStorage.getItem("step5CvData");
+  // let Awards;
+  // if (storedFormData) {
+  //   const parsedData = JSON.parse(storedFormData);
+  //   const { Awards: aw } = parsedData;
+  //   Awards = aw;
+  // }
+
+  // console.log(Awards);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
