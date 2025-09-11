@@ -33,13 +33,15 @@ const Resume: React.FC = () => {
   const { subscriptionPlan } = useUserData();
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
-    const formatedDate = date.toLocaleDateString("en-US", {
-      month: "long",
+    console.log("date", dateString);
+    const formatedDate = date.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
       year: "numeric",
     });
     console.log("formated date", formatedDate);
-    if (formatedDate == "Invalid Date") {
-      return dateString;
+    if (formatedDate == "Invalid Date" || formatedDate == "1 Jan 1970") {
+      return "Present";
     }
     return formatedDate;
   };

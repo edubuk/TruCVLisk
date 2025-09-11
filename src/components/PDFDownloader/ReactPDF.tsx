@@ -10,8 +10,6 @@ import {
   Image
 } from "@react-pdf/renderer";
 
-
-
 // Register Times font (built-in)
 Font.register({
   family: "Times-Roman",
@@ -108,7 +106,23 @@ const styles = StyleSheet.create({
   }
 });
 
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  console.log("date", dateString);
+  const formatedDate = date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  console.log("formated date", formatedDate);
+  if (formatedDate == "Invalid Date" || formatedDate == "1 Jan 1970") {
+    return "Present";
+  }
+  return formatedDate;
+};
+
 export const CVDocument = ({ cvData,id }: any) => (
+
   <Document
   title="Edubuk Certificate"
   author="Edubuk"
@@ -152,8 +166,8 @@ export const CVDocument = ({ cvData,id }: any) => (
           </View>
           <View style={styles.alignRight}>
             <Text>
-              {cvData.education.postGraduateDuration.duration.from} -{" "}
-              {cvData.education.postGraduateDuration.duration.to}
+              {formatDate(cvData.education?.postGraduateDuration?.duration?.from)} -{" "}
+              {formatDate(cvData.education?.postGraduateDuration?.duration?.to)}
             </Text>
             <Text>GPA: <Text style={styles.bold}>{cvData.education.postGraduateGPA}/10</Text></Text>
           </View>
@@ -167,10 +181,10 @@ export const CVDocument = ({ cvData,id }: any) => (
           </View>
           <View style={styles.alignRight}>
             <Text>
-              {cvData.education.underGraduateDuration.duration.from} -{" "}
-              {cvData.education.underGraduateDuration.duration.to}
+              {formatDate(cvData.education?.underGraduateDuration?.duration?.from)} -{" "}
+              {formatDate(cvData.education?.underGraduateDuration?.duration?.to)}
             </Text>
-            <Text>GPA: <Text style={styles.bold}>{cvData.education.underGraduateGPA}/10</Text></Text>
+            <Text>GPA: <Text style={styles.bold}>{cvData.education?.underGraduateGPA}/10</Text></Text>
           </View>
         </View>
         )}
@@ -215,11 +229,11 @@ export const CVDocument = ({ cvData,id }: any) => (
         {cvData.experience.map((exp: any, i: number) => (
           <View key={i} style={{ marginBottom: 6 }}>
             <View style={styles.rowBetween}>
-              <Text style={styles.bold}>{exp.company_name}</Text>
-              <Text>{exp.duration.from} - {exp.duration.to}</Text>
+              <Text style={styles.bold}>{exp?.company_name}</Text>
+              <Text>{formatDate(exp?.duration?.from)} - {formatDate(exp?.duration?.to)}</Text>
             </View>
-            <Text style={styles.italic}>{exp.job_role}</Text>
-            {exp.description.split(".")
+            <Text style={styles.italic}>{exp?.job_role}</Text>
+            {exp?.description?.split(".")
               .filter((d: string) => d.trim())
               .map((point: string, j: number) => (
                 <Text key={j} style={styles.listItem}>• {point}</Text>
@@ -236,10 +250,10 @@ export const CVDocument = ({ cvData,id }: any) => (
         {cvData.achievements.projects.map((proj: any, i: number) => (
           <View key={i} style={{ marginBottom: 6 }}>
             <View style={styles.rowBetween}>
-              <Text style={styles.bold}>{proj.project_name}</Text>
-              <Text>{proj.duration.from} - {proj.duration.to}</Text>
+              <Text style={styles.bold}>{proj?.project_name}</Text>
+              <Text>{formatDate(proj?.duration?.from)} - {formatDate(proj?.duration?.to)}</Text>
             </View>
-            {proj.description.split(".")
+            {proj?.description?.split(".")
               .filter((d: string) => d.trim())
               .map((point: string, j: number) => (
                 <Text key={j} style={styles.listItem}>• {point}</Text>
@@ -256,10 +270,10 @@ export const CVDocument = ({ cvData,id }: any) => (
         {cvData.achievements.courses.map((course: any, i: number) => (
           <View key={i} style={{ marginBottom: 6 }}>
             <View style={styles.rowBetween}>
-              <Text style={styles.bold}>{course.course_name} | {course.organization}</Text>
-              <Text>{course.duration.from} - {course.duration.to}</Text>
+              <Text style={styles.bold}>{course?.course_name} | {course?.organization}</Text>
+              <Text>{formatDate(course?.duration?.from)} - {formatDate(course?.duration?.to)}</Text>
             </View>
-            {course.description.split(".")
+            {course?.description?.split(".")
               .filter((d: string) => d.trim())
               .map((point: string, j: number) => (
                 <Text key={j} style={styles.listItem}>• {point}</Text>
@@ -276,10 +290,10 @@ export const CVDocument = ({ cvData,id }: any) => (
         {cvData.achievements.awards.map((award: any, i: number) => (
           <View key={i} style={{ marginBottom: 6 }}>
             <View style={styles.rowBetween}>
-              <Text><Text style={styles.bold}>{award.award_name}</Text> | {award.awarding_organization}</Text>
-              <Text>{award.date}</Text>
+              <Text><Text style={styles.bold}>{award?.award_name}</Text> | {award?.awarding_organization}</Text>
+              <Text>{formatDate(award?.date)}</Text>
             </View>
-            <Text style={styles.listItem}>• {award.description}</Text>
+            <Text style={styles.listItem}>• {award?.description}</Text>
           </View>
         ))}
       </View>
