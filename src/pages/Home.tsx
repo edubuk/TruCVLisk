@@ -11,7 +11,6 @@ import WhyTrucv from "../components/HomePageSections/WhyTrucv";
 import { useState} from "react";
 import ProfilePopup from "@/components/ui/Profile";
 import { Link } from "react-router-dom";
-import { CircleUser } from "lucide-react";
 
 
 const Home:React.FC<{handlerLogout:()=>void}> = ({handlerLogout}) => {
@@ -21,11 +20,11 @@ const Home:React.FC<{handlerLogout:()=>void}> = ({handlerLogout}) => {
     <div className="flex justify-center items-center flex-col gap-8 overflow-hidden">
      <div className="relative w-full flex flex-col">
      <div className="relative flex justify-end items-center w-full h-[20px] mt-2 p-6">
-      <div className="relative">
-      {localStorage.getItem("userImage")? <img src={localStorage.getItem("userImage") as string} referrerPolicy="no-referrer" className="w-12 h-12 text-[#03257e] rounded-full cursor-pointer" onClick={()=>setOpenProfile(!openProfile)}/>:localStorage.getItem("googleIdToken")&&<CircleUser className="w-12 h-12 text-[#03257e] rounded-full cursor-pointer" onClick={()=>setOpenProfile(!openProfile)}/> }      {/* <div className="absolute top-0  w-12 h-12  rounded-full   bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] -z-10"></div> */}
-      </div>
-
-     <ProfilePopup openProfile={openProfile}/></div>
+      {/* {localStorage.getItem("userImage")? <img src={localStorage.getItem("userImage") as string} referrerPolicy="no-referrer" className="w-12 h-12 text-[#03257e] rounded-full cursor-pointer" onClick={()=>setOpenProfile(!openProfile)}/>:localStorage.getItem("googleIdToken")&&<CircleUser className="w-12 h-12 text-[#03257e] rounded-full cursor-pointer" onClick={()=>setOpenProfile(!openProfile)}/> }      <div className="absolute top-0  w-12 h-12  rounded-full   bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] -z-10"></div> */}
+      {localStorage.getItem("googleIdToken")&&<div className='flex justify-center items-center bg-[#03257e] rounded-full w-12 h-12 cursor-pointer' onClick={()=>setOpenProfile(!openProfile)}>
+          <p className="text-center text-white font-bold cursor-pointer text-center md:text-2xl text-xl">{localStorage.getItem('userProfileName')?.slice(0,1)?.toUpperCase()}</p>
+      </div>}
+     <ProfilePopup openProfile={openProfile} setOpenProfile={setOpenProfile}/></div>
       <div className="flex justify-around items-center flex-wrap-reverse gap-10 md:gap-20 border-b-4 border-amber-300 md:h-[80vh]">
         <div className="flex justify-center items-center flex-col gap-4 pb-4" data-aos="fade-up">
           <div className="flex justify-center items-center gap-2">
