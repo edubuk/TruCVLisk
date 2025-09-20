@@ -4,16 +4,17 @@ import { cn } from "@/lib/utils";
 import { AnimatedBeam } from "./animated-beam";
 import SelfAttestButton from "../Buttons/SelfAttest";
 import UploadProofButton from "../Buttons/UploadProofButton";
-// import IssuerButton from "../Buttons/IssuerButton";
+import IssuerButton from "../Buttons/IssuerButton";
 import { twMerge } from "tailwind-merge";
 import { useFormContext } from "react-hook-form";
 import { Dialog, DialogContent, DialogTrigger } from "./dialog";
 import { FileUpload } from "./file-upload";
-import { uploadToIpfs } from "./PinFileOnPinata";
-// import {sendEmail} from './MailToVerify';
-// import toast from "react-hot-toast";
-// import { Input } from "./input";
-// import { Button } from "./button";
+import {uploadToIpfs} from "./PinFileOnPinata";
+import {sendEmail} from './MailToVerify';
+import toast from "react-hot-toast";
+import { Input } from "./input";
+import { Button } from "./button";
+
 
 const Circle = forwardRef<
   HTMLDivElement,
@@ -51,11 +52,19 @@ export function AnimatedVerification({
   validationStep,
   // verificationObject,
   setterVerificationObject,
-  companyInfo,
-  formSkill,
-  awardInfo,
-  courseInfo,
-  projectInfo,
+  jobRole,
+  companyName,
+  skill,
+  awardName,
+  awardOrg,
+  courseName,
+  courseOrg,
+  underGraduateCollegeName,
+  postGraduateCollegeName,
+  class10SchoolName,
+  class12CollegeName,
+  underGraduateDegreeName,
+  postGraduateDegreeName,
 }: {
   className?: string;
   firstButtonText: string;
@@ -73,23 +82,19 @@ export function AnimatedVerification({
     };
   };
   setterVerificationObject: React.Dispatch<React.SetStateAction<any>>;
-  jobRole?: string;
-  companyName?: string;
-  companyInfo?: any;
-  formSkill?: any;
-  awardName?: string;
-  awardOrg?: string;
-  awardInfo?: string;
-  courseInfo?: string;
-  courseName?: string;
-  courseOrg?: string;
-  projectInfo?: string;
-  class12CollegeName?: string;
-  class10SchoolName?: string;
-  underGraduateCollegeName?: string;
-  postGraduateCollegeName?: string;
-  underGraduateDegreeName?: string;
-  postGraduateDegreeName?: string;
+  jobRole?:string;
+  companyName?:string;
+  skill?:string;
+  awardName?:string;
+  awardOrg?:string;
+  courseName?:string;
+  courseOrg?:string;
+  class12CollegeName?:string;
+  class10SchoolName?:string;
+  underGraduateCollegeName?:string;
+  postGraduateCollegeName?:string;
+  underGraduateDegreeName?:string;
+  postGraduateDegreeName?:string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   // const div1Ref = useRef<HTMLDivElement>(null);
@@ -102,17 +107,16 @@ export function AnimatedVerification({
 
   // states;
   const [files, setFiles] = useState<File[]>([]);
-  const [ipfsHash, setIpfsHash] = useState<string>("");
+  const [ipfsHash,setIpfsHash] = useState<string>("");
   const { setValue, getValues } = useFormContext();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  // const [mailId,setMailId] = useState<string>("");
-  // const [openMailDialog, setOpenMailDialog] = useState<boolean>(false);
+  const [mailId,setMailId] = useState<string>("");
+  const [openMailDialog, setOpenMailDialog] = useState<boolean>(false);
   // Safely check if the verificationObject contains the field
   // const verificationData = verificationObject[field] || {};
-  console.log("skill");
-  const verificationData = storedVerifications[field] || {};
-  console.log("verification data is", verificationData);
+  console.log(field==="class10");
+  const verificationData = (storedVerifications?.[field]) || {};
   //console.log(files);
   // console.log("form object", getValues());
   const formObject = getValues();
@@ -132,278 +136,153 @@ export function AnimatedVerification({
     // for validations needed to stop the user from directly skip verifications;
     setValue(`${validationStep}[${field}].isSelfAttested`, true);
   };
-
+  
   const uploadImageToDB = async () => {
     if (files.length === 0) return;
 
-    let docHash;
-    switch (verificationStep) {
+    const proofArray: string[] = [];
+    const hashArray: string[] = [];
+  
+    let metaDataHash,docHash;
+    const userName = localStorage.getItem("userName");
+    switch(verificationStep)
+    {
       case "educationVerifications":
-        if (field === "class10") {
-          docHash = await uploadToIpfs(files[0], setIsUploading);
-          try {
-            setIsUploading(false);
-            setDialogOpen(false); //closing dialog after upload;
-            // Ensure setValue is called after all uploads are complete
-            setValue(`class10CertUrl`, docHash);
-            //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-            setIpfsHash(docHash as string);
-          } catch (error) {
-            console.error("Error uploading files:", error);
-            setIsUploading(false);
-          }
-        } else if (field === "class12") {
-          docHash = await uploadToIpfs(files[0], setIsUploading);
-          try {
-            setIsUploading(false);
-            setDialogOpen(false); //closing dialog after upload;
-            // Ensure setValue is called after all uploads are complete
-            setValue(`class12CertUrl`, docHash);
-            //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-            setIpfsHash(docHash as string);
-          } catch (error) {
-            console.error("Error uploading files:", error);
-            setIsUploading(false);
-          }
-        } else if (field === "undergraduation") {
-          docHash = await uploadToIpfs(files[0], setIsUploading);
-          try {
-            setIsUploading(false);
-            setDialogOpen(false); //closing dialog after upload;
-            // Ensure setValue is called after all uploads are complete
-            setValue(`undergraduateCertUrl`, docHash);
-            //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-            setIpfsHash(docHash as string);
-          } catch (error) {
-            console.error("Error uploading files:", error);
-            setIsUploading(false);
-          }
-        } else if (field === "postgraduation") {
-          docHash = await uploadToIpfs(files[0], setIsUploading);
-          try {
-            setIsUploading(false);
-            setDialogOpen(false); //closing dialog after upload;
-            // Ensure setValue is called after all uploads are complete
-            setValue(`postgraduateCertUrl`, docHash);
-            //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-            setIpfsHash(docHash as string);
-          } catch (error) {
-            console.error("Error uploading files:", error);
-            setIsUploading(false);
-          }
+        if(field==="class10")
+        {
+          const eduUserData1 = `completing ${firstButtonText} by ${userName} from ${class10SchoolName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,eduUserData1));
+        }
+        else if(field==="class12")
+        {
+          const eduUserData1 = `completing ${firstButtonText} by ${userName} from ${class12CollegeName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,eduUserData1));
+        }
+        else if(field==="undergraduation")
+        {
+          const eduUserData1 = `completing ${underGraduateDegreeName} by ${userName} from ${underGraduateCollegeName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,eduUserData1));
+        }
+        else if(field==="postgraduation")
+        {
+          const eduUserData1 = `completing ${postGraduateDegreeName} by ${userName} from ${postGraduateCollegeName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,eduUserData1));
         }
         break;
       case "experienceVerifications":
-        docHash = await uploadToIpfs(files[0], setIsUploading);
-        try {
-          setIsUploading(false);
-          setDialogOpen(false); //closing dialog after upload;
-          // Ensure setValue is called after all uploads are complete
-          setValue(`${companyInfo}.experienceCertUrl`, docHash);
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-          setIpfsHash(docHash as string);
-        } catch (error) {
-          console.error("Error uploading files:", error);
-          setIsUploading(false);
-        }
+        const userData1 = `completing ${jobRole} job by ${userName} at ${companyName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,userData1));
         break;
 
       case "skillsVerifications":
-        try {
-          docHash = await uploadToIpfs(files[0], setIsUploading);
-          setIsUploading(false);
-          setDialogOpen(false); //closing dialog after upload;
-          // Ensure setValue is called after all uploads are complete
-          setValue(`${formSkill}.skillUrl`, docHash);
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-          setIpfsHash(docHash as string);
-        } catch (error) {
-          console.error("Error uploading files:", error);
-          setIsUploading(false);
-        }
+        const userData2 = `completing ${skill} skill by ${userName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,userData2));
         break;
 
       case "awardVerifications":
-        try {
-          docHash = await uploadToIpfs(files[0], setIsUploading);
-          setIsUploading(false);
-          setDialogOpen(false); //closing dialog after upload;
-          // Ensure setValue is called after all uploads are complete
-          setValue(`${awardInfo}.awardCertUrl`, docHash);
-          setIpfsHash(docHash as string);
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-        } catch (error) {
-          console.error("Error uploading files:", error);
-          setIsUploading(false);
-        }
+        const userData3 = `receiving ${awardName} certificate by ${userName} at ${awardOrg}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,userData3));
         break;
       case "courseVerifications":
-        try {
-          docHash = await uploadToIpfs(files[0], setIsUploading);
-          setIsUploading(false);
-          setDialogOpen(false); //closing dialog after upload;
-          // Ensure setValue is called after all uploads are complete
-          setValue(`${courseInfo}.courseCertUrl`, docHash);
-          if (docHash) {
-            console.log("docHash while setting", docHash);
-            setIpfsHash(docHash as string);
+        const userData4 = `completing ${courseName} course by ${userName} at ${courseOrg}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,userData4));
+        break;
+    }
+    console.log("metaData and docHash",metaDataHash,docHash);
+    if(docHash)
+      {
+        if (
+          verificationStep === "educationVerifications" ||
+          verificationStep === "experienceVerifications" ||
+          verificationStep === "skillsVerifications" ||
+          verificationStep === "awardVerifications" ||
+          verificationStep === "courseVerifications"
+        ) {
+          hashArray.push(metaDataHash as string);
+          console.log("verification data : ",verificationData)
+          // Retrieve existing hashArray from localStorage
+          let data = localStorage.getItem("hashArray");
+        
+          let updatedArray = [];
+          if (data) {
+            // Parse existing data if not null
+            updatedArray = JSON.parse(data);
           }
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-        } catch (error) {
-          console.error("Error uploading files:", error);
-          setIsUploading(false);
+        
+          // Combine existing hashes with the new ones
+          updatedArray = [...updatedArray, ...hashArray];
+        
+          // Store the updated array back in localStorage
+          localStorage.setItem("hashArray", JSON.stringify(updatedArray));
         }
-        break;
-      case "projectsVerifications":
-        try {
-          docHash = await uploadToIpfs(files[0], setIsUploading);
-          setIsUploading(false);
-          setDialogOpen(false); //closing dialog after upload;
-          // Ensure setValue is called after all uploads are complete
-          setValue(`${projectInfo}.projectCertUrl`, docHash);
-          setIpfsHash(docHash as string);
-          //console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-        } catch (error) {
-          console.error("Error uploading files:", error);
-          setIsUploading(false);
-        }
-        break;
+        
+      setIpfsHash(docHash as string);
+      proofArray.push(docHash as string);
+      setDialogOpen(false);
+      console.log("Proof Array:", proofArray); // Ensure proofArray is correct
+      }
+
+    try {
+    
+      // for updating ui to proof uploaded updating verifications object using its setter;
+      setterVerificationObject((prev: any) => ({
+        ...prev,
+        [field]: {
+          ...prev[field],
+          proof: proofArray,
+        },
+      }));
+
+      setIsUploading(false);
+      setDialogOpen(false); //closing dialog after upload;
+      // Ensure setValue is called after all uploads are complete
+      setValue(`${verificationStep}[${field}].proof`, proofArray, {
+        shouldValidate: true, // Optionally trigger validation
+        shouldDirty: true, // Optionally mark the field as dirty
+      });
+      // setting value for the verification validations
+      setValue(`${validationStep}[${field}].proof`, proofArray, {
+        shouldValidate: true, // Optionally trigger validation
+        shouldDirty: true, // Optionally mark the field as dirty
+      });
+
+      console.log("Form after setting value:", getValues()); // Debug to see the updated form values
+    } catch (error) {
+      console.error("Error uploading files:", error);
+      setIsUploading(false);
     }
-    console.log("docHash", docHash);
-    // if(docHash)
-    //   {
-    //     if (
-    //       verificationStep === "educationVerifications" ||
-    //       verificationStep === "experienceVerifications" ||
-    //       verificationStep === "skillsVerifications" ||
-    //       verificationStep === "awardVerifications" ||
-    //       verificationStep === "courseVerifications"
-    //     ) {
-    //       setValue("class10CertUrl",docHash);
-    //       //hashArray.push(metaDataHash as string);
-    //       console.log("verification data : ",verificationData)
-    //       // Retrieve existing hashArray from localStorage
-    //       let data = localStorage.getItem("hashArray");
-
-    //       let updatedArray = [];
-    //       if (data) {
-    //         // Parse existing data if not null
-    //         updatedArray = JSON.parse(data);
-    //       }
-
-    //       // Combine existing hashes with the new ones
-    //       updatedArray = [...updatedArray, ...hashArray];
-
-    //       // Store the updated array back in localStorage
-    //       localStorage.setItem("hashArray", JSON.stringify(updatedArray));
-    //     }
-
-    //   setIpfsHash(docHash as string);
-    //   proofArray.push(docHash as string);
-    //   setDialogOpen(false);
-    //   console.log("Proof Array:", proofArray); // Ensure proofArray is correct
-    //   }
-
-    // try {
-
-    //   setIsUploading(false);
-    //   setDialogOpen(false); //closing dialog after upload;
-    //   // Ensure setValue is called after all uploads are complete
-    //   setValue(`${companyInfo}.experienceCertUrl`,docHash);
-    //   console.log("Form after setting value:", getValues()); // Debug to see the updated form values
-    // } catch (error) {
-    //   console.error("Error uploading files:", error);
-    //   setIsUploading(false);
-    // }
   };
-  const validateProofFile = (file: File) => {
-    const allowedTypes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "application/pdf",
-    ];
-    const allowedExtensions = [".jpg", ".jpeg", ".png", ".pdf"];
-    const maxSize = 10 * 1024 * 1024; // 10MB limit (optional)
 
-    if (!file) return { isValid: false, error: "No file selected" };
-
-    const fileExtension = file.name
-      .toLowerCase()
-      .substring(file.name.lastIndexOf("."));
-
-    if (!allowedTypes.includes(file.type)) {
-      return {
-        isValid: false,
-        error:
-          "Invalid file type. Please upload JPG, JPEG, PNG, or PDF files only.",
-      };
-    }
-
-    if (!allowedExtensions.includes(fileExtension)) {
-      return {
-        isValid: false,
-        error:
-          "Invalid file extension. Please upload JPG, JPEG, PNG, or PDF files only.",
-      };
-    }
-
-    if (file.size > maxSize) {
-      return {
-        isValid: false,
-        error: "File size too large. Please upload files smaller than 10MB.",
-      };
-    }
-
-    return { isValid: true };
-  };
+  // TODO: uploadProof button onClick handler;
   const uploadProofOnclickHandler = () => {
-    if (!files || files.length === 0) {
-      alert("Please select a file to upload.");
-      return;
-    }
+    //console.log("onclick called for upload button");
+    // you can have files in files[] before upload it to the database;
+    // <<---------------------------------------->>
 
-    const file = files[0];
-    const validation = validateProofFile(file);
+    // write your code here; try console.log(files);
 
-    if (!validation.isValid) {
-      alert(validation.error);
-      return;
-    }
-
-    // Proceed with upload if validation passes
+    // <<------------------------------------------>>
     uploadImageToDB().then(() => {
       setFiles([]);
     });
   };
-  //  uploadProof button onClick handler;
-  // const uploadProofOnclickHandler = () => {
-  //   // <<------------------------------------------>>
-  //   uploadImageToDB().then(() => {
-  //     setFiles([]);
-  //   });
-  // };
 
-  //  handle files and setting files;
+  // TODO: handle files and setting files;
   const handleUploadProof = (files: File[]) => {
     console.log(files);
-    if (!files || files.length === 0) {
-      alert("Please select a file to upload.");
-      return;
-    }
-
-    const file = files[0];
-    const validation = validateProofFile(file);
-
-    if (!validation.isValid) {
-      return alert(validation.error);
-    }
-    if (validation.isValid) {
-      setFiles((prev) => [...prev, ...files]);
-    }
+    setFiles((prev) => [...prev, ...files]);
   };
   setValue(`${verificationStep}[${field}].mailStatus`, "pending");
-
+  // handle mail to issuer;
+  const handleMailToIssuer = () => {
+    // TODO: handling mail to issuer;
+    //e.preventDefault();
+    if(!ipfsHash)
+    {
+      return toast.error("proof document is not uploaded");
+    }
+    sendEmail(ipfsHash,verificationStep,field,mailId);
+  };
   return (
     <div
       className={cn(
@@ -445,19 +324,46 @@ export function AnimatedVerification({
             <SelfAttestButton
               className="text-xs sm:text-base"
               onClick={() => handleSelfAttest(field)}
-              required={true}
               // isAttested={verificationObject[field].isSelfAttested}
               // isAttested={verificationData.isSelfAttested}
               isAttested={verificationData?.isSelfAttested}
             />
           </div>
+          <div ref={div3Ref} className="z-50 mt-2">
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTrigger>
+                {/* triggering dialogue */}
+              {!ipfsHash&&
+                <UploadProofButton
+                  col
+                  className="-ml-7 text-xs sm:text-base sm:ml-0"
+                  ipfsHash={ipfsHash}
+                />
+              }
+              </DialogTrigger>
+              {ipfsHash&&
+              <UploadProofButton
+                  col
+                  className="-ml-7 text-xs sm:text-base sm:ml-0 -mt-3"
+                  ipfsHash={ipfsHash}
+                />
+              }
+              <DialogContent className="max-w-80 sm:max-w-2xl">
+                <FileUpload
+                  onChange={handleUploadProof}
+                  uploadButtonOnClick={uploadProofOnclickHandler}
+                  isLoading={isUploading}
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
           <div ref={div4Ref} className="z-50">
-            {/* {!openMailDialog&&<IssuerButton
+            {!openMailDialog&&<IssuerButton
               text="Mail to issuer"
               onClick={()=>setOpenMailDialog(true)}
               className="-ml-2  text-xs sm:text-base sm:ml-0"
-            />} */}
-            {/* {
+            />}
+            {
               openMailDialog&&
             <div className="flex flex-col items-center justify-center gap-1 w-40">
                   <Input
@@ -471,35 +377,7 @@ export function AnimatedVerification({
                   <Button type="button" onClick={()=>setOpenMailDialog(false)}>close</Button>
                   </div>
                   </div>
-                  } */}
-          </div>
-          <div ref={div3Ref} className="z-50 mt-2">
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger>
-                {/* triggering dialogue */}
-                {!ipfsHash && (
-                  <UploadProofButton
-                    col
-                    className="-ml-7 text-xs sm:text-base sm:ml-0"
-                    ipfsHash={ipfsHash}
-                  />
-                )}
-              </DialogTrigger>
-              {ipfsHash && (
-                <UploadProofButton
-                  col
-                  className="-ml-7 text-xs sm:text-base sm:ml-0 -mt-3"
-                  ipfsHash={ipfsHash}
-                />
-              )}
-              <DialogContent className="max-w-80 sm:max-w-2xl">
-                <FileUpload
-                  onChange={handleUploadProof}
-                  uploadButtonOnClick={uploadProofOnclickHandler}
-                  isLoading={isUploading}
-                />
-              </DialogContent>
-            </Dialog>
+}
           </div>
         </div>
       </div>
@@ -523,12 +401,12 @@ export function AnimatedVerification({
         toRef={div6Ref}
         duration={3}
       />
-      {/* <AnimatedBeam
+      <AnimatedBeam
         containerRef={containerRef}
         fromRef={div4Ref}
         toRef={div6Ref}
         duration={3}
-      /> */}
+      />
       <AnimatedBeam
         containerRef={containerRef}
         fromRef={div5Ref}

@@ -22,6 +22,7 @@ import toast from "react-hot-toast";
 import { formSchema } from "@/components/FormSchema/formSchema";
 import { useUserData } from "@/context/AuthContext";
 import { Link } from "react-router-dom";
+import { connectWallet, getNFTContract } from "@/api/contract.api";
 
 export type CvFormDataType = z.infer<typeof formSchema>;
 
@@ -33,10 +34,13 @@ const CvForm = () => {
     },
   });
 
-  const { step, setStep } = useCvFromContext();
+
+  const { step, setStep, account, setAccount } = useCvFromContext();
   const [profession, setProfession] = useState<string | null>(null);
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>(new FormData());
+  const [txHash, setTxHash] = useState<string | null>(null);
+  const [txStarted, setTxStarted] = useState<boolean>(false);
   const [isAgree, setIsAgree] = useState<boolean>(false);
   //const oktoClient = useOkto();
   const { subscriptionPlan } = useUserData();
@@ -479,9 +483,49 @@ const CvForm = () => {
     }
   };
 
-  //console.log("step- ", step);
-  //console.log("statusCurr",paymentCurrStatus);
-  // reset page data
+
+  // setting account address
+  const getAccount = async () => {
+    try {
+      const acc = await connectWallet();
+      if (acc) {
+        setAccount(acc);
+      }
+      console.log("logged acc", acc);
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
+
+  const mintNFT = async () => {
+    const id = toast.loading("registration initiated. Please wait...");
+
+    try {
+      setTxStarted(true);
+      const arr = localStorage.getItem("hashArray");
+      const hashArray = arr ? JSON.parse(arr) : ["bafkreicojn2jmuymgcccwqznmntyyvendd47jwccvtnqpwaung6mvkrrta"];
+
+      console.log("hashArray", hashArray);
+      const contractNFT = await getNFTContract();
+      //const tx = await contract?.addStudentData("Ajeet",hashArray);
+      const tx = await contractNFT?.mintMyNFT(account, hashArray);
+      tx.wait();
+      //console.log("tx",tx);
+      if (tx?.hash) {
+        setTxHash(tx.hash);
+        localStorage.setItem("txHash", tx.hash);
+        toast.dismiss(id);
+        toast.success("certificate registered successfully");
+        setTxStarted(false);
+      }
+    } catch (err) {
+      toast.dismiss(id);
+      console.log("error", err);
+      toast.error("something went wrong");
+      setTxStarted(false);
+    }
+  };
+
   const resetPageHandler = (step: number): void => {
     switch (step) {
       case 1:
@@ -603,23 +647,14 @@ const CvForm = () => {
                     type="button"
                     onClick={stepsHandler}
                     disabled={isImageUploading || (step === 6 && !isAgree)}
-                    className={`w-auto sm:w-full bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] hover:opacity-90 ${
-                      isImageUploading
-                        ? "cursor-not-allowed opacity-100"
-                        : "cursor-pointer"
-                    }`}
+                    className={`w-auto sm:w-full bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] hover:opacity-90 ${isImageUploading
+                      ? "cursor-not-allowed opacity-100"
+                      : "cursor-pointer"
+                      }`}
                   >
                     {step === 6 ? "Submit" : "Save and next"}
                   </Button>
-                  {subscriptionPlan === "Free" && step === 6 && (
-                    <Link
-                      to="/subscription"
-                      className="w-auto sm:w-full rounded flex items-center justify-center text-white bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] hover:opacity-90"
-                    >
-                      Upgrade to Pro
-                    </Link>
-                  )}
-                  {step !== 6 && (
+                  {step !== 6 ? (
                     <div className="flex gap-2 w-full">
                       <Button
                         type="button"
@@ -636,7 +671,38 @@ const CvForm = () => {
                         Erase All
                       </Button>
                     </div>
-                  )}
+                  ) : (!txHash ? (account ?
+                    <Button
+                      disabled={txStarted}
+                      type="button"
+                      onClick={mintNFT}
+                      className={`w-auto sm:w-full active:translate-y-2 ${txStarted ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+                        }`}
+                    >
+                      Register Your CV on Blockchain
+                    </Button> :
+                    <Button
+                      type="button"
+                      onClick={getAccount}
+                      className="w-auto sm:w-full active:translate-y-2 "
+                    >
+                      Connect Wallet
+                    </Button>
+                  ) : (
+                    <div className="flex justify-center items-center w-auto sm:w-full">
+                      <a
+                        className="w-full px-2 py-1 text-center items-center border rounded hover:bg-[#f8f9fa] font-semibold hover:opacity-90"
+                        href={`https://blockscout.lisk.com/tx/${txHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View Transaction
+                      </a>
+                    </div>
+                  )
+                  )
+
+                  }
                 </div>
               )}
             </div>
