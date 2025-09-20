@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { useUserData } from '@/context/AuthContext';
 import { MdClose } from 'react-icons/md';
 
@@ -19,7 +19,7 @@ console.log("userData",userEmail,subscriptionPlan)
         <MdClose className="cursor-pointer size-6 mb-2" onClick={()=>setOpenProfile(false)}/>
       </div>
 
-      <div className="border-t pt-3">
+      {/* <div className="border-t pt-3">
         <p className="text-sm text-[#006666] mb-1">
           <span className="font-semibold">Current Plan:</span>{' '}
           <span className={`font-semibold ${subscriptionPlan === 'Pro' ? 'text-[#03257e]' : 'text-[#f14419]'}`}>
@@ -39,7 +39,7 @@ console.log("userData",userEmail,subscriptionPlan)
         {subscriptionPlan === 'Pro' && (
           <p className="text-xs text-[#03257e] mt-2">✅ You’re on the Pro plan</p>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

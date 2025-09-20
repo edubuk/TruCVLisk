@@ -75,6 +75,7 @@ export const useCV = () => {
 export const useGetCv = (id: string) => {
   const getCvRequest = async (): Promise<Cv_resoponse_type> => {
     const response = await fetch(`${API_BASE_URL}/cv/getCvByNanoId/${id}`);
+    console.log("response cvdata",response)
     if (!response.ok) {
       throw new Error("Could not get cv!");
     }

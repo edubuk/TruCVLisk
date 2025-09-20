@@ -112,7 +112,7 @@ const Resume: React.FC = () => {
         <div
           className="flex items-center gap-2 border-2 border-[#03257e] px-2 py-1 rounded cursor-pointer text-[#03257e] hover:text-[#006666]"
           onClick={() =>
-            copyResumeLink(`https://www.edubuktrucv.com/new-cv/${id}`)
+            copyResumeLink(`https://tru-cv-lisk-v2.vercel.app/new-cv/${id}`)
           }
         >
           <FaCopy />
@@ -121,7 +121,7 @@ const Resume: React.FC = () => {
           </span>
         </div>
         {
-          subscriptionPlan === "Free" ? (
+          subscriptionPlan !== "Free" ? (
             <Link
               to="/subscription"
               className="rounded flex items-center justify-center text-white bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419] px-4 py-2 hover:opacity-90"

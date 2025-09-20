@@ -1,7 +1,7 @@
 import { useGetCv } from "@/api/cv.apis";
 import { useParams } from "react-router-dom";
 import { SiHyperskill } from "react-icons/si";
-import { FaBriefcase, FaCopy, FaExternalLinkAlt } from "react-icons/fa";
+import { FaBriefcase, FaCopy} from "react-icons/fa";
 import { GiAchievement } from "react-icons/gi";
 import { BiSolidBriefcase } from "react-icons/bi";
 import { GraduationCap, Mail, MapPinned, Phone } from "lucide-react";
@@ -154,16 +154,6 @@ const CvOutputPage = () => {
                     <div className="flex flex-col">
                       <h1 className="font-semibold text-sm md:text-base">
                         {cvData.education.postGraduateCollege}{" "}
-                        {cvData.education.postGraduateCertUrl && (
-                          <a
-                            href={cvData.education.postGraduateCertUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[#FB980E] font-semibold text-md mt-2"
-                          >
-                            <FaExternalLinkAlt />
-                          </a>
-                        )}
                       </h1>
                       <ShowVerifications
                         isAttested={
@@ -174,6 +164,7 @@ const CvOutputPage = () => {
                           cvData.educationVerifications.postgraduation
                             .mailStatus
                         }
+                        hash={cvData?.educationVerifications?.postgraduation?.proof}
                         className="my-2"
                         textClass="text-white"
                         fillCheck
@@ -198,16 +189,6 @@ const CvOutputPage = () => {
                     <div className="flex flex-col">
                       <h1 className="font-semibold text-sm md:text-base">
                         {cvData.education.underGraduateCollege}{" "}
-                        {cvData.education.underGraduateCertUrl && (
-                          <a
-                            href={cvData.education.underGraduateCertUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[#FB980E] font-semibold text-md mt-2"
-                          >
-                            <FaExternalLinkAlt />
-                          </a>
-                        )}
                       </h1>
                       <ShowVerifications
                         isAttested={
@@ -218,6 +199,7 @@ const CvOutputPage = () => {
                           cvData.educationVerifications.undergraduation
                             .mailStatus
                         }
+                        hash={cvData?.educationVerifications?.undergraduation?.proof}
                         className="my-2"
                         textClass="text-white"
                         fillCheck
@@ -242,18 +224,6 @@ const CvOutputPage = () => {
                     <div className="flex flex-col">
                       <h1 className="font-semibold text-sm md:text-base">
                         {cvData.education.class12College}{" "}
-                        {cvData.education.class12CertUrl && (
-                          <a
-                            href={`${import.meta.env.VITE_AzureGATWAY}/${
-                              cvData.education.class12CertUrl
-                            }`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[#FB980E] font-semibold text-md mt-2"
-                          >
-                            <FaExternalLinkAlt />
-                          </a>
-                        )}
                       </h1>
                       <ShowVerifications
                         isAttested={
@@ -263,6 +233,7 @@ const CvOutputPage = () => {
                         mailStatus={
                           cvData.educationVerifications.class12.mailStatus
                         }
+                        hash={cvData?.educationVerifications?.class12?.proof}
                         className="my-2"
                         textClass="text-white"
                         fillCheck
@@ -287,18 +258,6 @@ const CvOutputPage = () => {
                     <div className="flex flex-col">
                       <h1 className="font-semibold text-sm md:text-base">
                         {cvData.education.class10School}{" "}
-                        {cvData.education.class10CertUrl && (
-                          <a
-                            href={`${import.meta.env.VITE_AzureGATWAY}/${
-                              cvData.education.class10CertUrl
-                            }`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[#FB980E] font-semibold text-md mt-2"
-                          >
-                            <FaExternalLinkAlt />
-                          </a>
-                        )}
                       </h1>
                       <ShowVerifications
                         isAttested={
@@ -308,6 +267,7 @@ const CvOutputPage = () => {
                         mailStatus={
                           cvData.educationVerifications.class10.mailStatus
                         }
+                        hash={cvData?.educationVerifications?.class10?.proof}
                         className="my-2"
                         textClass="text-white"
                         fillCheck
@@ -509,7 +469,7 @@ const CvOutputPage = () => {
                               // buttonClass="text-sm lg:text-base"
                               isSelfAttested={isSelfAttested}
                               mailStatus={mailStatus}
-                              hash={skill.skillUrl}
+                              hash={cvData?.skillsVerifications?.[skill.skillName]?.proof}
                             />
                           </div>
                         );
@@ -580,7 +540,7 @@ const CvOutputPage = () => {
                               <ShowVerifications
                                 isAttested={isSeflAtetsted}
                                 mailStatus={mailStatus}
-                                hash={hash}
+                                hash={cvData?.experienceVerifications?.[verificationKey]?.proof}
                                 className="ml-5 mt-1"
                               />
                             </div>
@@ -638,7 +598,6 @@ const CvOutputPage = () => {
                             const isSelfAttetsted =
                               cvData.awardVerifications[verificationKey]
                                 .isSelfAttested || true;
-                            const hash = award.awardCertUrl;
                             const mailStatus =
                               cvData.awardVerifications[verificationKey]
                                 .mailStatus;
@@ -653,18 +612,6 @@ const CvOutputPage = () => {
                                     ></div>
                                     <h1 className="text-md md:text-xl font-semibold tracking-tight line-clamp-1">
                                       {award.award_name}{" "}
-                                      {hash && (
-                                        <a
-                                          href={`${
-                                            import.meta.env.VITE_AzureGATWAY
-                                          }/${hash}`}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="text-[#FB980E] font-semibold text-sm"
-                                        >
-                                          🔗
-                                        </a>
-                                      )}
                                     </h1>
                                     <div className="flex flex-col">
                                       <p className="text-sm md:text-lg capitalize line-clamp-1 mb-1">
@@ -673,7 +620,7 @@ const CvOutputPage = () => {
                                       <ShowVerifications
                                         isAttested={isSelfAttetsted}
                                         mailStatus={mailStatus}
-                                        hash={hash}
+                                        hash={cvData?.awardVerifications?.[award.award_name]?.proof}
                                         className="ml-5 mt-1"
                                       />
                                     </div>
@@ -743,17 +690,6 @@ const CvOutputPage = () => {
                                           className="ml-5 mt-1"
                                         />
                                       </div>
-                                      {project.projectCertUrl && (
-                                        <a
-                                          href={`${
-                                            import.meta.env.VITE_AzureGATWAY
-                                          }/${project.projectCertUrl}`}
-                                          target="_blank"
-                                          className="hover:underline text-blue-600 cursor-pointer text-sm font-medium text-nowrap mt-5 lg:mt-0"
-                                        >
-                                          <FaExternalLinkAlt />
-                                        </a>
-                                      )}
                                     </div>
                                     {/* duration */}
                                     <div className="">
@@ -800,7 +736,6 @@ const CvOutputPage = () => {
                             const mailStatus =
                               cvData.courseVerifications[verificationKey]
                                 .mailStatus;
-                            const hash = course.courseCertUrl;
                             return (
                               <div key={index} className="flex flex-col ml-3">
                                 <div className="flex justify-between">
@@ -816,23 +751,11 @@ const CvOutputPage = () => {
                                     <div className="flex flex-col mb-1">
                                       <p className="text-sm md:text-lg capitalize line-clamp-1">
                                         {course.organization}{" "}
-                                        {course.courseCertUrl && (
-                                          <a
-                                            href={`${
-                                              import.meta.env.VITE_AzureGATWAY
-                                            }/${course.courseCertUrl}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-[#FB980E] font-semibold text-sm"
-                                          >
-                                            🔗
-                                          </a>
-                                        )}
                                       </p>
                                       <ShowVerifications
                                         isAttested={isSelfAttested}
                                         mailStatus={mailStatus}
-                                        hash={hash}
+                                        hash={cvData?.courseVerifications?.[course.course_name]?.proof}
                                         className="ml-5 mt-1"
                                       />
                                     </div>

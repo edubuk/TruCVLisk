@@ -49,7 +49,7 @@ export function ShowAnimatedVerifications({
   buttonClass?: string;
   isSelfAttested: boolean;
   mailStatus?:string;
-  hash?:string;
+  hash?:string[];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   // const div1Ref = useRef<HTMLDivElement>(null);
@@ -87,7 +87,7 @@ export function ShowAnimatedVerifications({
               ref={div7Ref}
               className="flex justify-center items-center gap-2 px-2 py-1 text-xs lg:text-sm tracking-wide font-semibold rounded-sm bg-[#006666] text-white w-fit"
             >
-              {firstButtonText } {hash&&<a href={`${import.meta.env.VITE_AzureGATWAY}/${hash}`} target="_blank" rel="noopener noreferrer" className="text-[#FB980E] font-semibold text-md"><FaExternalLinkAlt /></a>}
+              {firstButtonText }
             </div>
           </div>
         </div>
