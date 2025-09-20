@@ -7,7 +7,6 @@ import { AnimatedBeam } from "./ui/animated-beam";
 // import IssuerButton from "../Buttons/IssuerButton";
 // import { twMerge } from "tailwind-merge";
 import ShowVerifications from "./ShowVerifications";
-import { FaExternalLinkAlt } from "react-icons/fa";
 // import { useFormContext } from "react-hook-form";
 // import { Dialog, DialogContent, DialogTrigger } from "./dialog";
 
