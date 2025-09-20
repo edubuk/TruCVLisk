@@ -20,8 +20,7 @@ import toast from "react-hot-toast";
 // import { useOkto,getAccount } from "@okto_web3/react-sdk";
 //import PaymentPopup from "../paymentGateway/razorpay";
 import { formSchema } from "@/components/FormSchema/formSchema";
-import { useUserData } from "@/context/AuthContext";
-import { Link } from "react-router-dom";
+//import { useUserData } from "@/context/AuthContext";
 import { connectWallet, getNFTContract } from "@/api/contract.api";
 
 export type CvFormDataType = z.infer<typeof formSchema>;
@@ -43,7 +42,7 @@ const CvForm = () => {
   const [txStarted, setTxStarted] = useState<boolean>(false);
   const [isAgree, setIsAgree] = useState<boolean>(false);
   //const oktoClient = useOkto();
-  const { subscriptionPlan } = useUserData();
+  //const { subscriptionPlan } = useUserData();
   console.log("current step is", step);
   useEffect(() => {
     const nanoId = nanoid(16);

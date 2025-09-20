@@ -331,7 +331,6 @@ const Skills = () => {
                   validationStep="skillsVerificationsValidations"
                   setterVerificationObject={setSkillsVerification}
                   verificationStep="skillsVerifications"
-                  formSkill={`Skills[${i}]`}
                 />
                 <FormMessage />
               </FormItem>

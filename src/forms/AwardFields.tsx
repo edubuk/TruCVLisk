@@ -231,7 +231,6 @@ const AwardFields = ({ index, removeAwardFields, fields }: Props) => {
                   verificationStep="awardVerifications"
                   awardName={Awards[index].award_name}
                   awardOrg = {Awards[index].awarding_organization}
-                  awardInfo = {`Awards[${index}]`}
                 />
                 <FormMessage />
               </FormItem>

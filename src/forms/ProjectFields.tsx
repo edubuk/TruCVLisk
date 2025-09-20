@@ -214,7 +214,6 @@ const ProjectFields = ({ index, removeProjectFields, fields }: Props) => {
                   validationStep="projectVerificationsValidations"
                   setterVerificationObject={setProjectVerification}
                   verificationStep="projectsVerifications"
-                  projectInfo={`Projects[${index}]`}
                 />
                 <FormMessage />
               </FormItem>

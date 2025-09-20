@@ -236,7 +236,6 @@ const ExperienceFields = ({ index, removeExperienceFields, fields }: Props) => {
                   setterVerificationObject={setExperienceVerifications}
                   jobRole={Experience[index].job_role}
                   companyName={Experience[index].company_name}
-                  companyInfo={`Experience[${index}]`}
                 />
                 <FormMessage />
               </FormItem>
