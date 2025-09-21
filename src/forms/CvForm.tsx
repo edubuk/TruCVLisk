@@ -647,7 +647,7 @@ const CvForm = () => {
                       <Button
                         type="button"
                         onClick={stepsHandler}
-                        disabled={isImageUploading}
+                        disabled={isImageUploading || !isAgree}
                         className={`w-auto sm:w-full bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] hover:opacity-90 ${isImageUploading
                             ? "cursor-not-allowed opacity-100"
                             : "cursor-pointer"
@@ -688,7 +688,7 @@ const CvForm = () => {
                       </div>
                     ) : ((!txHash || localStorage.getItem("txHash") === "") ? (account ?
                       <Button
-                        disabled={txStarted}
+                        disabled={txStarted || !isAgree}
                         type="button"
                         onClick={mintNFT}
                         className={`w-auto sm:w-full active:translate-y-2 ${txStarted ? "cursor-not-allowed opacity-50" : "cursor-pointer"
@@ -699,6 +699,7 @@ const CvForm = () => {
                       <Button
                         type="button"
                         onClick={getAccount}
+                        disabled={!isAgree}
                         className="w-auto sm:w-full active:translate-y-2 "
                       >
                         Connect Wallet
