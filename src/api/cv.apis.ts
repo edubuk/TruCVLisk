@@ -42,6 +42,8 @@ export const useCV = () => {
     localStorage.removeItem("isFreeCoupon");
     localStorage.removeItem("nanoId");
     localStorage.removeItem("qualificationAnswered");
+    localStorage.removeItem("txHash");
+    localStorage.removeItem("hashArray");
     //const parseLocalData = JSON.parse(localData!);
     //localStorage.clear();
     //localStorage.setItem("AUTH_DETAILS",localData!);
