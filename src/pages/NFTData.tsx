@@ -106,7 +106,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi,account })
                   {nft?.hash && (
                     <a
                       className="inline-block mt-4 text-sm text-white bg-[#ff7300] px-4 py-2 rounded-full hover:bg-[#006666] transition-all"
-                      href={`${import.meta.env.VITE_AZUREGATWAY}/${nft.hash}`}
+                      href={`${import.meta.env.VITE_AzureGATWAY}/${nft.hash}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
