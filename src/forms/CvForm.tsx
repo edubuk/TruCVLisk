@@ -641,70 +641,85 @@ const CvForm = () => {
               {isLoading ? (
                 <LoadingButton className="w-auto bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)]" />
               ) : (
-                <div className="flex gap-2 w-full flex-col sm:flex-row">
-                  <Button
-                    type="button"
-                    onClick={stepsHandler}
-                    disabled={isImageUploading || (step === 6 && !isAgree)}
-                    className={`w-auto sm:w-full bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] hover:opacity-90 ${isImageUploading
-                      ? "cursor-not-allowed opacity-100"
-                      : "cursor-pointer"
-                      }`}
-                  >
-                    {step === 6 ? "Submit" : "Save and next"}
-                  </Button>
+                  <div className="flex gap-2 w-full flex-col sm:flex-row">
+                    {
+                      step === 6 && localStorage.getItem("txHash") &&
+                      <Button
+                        type="button"
+                        onClick={stepsHandler}
+                        disabled={isImageUploading}
+                        className={`w-auto sm:w-full bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] hover:opacity-90 ${isImageUploading
+                            ? "cursor-not-allowed opacity-100"
+                            : "cursor-pointer"
+                          }`}
+                      >
+                        {step === 6 ? "Submit" : "Save and next"}
+                      </Button>
+                    }
+                    {step !== 6 &&
+                      <Button
+                        type="button"
+                        onClick={stepsHandler}
+                        disabled={isImageUploading}
+                        className={`w-auto sm:w-full bg-[rgb(0,102,102)] hover:bg-[rgb(0,102,102)] hover:opacity-90 ${isImageUploading
+                            ? "cursor-not-allowed opacity-100"
+                            : "cursor-pointer"
+                          }`}
+                      >
+                        Save and next
+                      </Button>
+                    }
                   {step !== 6 ? (
-                    <div className="flex gap-2 w-full">
+                      <div className="flex gap-2 w-full">
+                        <Button
+                          type="button"
+                          onClick={() => resetPageHandler(step)}
+                          className="w-full mt-2 sm:mt-0 "
+                        >
+                          Reset
+                        </Button>
+                        <Button
+                          type="button"
+                          onClick={resetAllPageHandler}
+                          className="w-full mt-2 sm:mt-0 bg-[#f14419] hover:bg-[#f14419] hover:opacity-90"
+                        >
+                          Erase All
+                        </Button>
+                      </div>
+                    ) : ((!txHash || localStorage.getItem("txHash") === "") ? (account ?
+                      <Button
+                        disabled={txStarted}
+                        type="button"
+                        onClick={mintNFT}
+                        className={`w-auto sm:w-full active:translate-y-2 ${txStarted ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+                          }`}
+                      >
+                        Register Your CV on Blockchain
+                      </Button> :
                       <Button
                         type="button"
-                        onClick={() => resetPageHandler(step)}
-                        className="w-full mt-2 sm:mt-0 "
+                        onClick={getAccount}
+                        className="w-auto sm:w-full active:translate-y-2 "
                       >
-                        Reset
+                        Connect Wallet
                       </Button>
-                      <Button
-                        type="button"
-                        onClick={resetAllPageHandler}
-                        className="w-full mt-2 sm:mt-0 bg-[#f14419] hover:bg-[#f14419] hover:opacity-90"
-                      >
-                        Erase All
-                      </Button>
-                    </div>
-                  ) : (!txHash ? (account ?
-                    <Button
-                      disabled={txStarted}
-                      type="button"
-                      onClick={mintNFT}
-                      className={`w-auto sm:w-full active:translate-y-2 ${txStarted ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-                        }`}
-                    >
-                      Register Your CV on Blockchain
-                    </Button> :
-                    <Button
-                      type="button"
-                      onClick={getAccount}
-                      className="w-auto sm:w-full active:translate-y-2 "
-                    >
-                      Connect Wallet
-                    </Button>
-                  ) : (
-                    <div className="flex justify-center items-center w-auto sm:w-full">
-                      <a
-                        className="w-full px-2 py-1 text-center items-center border rounded hover:bg-[#f8f9fa] font-semibold hover:opacity-90"
-                        href={`https://blockscout.lisk.com/tx/${txHash}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View Transaction
-                      </a>
-                    </div>
-                  )
-                  )
-
-                  }
-                </div>
+                    ) : (
+                      <div className="flex justify-center items-center w-auto sm:w-full">
+                        <a
+                          className="w-full px-2 py-1 text-center items-center border rounded hover:bg-[#f8f9fa] font-semibold hover:opacity-90"
+                          href={`https://blockscout.lisk.com/tx/${txHash || localStorage.getItem("txHash")}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View Transaction
+                        </a>
+                      </div>
+                    )
+                    )
+                    }
+                  </div>
               )}
-            </div>
+                </div>
           </form>
         </Form>
       </div>
