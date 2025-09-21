@@ -1,180 +1,68 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import toast from "react-hot-toast";
-import { useOkto,getAccount } from "@okto_web3/react-sdk";
-import { oktoAuthTokenGenerator } from "@/oktoUtils/oktoAuthTokenGenerator";
+
 
 interface NFT {
   id: string;
   name: string;
   description: string;
   image: string;
-  hash: string;
+  hash:string;
 }
 
 interface NFTGalleryProps {
   contractAddress: string;
   abi: ethers.ContractInterface;
+  account:string;
 }
 
-const NFTGallery: React.FC<NFTGalleryProps> = () => {
+const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi,account }) => {
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const oktoClient = useOkto();
 
   const fetchNFTs = async () => {
-    const id = toast.loading("Fetching NFTs...");
+    const id=toast.loading("Fetching NFTs")
     try {
       setLoading(true);
-      let toAddress = null;
-      //let networkName = null;
-      const accounts= await getAccount(oktoClient);
-      console.log("accounts",accounts)
-      if(accounts?.length>0)
-      {
-        console.log("accounts",accounts)
-        const acc= accounts.find((accs:any)=>accs.networkName==="POLYGON");
-        toAddress=acc?.address
-      }
-      if (toAddress) {
-        const authToken = await oktoAuthTokenGenerator();
-        //console.log("Auth Token: ", authToken);
 
-        const response = await fetch(
-          "https://apigw.okto.tech/api/oc/v1/readContractData",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              caip2id: "eip155:137",
-              data: {
-                contractAddress:`${import.meta.env.VITE_ContractAddress}`,
-                abi: {
-                  inputs: [
-                    {
-                      internalType: "address",
-                      name: "user",
-                      type: "address",
-                    },
-                  ],
-                  name: "getTokenIds",
-                  outputs: [
-                    {
-                      internalType: "uint256[]",
-                      name: "",
-                      type: "uint256[]",
-                    },
-                  ],
-                  stateMutability: "view",
-                  type: "function",
-                },
-                args: {
-                  user:`${toAddress}`,
-                },
-              },
-            }),
-          }
-        );
+      // Connect to Ethereum using MetaMask           
+      const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+      //await provider.send("eth_requestAccounts", []);
+      //console.log("account",account[0]);
+      const signer = provider.getSigner();
+      // Connect to the smart contract
+      const contract = new ethers.Contract(contractAddress, abi, signer);
 
-        const data = await response.json();
-        const tokenIds = data.data;
-        //console.log("NFT Data:", data);
-        if (tokenIds.length > 0) {
-          // Flatten the array if `tokenIds` is an array of arrays
-          const flattenedTokenIds = tokenIds.flat(); // Flattens nested arrays into a single array
+      // Fetch all token IDs from the contract
+      const tokenIds = (await contract.getTokenIds(account)).map((id: ethers.BigNumber) =>
+        id.toString()
+      );
+      console.log("tokenIds",tokenIds);
+      // Fetch metadata for each token ID
+      const nftPromises = tokenIds.map(async (tokenId: string) => {
+        const tokenUri: string = await contract.tokenURI(tokenId);
+        console.log("tokenUri",tokenUri);
+        const metadataUrl = `${import.meta.env.VITE_AzureGATWAY}/${tokenUri}`;
+        console.log("metadataUrl",metadataUrl);
+        const response:any = await fetch(metadataUrl);
+        const metadata = await response.json();
 
-          // Fetch metadata for each token ID
-          const nftPromises = flattenedTokenIds.map(async (tokenId: string) => {
-            try {
-
-              // Get the token URI
-              const tokenUriRes = await fetch(
-                "https://apigw.okto.tech/api/oc/v1/readContractData",
-                {
-                  method: "POST",
-                  headers: {
-                    Authorization: `Bearer ${authToken}`,
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    caip2id: "eip155:137",
-                    data: {
-                      contractAddress:
-                        `${import.meta.env.VITE_ContractAddress}`,
-                      abi: {
-                        inputs: [
-                          {
-                            internalType: "uint256",
-                            name: "tokenId",
-                            type: "uint256",
-                          },
-                        ],
-                        name: "tokenURI",
-                        outputs: [
-                          {
-                            internalType: "string",
-                            name: "",
-                            type: "string",
-                          },
-                        ],
-                        stateMutability: "view",
-                        type: "function",
-                      },
-                      args: { tokenId: Number(tokenId) },
-                    },
-                  }),
-                }
-              );
-
-              const tokenUriData = await tokenUriRes.json();
-              console.log("token uri",tokenUriData);
-              if (tokenUriData?.data?.length === 0)
-                throw new Error(`Token URI not found for token ID: ${tokenId}`);
-              
-              //Fetch metadata from the URI
-              const metadataUrl = `${import.meta.env.VITE_AzureGATWAY}/${tokenUriData?.data[0]}`;
-              console.log("metadataUrl",metadataUrl)
-              const response = await fetch(metadataUrl);
-              console.log("metadataUrl",response);
-              const metadata = await response.json();
-              console.log("metadata res",response);
-              if (!metadata)
-                throw new Error(
-                  `Failed to fetch metadata from: ${metadataUrl}`
-                );
-              if(metadata)
-              return {
-                id: tokenId,
-                name: metadata.name || "Unknown Name",
-                description: metadata.description || "No Description",
-                image: metadata.image || "",
-                hash: metadata.hash || "",
-              };
-            } catch (err) {
-              console.error(
-                `Error fetching metadata for token ID ${tokenId}:`,
-                err
-              );
-              return null; // Return null if an error occurs for a specific token
-            }
-          });
-
-          // Wait for all NFT metadata to be fetched
-          const fetchedNFTs = await Promise.all(nftPromises);
-          setNfts(fetchedNFTs.filter((nft) => nft !== null)); // Filter out null values
-        } else {
-          console.warn("No token IDs found");
-          toast.error("No NFTs found for this address.");
-        }
-      }
+        return {
+          id: tokenId,
+          name: metadata.name,
+          description: metadata.description,
+          image: metadata.image,
+          hash:metadata.hash,
+        };
+      });
+    
+      const fetchedNFTs = await Promise.all(nftPromises);
+      setNfts(fetchedNFTs);
     } catch (error) {
       console.error("Error fetching NFTs:", error);
-      toast.error("Failed to fetch NFTs.");
     } finally {
-      toast.dismiss(id);
+        toast.dismiss(id);
       setLoading(false);
     }
   };
@@ -184,7 +72,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = () => {
   }, []);
 
   return (
-    <div className="p-4 w-full">
+     <div className="p-4 w-full">
       <h1 className="text-[#006666] text-3xl font-bold text-center mb-6">
         NFT Gallery
       </h1>
@@ -218,7 +106,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = () => {
                   {nft?.hash && (
                     <a
                       className="inline-block mt-4 text-sm text-white bg-[#ff7300] px-4 py-2 rounded-full hover:bg-[#006666] transition-all"
-                      href={`${import.meta.env.VITE_AzureGATWAY}/${nft.hash}`}
+                      href={`${import.meta.env.VITE_AZUREGATWAY}/${nft.hash}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

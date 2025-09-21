@@ -2,15 +2,16 @@ import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 //import OnChainData from "./OnChainData";
 import CvById from "./CvById";
-//import { connectWallet } from "@/api/contract.api";
+import { connectWallet } from "@/api/contract.api";
 import toast from "react-hot-toast";
 //import { API_BASE_URL } from "@/main";
 import { contractNFTAddress,abiNFT } from "@/contract/nft.contractData";
 import NFTGallery from "./NFTData";
 import { API_BASE_URL } from "@/main";
-
+import { useCvFromContext } from "@/context/CvForm.context";
 const DashBoard = () => {
     const [isActiveButton , setActiveButton] = useState<boolean>(true);
+    const {account,setAccount} = useCvFromContext();
  //   const [docData, setDocData] = useState([]);
     const [cvData, setCvData] = useState([]);
     const [isNFT, setNFT] = useState<boolean>(false);
@@ -32,20 +33,20 @@ const DashBoard = () => {
     // }
     //  }
 
-    //  const getAccount = async()=>{
+     const getAccount = async()=>{
   
-    //   try
-    //   {
-    //     console.log("clicked")
-    //     const acc = await connectWallet();
-    //     if(acc)
-    //     setAccount(acc);
-    //     console.log("logged acc",acc);
-    //   }
-    //   catch(e){
-    //     console.log("error",e)
-    //   }
-    //  }
+      try
+      {
+        console.log("clicked")
+        const acc = await connectWallet();
+        if(acc)
+        setAccount(acc);
+        console.log("logged acc",acc);
+      }
+      catch(e){
+        console.log("error",e)
+      }
+     }
 
     //  const fetchDataHandler=()=>{
     //   setActiveButton(false);
@@ -96,10 +97,11 @@ const DashBoard = () => {
       setNFT(false);
       fetchIds();
      }
-    //  const nftFetchHandler = ()=>{
-    //   setActiveButton(false)
-    //   setNFT(true);
-    //  }
+
+     const nftFetchHandler = ()=>{
+      setActiveButton(false)
+      setNFT(true);
+     }
 
   return (
     <div className="flex flex-col justify-start items-center h-auto w-full mt-2">
@@ -107,6 +109,15 @@ const DashBoard = () => {
           <div className="relative rounded-lg p-[1px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]">
         <Button className={`text-center border border-slate-300 text-[#006666] hover:bg-slate-100 ${isActiveButton?"bg-slate-100":"bg-white border"}`} onClick={idFetchHandler}>Get Your CV</Button>
         </div>
+        {!account?
+        <Button type="button" onClick={getAccount}>Connect Wallet</Button>:
+        <>
+        {/* <Button className={`text-center border border-slate-300 text-[#006666] hover:bg-slate-100 ${!isActiveButton?"bg-slate-100":"bg-white border"}`} onClick={fetchDataHandler}>Fetch your on-chain documents</Button> */}
+        <div className="relative rounded-lg p-[1px] bg-gradient-to-r from-[#03257e] via-[#006666] to-[#f14419]">
+        <Button className={`text-center border border-slate-300 text-[#006666] hover:bg-slate-100 ${isNFT?"bg-slate-100":"bg-white border"}`} onClick={nftFetchHandler}>Fetch your NFTs</Button>
+        </div>
+        </>
+}
         </div>
         <div className="flex justify-center items-center gap-2 my-4">
           {/* {
@@ -116,7 +127,7 @@ const DashBoard = () => {
             isActiveButton&&<CvById cvData={cvData}/>
           }
           {
-            isNFT&&<NFTGallery contractAddress={contractNFTAddress} abi={abiNFT}/>
+            isNFT&&<NFTGallery contractAddress={contractNFTAddress} abi={abiNFT} account={account!}/>
           }
         </div>
     </div>
