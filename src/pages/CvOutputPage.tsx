@@ -96,7 +96,7 @@ const CvOutputPage = () => {
 
         <div
           className="flex items-center gap-2 cursor-pointer text-[#03257e] hover:text-[#006666]"
-          onClick={() => copyResumeLink(`https://www.edubuktrucv.com/cv/${id}`)}
+          onClick={() => copyResumeLink(`https://tru-cv-lisk.vercel.app/cv/${id}`)}
         >
           <FaCopy />
           <span className="font-medium">
